@@ -1,11 +1,11 @@
 include( ../../common.pri )
 include( ../../lib.pri )
-QT += core gui
+QT += core
 TARGET = calclib$${LIB_SUFFIX}
 TEMPLATE = lib
 DEFINES += CALCLIB_LIBRARY 
-SOURCES += ./*.cpp
-HEADERS += ../../include/calclib/*.hpp
+SOURCES += common.cpp \
+HEADERS += ../../include/calclib/common.h \
 win32 {
      QMAKE_TARGET_PRODUCT = calclib
      QMAKE_TARGET_DESCRIPTION = Calculation library

@@ -2,6 +2,8 @@ QT += qml quick
 TARGET = TsunamiMaster
 TEMPLATE = app 
 SOURCES += main.cpp
+HEADERS += ../../include/gui/*.h \
+           ../../include/calclib/common.h
 RESOURCES += qml.qrc
 
 include( ../../common.pri ) 
