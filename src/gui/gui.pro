@@ -2,14 +2,13 @@ QT += qml quick
 TARGET = TsunamiMaster
 TEMPLATE = app 
 SOURCES += main.cpp
-HEADERS += ../../include/gui/*.h \
-           ../../include/calclib/common.h
+HEADERS += ../../include/Calclib/Common.h
 RESOURCES += qml.qrc
+CONFIG += console
 
-include( ../../common.pri ) 
-include( ../../app.pri ) 
+include( ../../Common.pri )
+include( ../../App.pri )
 #LIBS += -lcalclib$${LIB_SUFFIX}
 
 QML_IMPORT_PATH =
 
-include(deployment.pri)

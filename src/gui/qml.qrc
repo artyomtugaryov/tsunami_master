@@ -1,7 +1,15 @@
 <RCC>
     <qresource prefix="/">
-        <file>Main.qml</file>
-        <file>MainPage.qml</file>
-        <file>ItemGroup.qml</file>
+        <file>Resources/Main.qml</file>
+        <file>Resources/MainPage.qml</file>
+        <file>Resources/ItemGroup.qml</file>
+        <file>Resources/Assets/Biggest-Waves.jpg</file>
+        <file>Resources/MapData.qml</file>
+        <file>Resources/InstrumentPanel/InstrumentPanel.qml</file>
+        <file>Resources/InstrumentPanel/Assets/eye-flat.png</file>
+        <file>Resources/InstrumentPanel/Assets/checked.png</file>
+        <file>Resources/InstrumentPanel/ItemColumn.qml</file>
+        <file>Resources/Assets/Wallpaper_Of_Ocean_Waves.jpg</file>
+        <file>Resources/InstrumentPanel/Assets/InstrumentalPanel.png</file>
     </qresource>
 </RCC>

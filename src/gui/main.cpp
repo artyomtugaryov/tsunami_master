@@ -7,7 +7,8 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    engine.load(QUrl(QLatin1String("qrc:/Main.qml")));
+    engine.load(QUrl(QLatin1String("qrc:/Resources/Main.qml")));
 
     return app.exec();
+
 }

@@ -8,8 +8,13 @@ ApplicationWindow {
     property variant win;
 
     visible: true
-    width: 640
-    height: 480
+    width: 1350
+    height: 690
+    maximumHeight: height
+    maximumWidth: width
+    minimumHeight: height
+    minimumWidth: width
+
     title: qsTr("Tsunami Master")
 
     SwipeView {
@@ -17,8 +22,10 @@ ApplicationWindow {
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
 
-//        MainPage {
-//        }
+        MainPage {
+//            anchors.left: root
+//            anchors.top: parent
+        }
 
         Page {
             Label {
@@ -40,11 +47,11 @@ ApplicationWindow {
 
         currentIndex: swipeView.currentIndex
         TabButton {
-            onClicked: {
-                var component = Qt.createComponent("MainPage.qml");
-                win = component.createObject(root);
-                win.show();
-            }
+//            onClicked: {
+//                var component = Qt.createComponent("MainPage.qml");
+//                win = component.createObject(root);
+//                win.show();
+//            }
             text: qsTr("First")
         }
         TabButton {
