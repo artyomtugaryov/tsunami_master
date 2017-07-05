@@ -11,5 +11,7 @@
         <file>Resources/InstrumentPanel/ItemColumn.qml</file>
         <file>Resources/Assets/Wallpaper_Of_Ocean_Waves.jpg</file>
         <file>Resources/InstrumentPanel/Assets/InstrumentalPanel.png</file>
+        <file>Resources/InstrumentPanel/Assets/OpenIcon.png</file>
+        <file>Resources/InstrumentPanel/OpenDatFile.qml</file>
     </qresource>
 </RCC>

@@ -43,13 +43,7 @@ Item {
 
         ItemColumn {
             id: showDataItem
-            height: 40
 
-            anchors.left: parent.left
-            anchors.right: parent.right
-            itemColor: internal.defaultItemColor
-            radius: 10
-            textColor: "white"
             sourceIconLeft: "Assets/eye-flat.png"
             textAction: "Show"
             textDescription: "map data"
@@ -64,5 +58,26 @@ Item {
                 }
             }
         }
+
+        ItemColumn {
+            id: openData
+            textAction: "Open"
+            textDescription: "bathymetry file"
+            sourceIconLeft: "Assets/OpenIcon.png"
+            pressed: mouseAreaOpenData.pressed
+
+            MouseArea {
+                id: mouseAreaOpenData
+                anchors.fill: parent
+                onClicked: {
+                    openData.checked = !openData.checked;
+                    openData.textAction = openData.checked ? "Reopen" : "Open"
+                    openDatFileDialog.open()
+                }
+            }
+        }
+    }
+    OpenDatFile {
+    id: openDatFileDialog
     }
 }

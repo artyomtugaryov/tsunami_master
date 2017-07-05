@@ -14,7 +14,7 @@ Item {
         anchors.left: root.left
         anchors.top: root.top
         anchors.bottom: root.bottom
-        width: 220
+        width: 260
 
         onShowDataChanged: {
             mapDataAnimation.stop()

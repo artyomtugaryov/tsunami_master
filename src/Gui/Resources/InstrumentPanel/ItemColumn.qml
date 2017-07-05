@@ -13,6 +13,11 @@ Item {
     property real radius: 0
     property bool pressed: false
 
+    height: 40
+
+    anchors.left: parent.left
+    anchors.right: parent.right
+
     onPressedChanged: {
         if(pressed) {
             background.color = internal.pressedItemColor
@@ -37,8 +42,8 @@ Item {
         id: background
 
         anchors.fill: parent
-        color: itemColor
-        radius: root.radius
+        color: internal.defaultItemColor
+        radius: 10
         opacity: 0.8
     }
 
@@ -66,7 +71,7 @@ Item {
         anchors.rightMargin: 2
         text: textAction + (textAction.length === 0 ? "" : " ")
               + textDescription
-        color: textColor
+        color: internal.defaultTextColor
     }
 
     Image {
