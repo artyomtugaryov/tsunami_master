@@ -5,12 +5,12 @@ CONFIG(debug, debug|release) {
     BUILD_FLAG = debug
     LIB_SUFFIX = d
 } else {
-     BUILD_FLAG = release
+    BUILD_FLAG = release
 }
-LIBS_PATH = $${PROJECT_ROOT_PATH}/lib.$${OS_SUFFIX}/
 INC_PATH = $${PROJECT_ROOT_PATH}/include/
 IMPORT_PATH = $${PROJECT_ROOT_PATH}/import/
 BIN_PATH = $${PROJECT_ROOT_PATH}/bin/$${BUILD_FLAG}/
+LIBS_PATH = $${BIN_PATH}/lib/
 BUILD_PATH = $${PROJECT_ROOT_PATH}/build/$${BUILD_FLAG}/$${TARGET}/
 RCC_DIR = $${BUILD_PATH}/rcc/
 UI_DIR = $${BUILD_PATH}/ui/
