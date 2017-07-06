@@ -1,13 +1,12 @@
 QT += core
-TARGET = calclib$${LIB_SUFFIX}
-QMAKE_CXXFLAGS += -Werror
-include( ../../common.pri )
-include( ../../lib.pri )
+
+include( $${_PRO_FILE_PWD_}/../../common.pri )
+include( $${_PRO_FILE_PWD_}/../../lib.pri )
+
+TARGET = HDlib$${LIB_SUFFIX}
 TEMPLATE = lib
-DEFINES += CALCLIB_LIBRARY
+
+DEFINES += HDLIB_LIBRARY
+
 SOURCES += common.cpp
-HEADERS += ../../include/HDlib/common.h
-win32 {
-     QMAKE_TARGET_PRODUCT = calclib
-     QMAKE_TARGET_DESCRIPTION = calculation library
-}
+HEADERS += $${_PRO_FILE_PWD_}/../../include/HDlib/common.h

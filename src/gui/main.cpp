@@ -8,7 +8,6 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/Resources/Main.qml")));
-
     return app.exec();
 
 }
