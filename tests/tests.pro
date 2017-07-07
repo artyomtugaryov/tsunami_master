@@ -6,4 +6,6 @@ HEADERS += common_test.h \
             ../include/HDlib/common.h
 include( ../common.pri )
 include( ../app.pri )
+
 LIBS += -lHDlib$${LIB_SUFFIX}
+

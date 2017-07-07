@@ -26,8 +26,9 @@ Item {
 
     Image {
         id: background
-        anchors.fill: parent
 
+        anchors.fill: parent
+        opacity: 0.85
         source: "Assets/InstrumentalPanel.png"
     }
 

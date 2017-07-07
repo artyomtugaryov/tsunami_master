@@ -12,22 +12,6 @@ Item {
     property real startY: 11.313
     property real endY: 25.44
 
-    width: 390
-    height: 210
-    //    maximumHeight: height
-    //    maximumWidth: width
-
-    //    minimumHeight: height
-    //    minimumWidth: width
-
-    //    Rectangle {
-    //        id: background
-
-    //        anchors.fill: parent
-    //        gradient: Gradient {
-    //            GradientStop { position: 1.0; color: "#eeeeee" }
-    //            GradientStop { position: 0.0; color: "#dddddd" }
-    //        }
     Rectangle {
         id: informationGroup
 
@@ -38,10 +22,6 @@ Item {
         anchors.margins: 10
         border.color: "black"
         radius: 2
-        //        gradient: Gradient {
-        //            GradientStop { position: 1.0; color: "#eeeeee" }
-        //            GradientStop { position: 0.0; color: "#dddddd" }
-        //        }
         opacity: 0.5
     }
     Item {

@@ -8,5 +8,10 @@ TEMPLATE = lib
 
 DEFINES += HDLIB_LIBRARY
 
-SOURCES += common.cpp
-HEADERS += $${_PRO_FILE_PWD_}/../../include/HDlib/common.h
+SOURCES += common.cpp \
+           MapArea.cpp \
+           MapAreaWorker.cpp
+
+HEADERS += $${_PRO_FILE_PWD_}/../../include/HDlib/common.h \
+           $${_PRO_FILE_PWD_}/../../include/HDlib/MapArea.h \
+           $${_PRO_FILE_PWD_}/../../include/HDlib/MapAreaWorker.h

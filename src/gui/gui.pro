@@ -12,4 +12,8 @@ HEADERS += $${_PRO_FILE_PWD_}/../../include/HDlib/common.h
 RESOURCES += qml.qrc
 CONFIG += console
 
+
 LIBS += -lHDlib$${LIB_SUFFIX}
+
+QMAKE_CXXFLAGS += -Werror
+

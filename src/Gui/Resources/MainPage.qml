@@ -6,7 +6,15 @@ import "qrc:/Resources/InstrumentPanel/"
 Item {
     id: root
 
+    Image {
+        id: background
 
+        anchors.left: parent.left//instrumentPanel.right
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        source: "Assets/Wallpaper_Of_Ocean_Waves.jpg"
+    }
 
     InstrumentPanel {
         id: instrumentPanel
@@ -21,19 +29,24 @@ Item {
             mapDataAnimation.start()
         }
     }
-    Image {
-        id: background
+
+
+    Row {
+        id: topRow
 
         anchors.left: instrumentPanel.right
-        anchors.right: parent.right
         anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        source: "Assets/Wallpaper_Of_Ocean_Waves.jpg"
+        anchors.right: parent.right
+        anchors.bottom: parent.verticalCenter
+
+
     }
 
     MapData {
         id: mapData
 
+        width: (root.width - instrumentPanel.width) / 3
+        height: 210
         anchors.left: instrumentPanel.right
         anchors.top: parent.top
         opacity: 0
