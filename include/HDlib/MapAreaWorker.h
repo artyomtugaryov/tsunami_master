@@ -10,11 +10,11 @@ namespace Map{
 class MapAreaWorker
 {
 private:
-    std::shared_ptr<MapArea> m_eta;
-    std::shared_ptr<MapArea> m_etaOld;
-    std::shared_ptr<MapArea> m_max;
-    std::shared_ptr<MapArea> m_min;
-    std::shared_ptr<MapArea> m_bathymetry;
+    std::shared_ptr<MapArea <double>> m_eta;
+    std::shared_ptr<MapArea <double>> m_etaOld;
+    std::shared_ptr<MapArea <double>> m_max;
+    std::shared_ptr<MapArea <double>> m_min;
+    std::shared_ptr<MapArea <double>> m_bathymetry;
     std::__cxx11::string m_bathymetryPath;
     void readBathymetryFromFileDat();
     void testDraw();

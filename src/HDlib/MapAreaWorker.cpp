@@ -54,9 +54,9 @@ void Map::MapAreaWorker::readBathymetryFromFileDat()
     double endX = maxX + stepX / 2.;
     double endY = maxY + stepY / 2.;
 
-    m_bathymetry = std::make_shared<Map::MapArea>(sizeX, sizeY);
+    m_bathymetry = std::make_shared<Map::MapArea <double>>(sizeX, sizeY);
 
-    m_bathymetry->setEndX(endX);
+    m_bathymetry->MapArea<double>::setEndX(endX);
     m_bathymetry->setEndY(endY);
     m_bathymetry->setSizeX(sizeX);
     m_bathymetry->setSizeY(sizeY);
@@ -86,10 +86,6 @@ void Map::MapAreaWorker::testDraw()
             if(m_bathymetry->getDataByIndex(x,y) > 0)
                 bath.setPixelColor(x, y, QColor(0, 255, 0));
             else bath.setPixelColor(x, y, QColor(0, 0, 255));
-            //if(eta[y][x] > 0){
-            //    qDebug() << "3";
-           //     bath.setPixelColor(x, y, QColor(255, 0, 0));
-            //}
         }
     }
     bath.save("testOutput.png");

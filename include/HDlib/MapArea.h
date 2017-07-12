@@ -9,6 +9,7 @@ namespace Map{
 struct Index {
     std::size_t x, y;
 };
+template <typename DataType>
 class MapArea
 {
 private:
@@ -20,7 +21,7 @@ private:
     double m_stepY;
     double m_endX;
     double m_endY;
-    std::vector<double> m_data;
+    std::vector<DataType> m_data;
     std::size_t getIndex(std::size_t x, std::size_t y) const;
     std::size_t getIndexByPoint(double lat, double lon) const;
 
@@ -35,8 +36,8 @@ public:
     double startY() const noexcept;
     double endX() const noexcept;
     double endY() const noexcept;
-    double getDataByIndex(std::size_t x, std::size_t y) const;
-    double getDataByPoint(double latitude, double longitude) const;
+    DataType getDataByIndex(std::size_t x, std::size_t y) const;
+    DataType getDataByPoint(double latitude, double longitude) const;
     void setSizeX(std::size_t sizeX);
     void setSizeY(std::size_t sizeY);
     void setStepX(double stepX);
@@ -45,8 +46,8 @@ public:
     void setStartY(double startY);
     void setEndX(double endX);
     void setEndY(double endY);
-    void setDataByIndex(std::size_t x, std::size_t y, double value);
-    void setDataByPoint(double latitude, double longitude, double value);
+    void setDataByIndex(std::size_t x, std::size_t y, DataType value);
+    void setDataByPoint(double latitude, double longitude, DataType value);
     void saveMapAreaToTextFile(std::__cxx11::string path);
     void saveMapAreaToBinFile(std::__cxx11::string path);
 };

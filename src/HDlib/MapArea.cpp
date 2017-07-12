@@ -4,29 +4,29 @@
 #include <cstdio>
 #include <fstream>
 
-Map::MapArea::MapArea(std::size_t sizeX, std::size_t sizeY) :
+template <typename DataType>
+Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY) :
     m_sizeX(sizeX), m_sizeY(sizeY)
 {
     using namespace std;
     m_data.resize(m_sizeX * m_sizeY, 1);
-    for (std::size_t i=0; i < m_sizeX * m_sizeY; i++) {
-        std::cout << i << "  ||  ";
-        cout<< m_data[i] << std::endl;
-    }
 }
 
-Map::MapArea::MapArea()
+template <typename DataType>
+Map::MapArea<DataType>::MapArea()
 {
 
 }
 
-std::size_t Map::MapArea::getIndex(std::size_t x, std::size_t y) const
+template <typename DataType>
+std::size_t Map::MapArea<DataType>::getIndex(std::size_t x, std::size_t y) const
 {
     // TODO: if x>m_sizeX && x>m_sizeY
     return (x + y * m_sizeY);
 }
 
-std::size_t Map::MapArea::getIndexByPoint(double lat, double lon) const
+template <typename DataType>
+std::size_t Map::MapArea<DataType>::getIndexByPoint(double lat, double lon) const
 {
  //   return{ (int)((x - start_x) / delta_x), size_y - 1 - (int)(((y - start_y) / delta_y)) };
     std::size_t x = static_cast<int>((lat - m_startX) / m_stepX);
@@ -34,138 +34,151 @@ std::size_t Map::MapArea::getIndexByPoint(double lat, double lon) const
     return getIndex(x, y);   // **
 }
 
-std::size_t Map::MapArea::sizeX() const noexcept
+template <typename DataType>
+std::size_t Map::MapArea<DataType>::sizeX() const noexcept
 {
     return m_sizeX;
 }
 
-std::size_t Map::MapArea::sizeY() const noexcept
+template <typename DataType>
+std::size_t Map::MapArea<DataType>::sizeY() const noexcept
 {
     return m_sizeY;
 }
 
-double Map::MapArea::stepX() const noexcept
+template <typename DataType>
+double Map::MapArea<DataType>::stepX() const noexcept
 {
     return m_stepX;
 }
 
-double Map::MapArea::stepY() const noexcept
+template <typename DataType>
+double Map::MapArea<DataType>::stepY() const noexcept
 {
     return m_stepY;
 }
 
-double Map::MapArea::startX() const noexcept
+template <typename DataType>
+double Map::MapArea<DataType>::startX() const noexcept
 {
     return m_startX;
 }
 
-double Map::MapArea::startY() const noexcept
+template <typename DataType>
+double Map::MapArea<DataType>::startY() const noexcept
 {
     return m_startY;
 }
 
-double Map::MapArea::endX() const noexcept
+template <typename DataType>
+double Map::MapArea<DataType>::endX() const noexcept
 {
     return m_endX;
 }
 
-double Map::MapArea::endY() const noexcept
+template <typename DataType>
+double Map::MapArea<DataType>::endY() const noexcept
 {
     return m_endY;
 }
 
-double Map::MapArea::getDataByIndex(std::size_t x, std::size_t y) const
+template <typename DataType>
+DataType Map::MapArea<DataType>::getDataByIndex(std::size_t x, std::size_t y) const
 {
     //return m_data.get().operator[](getIndex(x,y)];
     return m_data[getIndex(x,y)];
 }
 
-double Map::MapArea::getDataByPoint(double latitude, double longitude) const
+template <typename DataType>
+DataType Map::MapArea<DataType>::getDataByPoint(double latitude, double longitude) const
 {
-    //double* data = (m_data.get() + getIndexByPoint(longitude, latitude));
-    //if (data == NULL) {
-    //    return 0.;
-    //}
-    std::size_t data = m_data[getIndexByPoint(latitude, longitude)];
-    std::cout << data << "\n";
     return m_data[getIndexByPoint(latitude, longitude)];
 }
 
-void Map::MapArea::setSizeX(std::size_t sizeX)
+template <typename DataType>
+void Map::MapArea<DataType>::setSizeX(std::size_t sizeX)
 {
     if (m_sizeX  != sizeX) {
         m_sizeX = sizeX;
     }
 }
 
-void Map::MapArea::setSizeY(std::size_t sizeY)
+template <typename DataType>
+void Map::MapArea<DataType>::setSizeY(std::size_t sizeY)
 {
     if (m_sizeY  != sizeY) {
         m_sizeY = sizeY;
     }
 }
 
-void Map::MapArea::setStepX(double stepX)
+template <typename DataType>
+void Map::MapArea<DataType>::setStepX(double stepX)
 {
     if (m_stepX  != stepX) {
         m_stepX = stepX;
     }
 }
 
-void Map::MapArea::setStepY(double stepY)
+template <typename DataType>
+void Map::MapArea<DataType>::setStepY(double stepY)
 {
     if (m_stepY  != stepY) {
         m_stepY = stepY;
     }
 }
 
-void Map::MapArea::setStartX(double startX)
+template <typename DataType>
+void Map::MapArea<DataType>::setStartX(double startX)
 {
     if (m_startX  != startX) {
         m_startX = startX;
     }
 }
 
-void Map::MapArea::setStartY(double startY)
+template <typename DataType>
+void Map::MapArea<DataType>::setStartY(double startY)
 {
     if (m_startY != startY) {
         m_startY = startY;
     }
 }
 
-void Map::MapArea::setEndX(double endX)
+template <typename DataType>
+void Map::MapArea<DataType>::setEndX(double endX)
 {
     if (m_endX != endX) {
         m_endX = endX;
     }
 }
 
-void Map::MapArea::setEndY(double endY)
+template <typename DataType>
+void Map::MapArea<DataType>::setEndY(double endY)
 {
     if (m_endY != endY) {
         m_endY = endY;
     }
 }
 
-void Map::MapArea::setDataByIndex(std::size_t x, std::size_t y, double value)
+template <typename DataType>
+void Map::MapArea<DataType>::setDataByIndex(std::size_t x, std::size_t y, DataType value)
 {
     double data = getDataByIndex(x, y);
     if (data != value) {
-        //m_data[getIndex(x,y)] = value;
        m_data[getIndex(x,y)] = value;
     }
 }
 
-void Map::MapArea::setDataByPoint(double latitude, double longitude, double value)
+template <typename DataType>
+void Map::MapArea<DataType>::setDataByPoint(double latitude, double longitude, DataType value)
 {
     double data = getDataByPoint(latitude, longitude);
     if (data != value) {
-        //m_data[getIndexByPoint(longitude, latitude)] = value;
         m_data[getIndexByPoint( latitude, longitude)] = value;
     }
 }
 
-void Map::MapArea::saveMapAreaToTextFile(std::__cxx11::string path)
+template <typename DataType>
+void Map::MapArea<DataType>::saveMapAreaToTextFile(std::__cxx11::string path)
 {
     path = "";
     for (std::size_t i = 0; i < m_sizeX; i++) {
@@ -175,7 +188,8 @@ void Map::MapArea::saveMapAreaToTextFile(std::__cxx11::string path)
     }
 }
 
-void Map::MapArea::saveMapAreaToBinFile(std::__cxx11::string path)
+template <typename DataType>
+void Map::MapArea<DataType>::saveMapAreaToBinFile(std::__cxx11::string path)
 {
     path = "";
     for (std::size_t i = 0; i < m_sizeX; i++) {
@@ -184,3 +198,7 @@ void Map::MapArea::saveMapAreaToBinFile(std::__cxx11::string path)
         }
     }
 }
+
+template class Map::MapArea<double>;
+template class Map::MapArea<bool>;
+template class Map::MapArea<int>;
