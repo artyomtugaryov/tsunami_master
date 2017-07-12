@@ -14,8 +14,8 @@ Map::MapAreaWorker::MapAreaWorker()
 
 void Map::MapAreaWorker::readBathymetryFromFileDat()
 {
-    std::vector <double> longitude;//y
-    std::vector <double> latitude;//x
+    std::vector <double> longitude; // y
+    std::vector <double> latitude;  // x
     std::vector <double> depth;
     FILE* infile;
 
@@ -25,8 +25,8 @@ void Map::MapAreaWorker::readBathymetryFromFileDat()
     double maxX;
     double minY;
     double maxY;
-    double datX;// latitude
-    double datY; //longitude
+    double datX; // latitude
+    double datY; // longitude
     double datZ; // depth
 
     while (fscanf(infile, "%lf%lf%lf", &datX, &datY, &datZ) == 3)
@@ -41,8 +41,8 @@ void Map::MapAreaWorker::readBathymetryFromFileDat()
     std::vector <double> lat_uniq(latitude), long_uniq(longitude);
     std::sort(lat_uniq.begin(), lat_uniq.end());
     std::sort(long_uniq.begin(), long_uniq.end());
-    int sizeX = (std::unique(lat_uniq.begin(), lat_uniq.end()) - lat_uniq.begin());
-    int sizeY = (std::unique(long_uniq.begin(), long_uniq.end()) - long_uniq.begin());
+    std::size_t sizeX = (std::unique(lat_uniq.begin(), lat_uniq.end()) - lat_uniq.begin());
+    std::size_t sizeY = (std::unique(long_uniq.begin(), long_uniq.end()) - long_uniq.begin());
     maxX = *std::max_element(latitude.begin(), latitude.end());
     maxY = *std::max_element(longitude.begin(), longitude.end());
     minX = *std::min_element(latitude.begin(), latitude.end());
@@ -54,7 +54,7 @@ void Map::MapAreaWorker::readBathymetryFromFileDat()
     double endX = maxX + stepX / 2.;
     double endY = maxY + stepY / 2.;
 
-    m_bathymetry = new MapArea(sizeX, sizeY);
+    m_bathymetry = std::make_shared<Map::MapArea>(sizeX, sizeY);
 
     m_bathymetry->setEndX(endX);
     m_bathymetry->setEndY(endY);
@@ -78,11 +78,11 @@ void Map::MapAreaWorker::readBathymetryFromFileDat()
 
 void Map::MapAreaWorker::testDraw()
 {
-    int sizeX = m_bathymetry->sizeX();
-    int sizeY = m_bathymetry->sizeY();
+    std::size_t sizeX = m_bathymetry->sizeX();
+    std::size_t sizeY = m_bathymetry->sizeY();
     QImage bath = QImage( sizeX, sizeY, QImage::Format_RGB32);
-    for(int y = 0; y < sizeY; y++){
-        for(int x = 0; x < sizeX; x++){
+    for(std::size_t y = 0; y < sizeY; y++){
+        for(std::size_t x = 0; x < sizeX; x++){
             if(m_bathymetry->getDataByIndex(x,y) > 0)
                 bath.setPixelColor(x, y, QColor(0, 255, 0));
             else bath.setPixelColor(x, y, QColor(0, 0, 255));
