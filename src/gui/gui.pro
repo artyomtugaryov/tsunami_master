@@ -1,4 +1,4 @@
-QT += qml quick 
+QT += qml quick
 
 TARGET = TsunamiMaster
 TEMPLATE = app
@@ -6,9 +6,12 @@ TEMPLATE = app
 !include( $${_PRO_FILE_PWD_}/../../common.pri ): error(include file not found)
 !include( $${_PRO_FILE_PWD_}/../../app.pri ): error(include file not found)
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+           ApplicationGUI.cpp
 
-HEADERS += $${_PRO_FILE_PWD_}/../../include/HDlib/common.h
+HEADERS += $${_PRO_FILE_PWD_}/../../include/HDlib/common.h \
+           ApplicationGUI.h
+
 RESOURCES += qml.qrc
 CONFIG += console
 
