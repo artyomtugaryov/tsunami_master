@@ -56,7 +56,7 @@ void Map::MapAreaWorker::readBathymetryFromFileDat()
 
     m_bathymetry = std::make_shared<Map::MapArea <double>>(sizeX, sizeY);
 
-    m_bathymetry->MapArea<double>::setEndX(endX);
+    m_bathymetry->setEndX(endX);
     m_bathymetry->setEndY(endY);
     m_bathymetry->setSizeX(sizeX);
     m_bathymetry->setSizeY(sizeY);
@@ -74,13 +74,14 @@ void Map::MapAreaWorker::readBathymetryFromFileDat()
     //initMainArrays(size_y, size_x);
     //init_old_arrays();
     testDraw();
+    m_bathymetry->saveMapAreaToTextFile("testFile.mtx", 0);
 }
 
 void Map::MapAreaWorker::testDraw()
 {
     std::size_t sizeX = m_bathymetry->sizeX();
     std::size_t sizeY = m_bathymetry->sizeY();
-    QImage bath = QImage( sizeX, sizeY, QImage::Format_RGB32);
+    QImage bath = QImage(sizeX, sizeY, QImage::Format_RGB32);
     for(std::size_t y = 0; y < sizeY; y++){
         for(std::size_t x = 0; x < sizeX; x++){
             if(m_bathymetry->getDataByIndex(x,y) > 0)
