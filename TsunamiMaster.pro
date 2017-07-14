@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    src/HDlib \
+    src/TMlib \
     src/GUI \
-    tests
+#    tests

@@ -9,14 +9,12 @@ TEMPLATE = app
 SOURCES += main.cpp \
            ApplicationGUI.cpp
 
-HEADERS += $${_PRO_FILE_PWD_}/../../include/HDlib/common.h \
-           ApplicationGUI.h
+HEADERS += ApplicationGUI.h
 
+HEADERS += $${_PRO_FILE_PWD_}/../../include/TMlib
 RESOURCES += qml.qrc
 CONFIG += console
 
-
-LIBS += -lHDlib$${LIB_SUFFIX}
+LIBS += -lTMlib$${LIB_SUFFIX}
 
 QMAKE_CXXFLAGS += -Werror
-

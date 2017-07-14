@@ -1,5 +1,5 @@
-#include "HDlib/MapArea.h"
-
+#include "TMlib/TMMapArea.h"
+#include "TMlib/TMException.h"
 #include <iostream>
 #include <cstdio>
 #include <fstream>
@@ -7,20 +7,20 @@
 #include <stdexcept>
 
 template <typename DataType>
-Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY) :
+TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY) :
     m_sizeX(sizeX), m_sizeY(sizeY), m_data(m_sizeX * m_sizeY, 1)
 {
 }
 
 template <typename DataType>
-Map::MapArea<DataType>::MapArea()
+TM::Map::MapArea<DataType>::MapArea()
 {
 }
 
 template <typename DataType>
-std::size_t Map::MapArea<DataType>::getIndex(std::size_t x, std::size_t y) const
+std::size_t TM::Map::MapArea<DataType>::getIndex(std::size_t x, std::size_t y) const
 {
-    // TODO: Will be check by Artem
+    // TODO: Need to usr TMException, wehen it will be work:)
     if(x >= m_sizeX || y >= m_sizeY) {
         throw std::out_of_range("Out of range");
     }
@@ -28,7 +28,7 @@ std::size_t Map::MapArea<DataType>::getIndex(std::size_t x, std::size_t y) const
 }
 
 template <typename DataType>
-std::size_t Map::MapArea<DataType>::getIndexByPoint(double lat, double lon) const
+std::size_t TM::Map::MapArea<DataType>::getIndexByPoint(double lat, double lon) const
 {
     std::size_t x = static_cast<std::size_t>(((lat - m_startX) / m_stepX));
     std::size_t y = m_sizeY - 1 - static_cast<std::size_t>(((lon - m_startY) / m_stepY));
@@ -36,67 +36,67 @@ std::size_t Map::MapArea<DataType>::getIndexByPoint(double lat, double lon) cons
 }
 
 template <typename DataType>
-std::size_t Map::MapArea<DataType>::sizeX() const noexcept
+std::size_t TM::Map::MapArea<DataType>::sizeX() const noexcept
 {
     return m_sizeX;
 }
 
 template <typename DataType>
-std::size_t Map::MapArea<DataType>::sizeY() const noexcept
+std::size_t TM::Map::MapArea<DataType>::sizeY() const noexcept
 {
     return m_sizeY;
 }
 
 template <typename DataType>
-double Map::MapArea<DataType>::stepX() const noexcept
+double TM::Map::MapArea<DataType>::stepX() const noexcept
 {
     return m_stepX;
 }
 
 template <typename DataType>
-double Map::MapArea<DataType>::stepY() const noexcept
+double TM::Map::MapArea<DataType>::stepY() const noexcept
 {
     return m_stepY;
 }
 
 template <typename DataType>
-double Map::MapArea<DataType>::startX() const noexcept
+double TM::Map::MapArea<DataType>::startX() const noexcept
 {
     return m_startX;
 }
 
 template <typename DataType>
-double Map::MapArea<DataType>::startY() const noexcept
+double TM::Map::MapArea<DataType>::startY() const noexcept
 {
     return m_startY;
 }
 
 template <typename DataType>
-double Map::MapArea<DataType>::endX() const noexcept
+double TM::Map::MapArea<DataType>::endX() const noexcept
 {
     return m_endX;
 }
 
 template <typename DataType>
-double Map::MapArea<DataType>::endY() const noexcept
+double TM::Map::MapArea<DataType>::endY() const noexcept
 {
     return m_endY;
 }
 
 template <typename DataType>
-DataType Map::MapArea<DataType>::getDataByIndex(std::size_t x, std::size_t y) const
+DataType TM::Map::MapArea<DataType>::getDataByIndex(std::size_t x, std::size_t y) const
 {
     return m_data[getIndex(x,y)];
 }
 
 template <typename DataType>
-DataType Map::MapArea<DataType>::getDataByPoint(double latitude, double longitude) const
+DataType TM::Map::MapArea<DataType>::getDataByPoint(double latitude, double longitude) const
 {
     return m_data[getIndexByPoint(latitude, longitude)];
 }
 
 template <typename DataType>
-void Map::MapArea<DataType>::setSizeX(std::size_t sizeX)
+void TM::Map::MapArea<DataType>::setSizeX(std::size_t sizeX)
 {
     if (m_sizeX  != sizeX) {
         m_sizeX = sizeX;
@@ -104,7 +104,7 @@ void Map::MapArea<DataType>::setSizeX(std::size_t sizeX)
 }
 
 template <typename DataType>
-void Map::MapArea<DataType>::setSizeY(std::size_t sizeY)
+void TM::Map::MapArea<DataType>::setSizeY(std::size_t sizeY)
 {
     if (m_sizeY  != sizeY) {
         m_sizeY = sizeY;
@@ -112,7 +112,7 @@ void Map::MapArea<DataType>::setSizeY(std::size_t sizeY)
 }
 
 template <typename DataType>
-void Map::MapArea<DataType>::setStepX(double stepX)
+void TM::Map::MapArea<DataType>::setStepX(double stepX)
 {
     if (m_stepX  != stepX) {
         m_stepX = stepX;
@@ -120,7 +120,7 @@ void Map::MapArea<DataType>::setStepX(double stepX)
 }
 
 template <typename DataType>
-void Map::MapArea<DataType>::setStepY(double stepY)
+void TM::Map::MapArea<DataType>::setStepY(double stepY)
 {
     if (m_stepY  != stepY) {
         m_stepY = stepY;
@@ -128,7 +128,7 @@ void Map::MapArea<DataType>::setStepY(double stepY)
 }
 
 template <typename DataType>
-void Map::MapArea<DataType>::setStartX(double startX)
+void TM::Map::MapArea<DataType>::setStartX(double startX)
 {
     if (m_startX  != startX) {
         m_startX = startX;
@@ -136,7 +136,7 @@ void Map::MapArea<DataType>::setStartX(double startX)
 }
 
 template <typename DataType>
-void Map::MapArea<DataType>::setStartY(double startY)
+void TM::Map::MapArea<DataType>::setStartY(double startY)
 {
     if (m_startY != startY) {
         m_startY = startY;
@@ -144,7 +144,7 @@ void Map::MapArea<DataType>::setStartY(double startY)
 }
 
 template <typename DataType>
-void Map::MapArea<DataType>::setEndX(double endX)
+void TM::Map::MapArea<DataType>::setEndX(double endX)
 {
     if (m_endX != endX) {
         m_endX = endX;
@@ -152,7 +152,7 @@ void Map::MapArea<DataType>::setEndX(double endX)
 }
 
 template <typename DataType>
-void Map::MapArea<DataType>::setEndY(double endY)
+void TM::Map::MapArea<DataType>::setEndY(double endY)
 {
     if (m_endY != endY) {
         m_endY = endY;
@@ -160,7 +160,7 @@ void Map::MapArea<DataType>::setEndY(double endY)
 }
 
 template <typename DataType>
-void Map::MapArea<DataType>::setDataByIndex(std::size_t x, std::size_t y, DataType value)
+void TM::Map::MapArea<DataType>::setDataByIndex(std::size_t x, std::size_t y, DataType value)
 {
     double data = getDataByIndex(x, y);
     if (data != value) {
@@ -169,7 +169,7 @@ void Map::MapArea<DataType>::setDataByIndex(std::size_t x, std::size_t y, DataTy
 }
 
 template <typename DataType>
-void Map::MapArea<DataType>::setDataByPoint(double latitude, double longitude, DataType value)
+void TM::Map::MapArea<DataType>::setDataByPoint(double latitude, double longitude, DataType value)
 {
     DataType data = getDataByPoint(latitude, longitude);
     if (data != value) {
@@ -178,7 +178,7 @@ void Map::MapArea<DataType>::setDataByPoint(double latitude, double longitude, D
 }
 
 template <typename DataType>
-void Map::MapArea<DataType>::saveMapAreaToTextFile(std::__cxx11::string path, int setprecision)
+void TM::Map::MapArea<DataType>::saveMapAreaToTextFile(std::__cxx11::string path, int setprecision)
 {
     //TODO: Will need check rounding for different data types.
     std::fstream file;
@@ -194,7 +194,7 @@ void Map::MapArea<DataType>::saveMapAreaToTextFile(std::__cxx11::string path, in
 }
 
 template <typename DataType>
-void Map::MapArea<DataType>::saveMapAreaToBinFile(std::__cxx11::string path)
+void TM::Map::MapArea<DataType>::saveMapAreaToBinFile(std::__cxx11::string path)
 {
     path = "";
     for (std::size_t i = 0; i < m_sizeX; i++) {
@@ -204,7 +204,7 @@ void Map::MapArea<DataType>::saveMapAreaToBinFile(std::__cxx11::string path)
     }
 }
 
-template class Map::MapArea<double>;
-template class Map::MapArea<float>;
-template class Map::MapArea<bool>;
-template class Map::MapArea<int>;
+template class TM::Map::MapArea<double>;
+template class TM::Map::MapArea<float>;
+template class TM::Map::MapArea<bool>;
+template class TM::Map::MapArea<int>;

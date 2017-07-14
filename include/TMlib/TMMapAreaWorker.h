@@ -3,8 +3,9 @@
 
 #include <iostream>
 #include <memory>
-#include "MapArea.h"
+#include "TMMapArea.h"
 
+namespace TM{
 namespace Map{
 
 class MapAreaWorker
@@ -23,5 +24,6 @@ public:
     void readBathymetryFromFile();
     void setBathymetryPath(std::__cxx11::string path, bool readFromFile = false);
 };
+}
 }
 #endif // MAPAREAWORKER_H

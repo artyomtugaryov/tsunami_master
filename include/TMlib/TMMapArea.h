@@ -5,10 +5,8 @@
 #include <memory>
 #include <vector>
 
+namespace TM {
 namespace Map{
-struct Index {
-    std::size_t x, y;
-};
 template <typename DataType>
 class MapArea
 {
@@ -22,6 +20,8 @@ private:
     double m_endX;
     double m_endY;
     std::vector<DataType> m_data;
+public:
+
     std::size_t getIndex(std::size_t x, std::size_t y) const;
     std::size_t getIndexByPoint(double lat, double lon) const;
 
@@ -51,5 +51,6 @@ public:
     void saveMapAreaToTextFile(std::__cxx11::string path, int setprecision);
     void saveMapAreaToBinFile(std::__cxx11::string path);
 };
+}
 }
 #endif // MAPAREA_H

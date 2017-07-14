@@ -1,4 +1,4 @@
-#include "HDlib/MapAreaWorker.h"
+#include "TMlib/TMMapAreaWorker.h"
 
 #include <iostream>
 #include <cstdio>
@@ -7,12 +7,12 @@
 #include <algorithm>
 #include <QImage>
 
-Map::MapAreaWorker::MapAreaWorker()
+TM::Map::MapAreaWorker::MapAreaWorker()
 {
 
 }
 
-void Map::MapAreaWorker::readBathymetryFromFileDat()
+void TM::Map::MapAreaWorker::readBathymetryFromFileDat()
 {
     std::vector <double> longitude; // y
     std::vector <double> latitude;  // x
@@ -54,7 +54,7 @@ void Map::MapAreaWorker::readBathymetryFromFileDat()
     double endX = maxX + stepX / 2.;
     double endY = maxY + stepY / 2.;
 
-    m_bathymetry = std::make_shared<Map::MapArea <double>>(sizeX, sizeY);
+    m_bathymetry = std::make_shared<TM::Map::MapArea <double>>(sizeX, sizeY);
 
     m_bathymetry->setEndX(endX);
     m_bathymetry->setEndY(endY);
@@ -77,7 +77,7 @@ void Map::MapAreaWorker::readBathymetryFromFileDat()
     m_bathymetry->saveMapAreaToTextFile("testFile.mtx", 0);
 }
 
-void Map::MapAreaWorker::testDraw()
+void TM::Map::MapAreaWorker::testDraw()
 {
     std::size_t sizeX = m_bathymetry->sizeX();
     std::size_t sizeY = m_bathymetry->sizeY();
@@ -92,7 +92,7 @@ void Map::MapAreaWorker::testDraw()
     bath.save("testOutput.png");
 }
 
-void Map::MapAreaWorker::readBathymetryFromFile()
+void TM::Map::MapAreaWorker::readBathymetryFromFile()
 {
     if (m_bathymetryPath.size() < 5) {
         if(m_bathymetryPath.size() == 0) {
@@ -112,10 +112,11 @@ void Map::MapAreaWorker::readBathymetryFromFile()
     }
 }
 
-void Map::MapAreaWorker::setBathymetryPath(std::__cxx11::string path, bool readFromFile)
+void TM::Map::MapAreaWorker::setBathymetryPath(std::__cxx11::string path, bool readFromFile)
 {
     m_bathymetryPath = path;
     if (readFromFile) {
         readBathymetryFromFile();
     }
 }
+
