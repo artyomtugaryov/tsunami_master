@@ -8,7 +8,7 @@ ApplicationGUI::ApplicationGUI(int &argc, char **argv) :
     m_view = new QQuickView;
     m_view->setSource(QUrl(QLatin1String("qrc:/Resources/Main.qml")));
     m_view->setResizeMode(QQuickView::SizeRootObjectToView);
-    //TODO: remaked
+    //TODO: remake
     // ************************* //
     QRect rect = m_view->screen()->availableGeometry();
     QSize screenSize(rect.width(), rect.height()-35);
@@ -19,6 +19,7 @@ ApplicationGUI::ApplicationGUI(int &argc, char **argv) :
     m_view->setMinimumSize(screenSize);
     setPositionByCenter();
     m_view->show();
+
 }
 
 ApplicationGUI::~ApplicationGUI()

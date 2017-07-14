@@ -7,9 +7,13 @@ TEMPLATE = app
 !include( $${_PRO_FILE_PWD_}/../../app.pri ): error(include file not found)
 
 SOURCES += main.cpp \
-           ApplicationGUI.cpp
+           ApplicationGUI.cpp \
+           SourceGUI.cpp \
+           MapData.cpp
 
-HEADERS += ApplicationGUI.h
+HEADERS += ApplicationGUI.h \
+           SourceGUI.h \
+           MapData.h
 
 HEADERS += $${_PRO_FILE_PWD_}/../../include/TMlib
 RESOURCES += qml.qrc

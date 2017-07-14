@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGuiApplication>
 #include <QQuickView>
+#include <QThread>
 //class QQuickView;
 //TODO: Create and include SourceGUI class
 /*namespace GUI
@@ -21,6 +22,7 @@ public:
     void setPositionByCenter();
 private:
     QQuickView *m_view;
+    QThread *m_calculation;
 };
 
 #endif // APPLICATIONGUI_H
