@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <sstream>
+#include <string>
 
 #define THROW_TM_EXCEPTION\
     throw TM::details::TMException(__FILE__, __LINE__)\
@@ -21,6 +22,7 @@ class TMException: public std::exception
 public:
     const char *what() const noexcept override{
         if (m_errorDesc.empty() && m_exceptionStream){
+            (*m_exceptionStream) << std::endl <<std::string("FILE: ")<<m_file<< std::string(" LINE: ")<<m_line<<std::endl;
             m_errorDesc = m_exceptionStream->str();
         }
         return m_errorDesc.c_str();
@@ -32,7 +34,7 @@ public:
 
     template<class T>
     TMException &operator<<(const T &arg){
-        if (m_exceptionStream){
+        if (!m_exceptionStream){
             m_exceptionStream.reset(new std::stringstream());
         }
         (*m_exceptionStream) << arg;

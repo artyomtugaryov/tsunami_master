@@ -20,9 +20,8 @@ TM::Map::MapArea<DataType>::MapArea()
 template <typename DataType>
 std::size_t TM::Map::MapArea<DataType>::getIndex(std::size_t x, std::size_t y) const
 {
-    // TODO: Need to usr TMException, wehen it will be work:)
     if(x >= m_sizeX || y >= m_sizeY) {
-        throw std::out_of_range("Out of range");
+       THROW_TM_EXCEPTION<<"Out of range in "<<__FUNCTION__;
     }
     return (x + y * m_sizeX);
 }
