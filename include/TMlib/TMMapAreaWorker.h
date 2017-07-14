@@ -7,7 +7,6 @@
 
 namespace TM{
 namespace Map{
-
 class MapAreaWorker
 {
 private:

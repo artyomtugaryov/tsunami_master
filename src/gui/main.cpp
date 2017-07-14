@@ -1,8 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include "ApplicationGUI.h"
-#include <TMlib/TMMapAreaWorker.h>
-#include <TMlib/TMException.h>
+
 int main(int argc, char *argv[])
 {
     ApplicationGUI application(argc, argv);

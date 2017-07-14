@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+namespace TsunamiManagerInfo {
 class MapData : public QObject
 {
 
@@ -73,5 +74,5 @@ private:
     double m_deltaX;
     double m_deltaY;
 };
-
+}
 #endif // MAPDATA_H

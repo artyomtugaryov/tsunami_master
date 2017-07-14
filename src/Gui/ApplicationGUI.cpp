@@ -3,7 +3,8 @@
 #include <QScreen>
 
 ApplicationGUI::ApplicationGUI(int &argc, char **argv) :
-    QGuiApplication(argc, argv)
+    QGuiApplication(argc, argv),
+    m_sourceGUI(new SourceGUI(this))
 {
     m_view = new QQuickView;
     m_view->setSource(QUrl(QLatin1String("qrc:/Resources/Main.qml")));
@@ -20,6 +21,13 @@ ApplicationGUI::ApplicationGUI(int &argc, char **argv) :
     setPositionByCenter();
     m_view->show();
 
+//    m_calculationThread = new Thread;
+//    m_mapAreaWorker = new TM::Map::MapAreaWorker;
+//    m_mapAreaWorker->setBathymetryPath("work.dat");
+
+//    connect(this, SIGNAL(readBathymetryFromFile()),
+//            m_mapAreaWorker, SLOT(readBathymetryFromFile()), Qt::DirectConnection);
+//    emit readBathymetryFromFile();
 }
 
 ApplicationGUI::~ApplicationGUI()

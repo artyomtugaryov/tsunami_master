@@ -3,4 +3,5 @@ TEMPLATE = subdirs
 SUBDIRS += \
     src/TMlib \
     src/GUI \
-    tests
+    tests \
+    src/TsunamiManager

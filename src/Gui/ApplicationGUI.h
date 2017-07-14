@@ -5,12 +5,9 @@
 #include <QGuiApplication>
 #include <QQuickView>
 #include <QThread>
+#include "SourceGUI.h"
 //class QQuickView;
 //TODO: Create and include SourceGUI class
-/*namespace GUI
-{
-    class SourceGUI;
-}*/
 
 class ApplicationGUI : public QGuiApplication
 {
@@ -20,9 +17,13 @@ public:
     ApplicationGUI(int &argc, char **argv);
     ~ApplicationGUI();
     void setPositionByCenter();
+//signals:
+//    void readBathymetryFromFile();
 private:
     QQuickView *m_view;
-    QThread *m_calculation;
+    SourceGUI* m_sourceGUI;
+//    QThread *m_calculationThread;
+//    TM::Map::MapAreaWorker *m_mapAreaWorker;
 };
 
 #endif // APPLICATIONGUI_H

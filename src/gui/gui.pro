@@ -8,17 +8,19 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
            ApplicationGUI.cpp \
-           SourceGUI.cpp \
-           MapData.cpp
+           SourceGUI.cpp
 
 HEADERS += ApplicationGUI.h \
-           SourceGUI.h \
-           MapData.h
+           SourceGUI.h
 
-HEADERS += $${_PRO_FILE_PWD_}/../../include/TMlib
+HEADERS += $${_PRO_FILE_PWD_}/../../include/TMlib \
+           $${_PRO_FILE_PWD_}/../../include/TsunamiManager \
+
 RESOURCES += qml.qrc
+
 CONFIG += console
 
 LIBS += -lTMlib$${LIB_SUFFIX}
-
+LIBS += -lTsunamiManagerlib$${LIB_SUFFIX}
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../../include/TMlib/
 QMAKE_CXXFLAGS += -Werror
