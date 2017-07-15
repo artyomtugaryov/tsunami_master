@@ -2,13 +2,19 @@ QT += testlib
 
 TARGET = TsunamiMasterTests
 TEMPLATE = app 
-SOURCES += common_test.cpp
-HEADERS += common_test.h \
-           ../include/TMlib/TMMapArea.h
+SOURCES += \
+            TestCommon.cpp \
+            TMMapAreaTests.cpp
+
+HEADERS += \
+            ../include/TMlib/TMMapArea.h \
+            TestCommon.h \
+            TMMapAreaTests.h
+
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../include/TMlib/
 
 include( ../common.pri )
 include( ../app.pri )
 
 LIBS += -lTMlib$${LIB_SUFFIX}
-#LIBS += -lgdi32
 

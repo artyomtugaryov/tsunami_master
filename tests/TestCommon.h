@@ -3,8 +3,10 @@
 
 #include <QtTest/QtTest>
 
-class TestsCommon: public QObject {
-
+class TestCommon
+        : public QObject
+{
+Q_OBJECT
 };
 
 #endif // COMMON_TEST_H
