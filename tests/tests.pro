@@ -3,7 +3,6 @@ QT += testlib
 TARGET = TsunamiMasterTests
 TEMPLATE = app 
 SOURCES += \
-            TestCommon.cpp \
             TMMapAreaTests.cpp
 
 HEADERS += \

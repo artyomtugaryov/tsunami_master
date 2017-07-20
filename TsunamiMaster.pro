@@ -1,7 +1,15 @@
 TEMPLATE = subdirs
-
 SUBDIRS += \
-    src/TMlib \
-    src/GUI \
-    tests \
-    src/TsunamiManager
+    TMlib \
+    TsunamiManager \
+    GUI \
+    tests
+
+TMlib.subdir = src/TMlib
+TsunamiManager.subdir  = src/TsunamiManager
+GUI.subdir  = src/GUI
+tests.subdir  = tests
+
+GUI.depends = TMlib TsunamiManager
+tests.depends = TMlib TsunamiManager
+TsunamiManager.depends = TMlib

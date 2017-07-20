@@ -1,3 +1,5 @@
+CONFIG +=c++11
+
 PROJECT_ROOT_PATH = $${PWD}/
 
 win32: OS_SUFFIX = win32

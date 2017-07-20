@@ -14,7 +14,6 @@ SOURCES+= TsunamiManager.cpp \
 HEADERS += $${_PRO_FILE_PWD_}/../../include/TsunamiManager/TsunamiManager.h \
            $${_PRO_FILE_PWD_}/../../include/TsunamiManager/MapData.h
 
-#CONFIG += staticlib
 
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../../include/TMlib/
 LIBS += -lTMlib$${LIB_SUFFIX}

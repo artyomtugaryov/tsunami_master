@@ -1,2 +1,2 @@
-#include "TMLib/TMException.h"
+#include "TMException.h"
 
