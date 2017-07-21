@@ -21,16 +21,17 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat()
 
     infile = fopen(m_bathymetryPath.c_str(), "rt");
 
-    double minX;
-    double maxX;
-    double minY;
-    double maxY;
-    double datX; // latitude
-    double datY; // longitude
-    double datZ; // depth
-
-    while (fscanf(infile, "%lf%lf%lf", &datX, &datY, &datZ) == 3)
+    double minX(0);
+    double maxX(0);
+    double minY(0);
+    double maxY(0);
+    double datX(0); // latitude
+    double datY(0); // longitude
+    double datZ(0); // depth
+    char  line[255];
+    while (fgets(line, sizeof(line), infile) != nullptr)
     {
+        sscanf (line,"%lf%lf%lf", &datX, &datY, &datZ);
         latitude.push_back(datX);
         longitude.push_back(datY);
         depth.push_back(datZ);
