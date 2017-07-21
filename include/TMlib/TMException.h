@@ -6,9 +6,11 @@
 #include <string>
 #include <sstream>
 #include <string>
+
+#ifdef __linux__
 #include <execinfo.h>
 #include <cxxabi.h>
-
+#endif//__linux__
 
 #define THROW_TM_EXCEPTION\
     throw TM::details::TMException(__FILE__, __LINE__)\
@@ -33,7 +35,6 @@ public:
 
     TMException(const std::string &fileName, const int line)
         : m_file(fileName), m_line(line) {
-
     }
 
     template<class T>
@@ -41,10 +42,16 @@ public:
         if (!m_exceptionStream){
             m_exceptionStream.reset(new std::stringstream());
         }
-        (*m_exceptionStream) << print_stacktrace() <<std::endl<<arg;
+
+        (*m_exceptionStream)
+#ifdef __linux__
+                << print_stacktrace()
+#endif//__linux__
+                <<std::endl<<arg;
         return *this;
     }
 private:
+#ifdef __linux__
     static inline std::string print_stacktrace(unsigned int max_frames = 63) {
         std::stringstream out;
         out << "STACK TRACE:\n";
@@ -101,8 +108,7 @@ private:
         free(symbollist);
         return out.str();
     }
-
-
+#endif//__linux__
 };
 }
 }
