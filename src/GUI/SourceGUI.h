@@ -24,8 +24,6 @@ public slots:
 private:
     TsunamiManagerInfo::TsunamiManager* m_tsunamiManager;
     QThread* m_tsunamiManagerThread;
-signals:
-    void readBathymetryFromFile();
 };
 
 #endif // SOURCEGUI_H
