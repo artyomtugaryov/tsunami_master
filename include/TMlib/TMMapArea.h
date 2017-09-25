@@ -48,8 +48,8 @@ public:
     void setEndY(double endY);
     void setDataByIndex(std::size_t x, std::size_t y, DataType value);
     void setDataByPoint(double latitude, double longitude, DataType value);
-    void saveMapAreaToTextFile(std::__cxx11::string path, int setprecision);
-    void saveMapAreaToBinFile(std::__cxx11::string path);
+    void saveMapAreaToTextFile(std::string path, int setprecision);
+    void saveMapAreaToBinFile(std::string path);
 };
 }
 }

@@ -22,7 +22,7 @@ class MapData : public QObject
     Q_PROPERTY(double deltaY READ deltaY NOTIFY deltaYChanged)
 public:
     MapData(QObject *parent = 0);
-    ~MapData();
+    virtual ~MapData();
 
     uint sizeX() const;
     uint sizeY() const;

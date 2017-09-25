@@ -15,15 +15,15 @@ class ApplicationGUI : public QGuiApplication
 
 public:
     ApplicationGUI(int &argc, char **argv);
-    ~ApplicationGUI();
+    virtual ~ApplicationGUI();
     void setPositionByCenter();
-//signals:
-//    void readBathymetryFromFile();
+signals:
+    void readBathymetryFromFile();
 private:
     QQuickView *m_view;
     SourceGUI* m_sourceGUI;
-//    QThread *m_calculationThread;
-//    TM::Map::MapAreaWorker *m_mapAreaWorker;
+    QThread *m_calculationThread;
+    TM::Map::MapAreaWorker *m_mapAreaWorker;
 };
 
 #endif // APPLICATIONGUI_H

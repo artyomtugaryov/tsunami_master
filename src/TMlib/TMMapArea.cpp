@@ -177,7 +177,7 @@ void TM::Map::MapArea<DataType>::setDataByPoint(double latitude, double longitud
 }
 
 template <typename DataType>
-void TM::Map::MapArea<DataType>::saveMapAreaToTextFile(std::__cxx11::string path, int setprecision)
+void TM::Map::MapArea<DataType>::saveMapAreaToTextFile(std::string path, int setprecision)
 {
     //TODO: Will need check rounding for different data types.
     std::fstream file;
@@ -193,7 +193,7 @@ void TM::Map::MapArea<DataType>::saveMapAreaToTextFile(std::__cxx11::string path
 }
 
 template <typename DataType>
-void TM::Map::MapArea<DataType>::saveMapAreaToBinFile(std::__cxx11::string path)
+void TM::Map::MapArea<DataType>::saveMapAreaToBinFile(std::string path)
 {
     path = "";
     for (std::size_t i = 0; i < m_sizeX; i++) {

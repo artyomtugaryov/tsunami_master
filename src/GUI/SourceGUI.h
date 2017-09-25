@@ -16,7 +16,7 @@ class SourceGUI : public QObject
 
 public:
     SourceGUI(QObject *parent = 0);
-    ~SourceGUI();
+    virtual ~SourceGUI();
 
     TsunamiManagerInfo::TsunamiManager* TsunamiManager() const;
 public slots:

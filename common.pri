@@ -6,10 +6,10 @@ win32: OS_SUFFIX = win32
 linux-g++: OS_SUFFIX = linux
 
 CONFIG(debug, debug|release) {
-    BUILD_FLAG = debug
+    BUILD_FLAG = Debug
     LIB_SUFFIX = d
 } else {
-    BUILD_FLAG = release
+    BUILD_FLAG = Release
 }
 linux-g++ {
    QMAKE_CXXFLAGS += -Werror

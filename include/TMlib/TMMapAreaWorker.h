@@ -15,13 +15,13 @@ private:
     std::shared_ptr<MapArea <double>> m_max;
     std::shared_ptr<MapArea <double>> m_min;
     std::shared_ptr<MapArea <double>> m_bathymetry;
-    std::__cxx11::string m_bathymetryPath;
+    std::string m_bathymetryPath;
     void readBathymetryFromFileDat();
     void testDraw();
 public:
     MapAreaWorker();
     void readBathymetryFromFile();
-    void setBathymetryPath(std::__cxx11::string path, bool readFromFile = false);
+    void setBathymetryPath(std::string path, bool readFromFile = false);
 };
 }
 }
