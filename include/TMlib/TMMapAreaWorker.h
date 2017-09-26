@@ -19,9 +19,9 @@ private:
     void readBathymetryFromFileDat();
     void testDraw();
 public:
-    MapAreaWorker();
+    MapAreaWorker() = default;
     void readBathymetryFromFile();
-    void setBathymetryPath(std::string path, bool readFromFile = false);
+    void setBathymetryPath(const std::string& path, bool readFromFile = false);
 };
 }
 }
