@@ -7,25 +7,39 @@ linux-g++: OS_SUFFIX = linux
 
 CONFIG(debug, debug|release) {
     BUILD_FLAG = Debug
-    LIB_SUFFIX = d
 } else {
     BUILD_FLAG = Release
 }
 linux-g++ {
    QMAKE_CXXFLAGS += -Werror
+   !contains(QT_ARCH, x86_64){
+       ARCH=x32
+       message("Compiling for 32bit system")
+    } else {
+       ARCH=x64
+       message("Compiling for 64bit system")
+   }
 }
-win32-g++ {
-   QMAKE_CXXFLAGS += -Werror
+win{
+    !contains(QMAKE_TARGET.arch, x86_64) {
+       ARCH=x32
+       message("Compiling for 32bit system")
+    } else {
+       ARCH=x64
+       message("Compiling for 64bit system")
+    }
+    win32-g++ {
+        QMAKE_CXXFLAGS += -Werror
+    }
+    win32-msvc*{
+        QMAKE_CXXFLAGS += /WX
+    }
 }
-win32-msvc*{
-   QMAKE_CXXFLAGS += /WX
-}
-
 INC_PATH = $${PROJECT_ROOT_PATH}/include/
 IMPORT_PATH = $${PROJECT_ROOT_PATH}/import/
-BIN_PATH = $${PROJECT_ROOT_PATH}/bin/$${BUILD_FLAG}/
+BIN_PATH = $${PROJECT_ROOT_PATH}/bin/$${ARCH}/$${BUILD_FLAG}/
 LIBS_PATH = $${BIN_PATH}/lib/
-BUILD_PATH = $${PROJECT_ROOT_PATH}/../TsunamiMaster_build/$${BUILD_FLAG}/$${TARGET}/
+BUILD_PATH = $${PROJECT_ROOT_PATH}/build/$${BUILD_FLAG}/$${TARGET}/
 
 RCC_DIR = $${BUILD_PATH}/rcc/
 UI_DIR = $${BUILD_PATH}/ui/
