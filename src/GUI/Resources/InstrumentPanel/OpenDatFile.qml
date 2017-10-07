@@ -17,6 +17,7 @@ FileDialog {
     sidebarVisible: true
     onAccepted: {
         console.log("Accepted: " + fileUrls)
+        _sourceGUI.startReadFromFile(fileUrls)
     }
     onRejected: { console.log("Rejected") }
 }

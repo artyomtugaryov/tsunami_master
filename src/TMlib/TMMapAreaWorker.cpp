@@ -67,16 +67,28 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
     }
     //initMainArrays(size_y, size_x);
     //init_old_arrays();
-//    testDraw();
+    testDraw();
     m_bathymetry->saveMapAreaToTextFile("testFile.mtx", 0);
 }
 
-void TM::Map::MapAreaWorker::testDraw(){
-
+//#include <QImage> // for testDraw
+void TM::Map::MapAreaWorker::testDraw() {
+    /*std::size_t sizeX = m_bathymetry->sizeX();
+    std::size_t sizeY = m_bathymetry->sizeY();
+    QImage bath = QImage(sizeX, sizeY, QImage::Format_RGB32);
+    for(std::size_t y = 0; y < sizeY; y++){
+        for(std::size_t x = 0; x < sizeX; x++){
+            if(m_bathymetry->getDataByIndex(x,y) > 0)
+                bath.setPixelColor(x, y, QColor(0, 255, 0));
+            else bath.setPixelColor(x, y, QColor(0, 0, 255));
+        }
+    }
+    bath.save("testOutput.png");*/
 }
 
 void TM::Map::MapAreaWorker::readBathymetryFromFile() {
-    if (m_bathymetryPath.size() < 5) { //WHAT??? Why 5?
+    if (m_bathymetryPath.size() < 5) { //WHAT??? Why 5? -
+                                       //*.dat, *.mtx, *.grd - all formats can not be less than 5 characters
         if (m_bathymetryPath.empty()) {
             std::cerr << "Empty path.\n";
         } else {

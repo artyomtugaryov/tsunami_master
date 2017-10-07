@@ -19,8 +19,8 @@ public:
     virtual ~SourceGUI();
 
     TsunamiManagerInfo::TsunamiManager* TsunamiManager() const;
-public slots:
-    void initTsunamiMaster();
+    Q_INVOKABLE void startReadFromFile(const QString &path);
+
 private:
     TsunamiManagerInfo::TsunamiManager* m_tsunamiManager;
     QThread* m_tsunamiManagerThread;

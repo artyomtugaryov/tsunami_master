@@ -1,5 +1,6 @@
 #include "ApplicationGUI.h"
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <QScreen>
 
 ApplicationGUI::ApplicationGUI(int &argc, char **argv) :
@@ -7,8 +8,10 @@ ApplicationGUI::ApplicationGUI(int &argc, char **argv) :
     m_sourceGUI(new SourceGUI(this))
 {
     m_view = new QQuickView;
+    m_view->rootContext()->setContextProperty("_sourceGUI", m_sourceGUI);
     m_view->setSource(QUrl(QLatin1String("qrc:/Resources/Main.qml")));
     m_view->setResizeMode(QQuickView::SizeRootObjectToView);
+
     //TODO: remake
     // ************************* //
     QRect rect = m_view->screen()->availableGeometry();
@@ -20,14 +23,6 @@ ApplicationGUI::ApplicationGUI(int &argc, char **argv) :
     m_view->setMinimumSize(screenSize);
     setPositionByCenter();
     m_view->show();
-
-//    m_calculationThread = new Thread;
-//    m_mapAreaWorker = new TM::Map::MapAreaWorker;
-//    m_mapAreaWorker->setBathymetryPath("work.dat");
-
-//    connect(this, SIGNAL(readBathymetryFromFile()),
-//            m_mapAreaWorker, SLOT(readBathymetryFromFile()), Qt::DirectConnection);
-//    emit readBathymetryFromFile();
 }
 
 ApplicationGUI::~ApplicationGUI()
