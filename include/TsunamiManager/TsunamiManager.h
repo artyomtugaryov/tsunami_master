@@ -4,6 +4,12 @@
 #include "MapData.h"
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMException.h>
+#include <PlotLib/Plot2d.h>
+#include <PlotLib/ColorMap.h>
+#include <QImage>
+
+
+using namespace PlotLib;
 
 namespace TsunamiManagerInfo {
 
@@ -25,11 +31,13 @@ public slots:
 
 signals:
     void pathChanged();
-
 private:
     TsunamiManagerInfo::MapData* m_mapData;
     TM::Map::MapAreaWorker* m_mapAreaWorker;
     QString m_path;
+    QImage* m_bathymetryImage;
+    Plot2d* m_plot;
+    void plotBathametry();
 };
 }
 #endif //TSUNAMIMANAGER_H

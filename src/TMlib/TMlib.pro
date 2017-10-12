@@ -1,5 +1,5 @@
 QT += core
-s
+
 include( $${_PRO_FILE_PWD_}/../../common.pri )
 include( $${_PRO_FILE_PWD_}/../../lib.pri )
 

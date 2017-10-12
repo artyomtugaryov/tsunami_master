@@ -38,14 +38,14 @@ double TsunamiManagerInfo::MapData::endY() const
     return m_endY;
 }
 
-double TsunamiManagerInfo::MapData::deltaX() const
+double TsunamiManagerInfo::MapData::stepX() const
 {
-    return m_deltaX;
+    return m_stepX;
 }
 
-double TsunamiManagerInfo::MapData::deltaY() const
+double TsunamiManagerInfo::MapData::stepY() const
 {
-    return m_deltaY;
+    return m_stepY;
 }
 
 void TsunamiManagerInfo::MapData::setSizeX(uint size) {
@@ -90,16 +90,16 @@ void TsunamiManagerInfo::MapData::setEndY(double end) {
     }
 }
 
-void TsunamiManagerInfo::MapData::setDeltaX(double delta) {
-    if (m_deltaX != delta) {
-        m_deltaX = delta;
-        emit deltaXChanged(delta);
+void TsunamiManagerInfo::MapData::setStepX(double step) {
+    if (m_stepX != step) {
+        m_stepX = step;
+        emit stepXChanged(step);
     }
 }
 
-void TsunamiManagerInfo::MapData::setDeltaY(double delta) {
-    if (m_deltaY != delta) {
-        m_deltaY = delta;
-        emit deltaYChanged(delta);
+void TsunamiManagerInfo::MapData::setStepY(double step) {
+    if (m_stepY != step) {
+        m_stepY = step;
+        emit stepYChanged(step);
     }
 }

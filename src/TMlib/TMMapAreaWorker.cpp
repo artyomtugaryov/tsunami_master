@@ -48,7 +48,7 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
     double startY = minY - stepY / 2.;
     double endX = maxX + stepX / 2.;
     double endY = maxY + stepY / 2.;
-
+    std::cout<< stepY << std::endl;
     m_bathymetry = std::make_shared<TM::Map::MapArea<double>>(sizeX, sizeY);
 
     m_bathymetry->setEndX(endX);
@@ -60,54 +60,45 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
     m_bathymetry->setStepX(stepX);
     m_bathymetry->setStepY(stepY);
 
-    //bottom = create_array(size_y, size_x);
-    //m_bathymetry->setDataByIndex(0, 0, 0);
     for (int k = 0; k < (int) depth.size(); k++) {
         m_bathymetry->setDataByPoint(latitude[k], longitude[k], depth[k]);
     }
     //initMainArrays(size_y, size_x);
     //init_old_arrays();
-    testDraw();
     m_bathymetry->saveMapAreaToTextFile("testFile.mtx", 0);
 }
 
-//#include <QImage> // for testDraw
-void TM::Map::MapAreaWorker::testDraw() {
-    /*std::size_t sizeX = m_bathymetry->sizeX();
-    std::size_t sizeY = m_bathymetry->sizeY();
-    QImage bath = QImage(sizeX, sizeY, QImage::Format_RGB32);
-    for(std::size_t y = 0; y < sizeY; y++){
-        for(std::size_t x = 0; x < sizeX; x++){
-            if(m_bathymetry->getDataByIndex(x,y) > 0)
-                bath.setPixelColor(x, y, QColor(0, 255, 0));
-            else bath.setPixelColor(x, y, QColor(0, 0, 255));
-        }
-    }
-    bath.save("testOutput.png");*/
-}
-
-void TM::Map::MapAreaWorker::readBathymetryFromFile() {
+bool TM::Map::MapAreaWorker::readBathymetryFromFile() {
     if (m_bathymetryPath.size() < 5) { //WHAT??? Why 5? -
                                        //*.dat, *.mtx, *.grd - all formats can not be less than 5 characters
         if (m_bathymetryPath.empty()) {
             std::cerr << "Empty path.\n";
+            return false;
         } else {
             std::cerr << "Incorrect path.";
+            return false;
         }
-        return;
+        return false;
     }
     if (m_bathymetryPath.substr(m_bathymetryPath.size() - 4, 4) == ".dat") {
         readBathymetryFromFileDat();
+        return true;
     } else {
         std::cerr << "No supported format\n";
-        return;
+        return false;
     }
 }
 
-void TM::Map::MapAreaWorker::setBathymetryPath(const std::string& path, bool readFromFile) {
+bool TM::Map::MapAreaWorker::setBathymetryPath(const std::string& path, bool readFromFile) {
     m_bathymetryPath = path;
     if (readFromFile) {
-        readBathymetryFromFile();
+        return readBathymetryFromFile();
     }
+    return false;
+}
+
+std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::bathymetry()
+{
+    return m_bathymetry;
 }
 

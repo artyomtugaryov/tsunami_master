@@ -17,11 +17,11 @@ private:
     std::shared_ptr<MapArea <double>> m_bathymetry;
     std::string m_bathymetryPath;
     void readBathymetryFromFileDat();
-    void testDraw();
 public:
     MapAreaWorker() = default;
-    void readBathymetryFromFile();
-    void setBathymetryPath(const std::string& path, bool readFromFile = false);
+    bool readBathymetryFromFile();
+    bool setBathymetryPath(const std::string& path, bool readFromFile = false);
+    std::shared_ptr<MapArea <double>> bathymetry();
 };
 }
 }

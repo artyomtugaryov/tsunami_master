@@ -18,8 +18,8 @@ class MapData : public QObject
     Q_PROPERTY(double endX READ endX NOTIFY endXChanged)
     Q_PROPERTY(double endY READ endY NOTIFY endYChanged)
 
-    Q_PROPERTY(double deltaX READ deltaX NOTIFY deltaXChanged)
-    Q_PROPERTY(double deltaY READ deltaY NOTIFY deltaYChanged)
+    Q_PROPERTY(double stepX READ stepX NOTIFY stepXChanged)
+    Q_PROPERTY(double stepY READ stepY NOTIFY stepYChanged)
 public:
     MapData(QObject *parent = 0);
     virtual ~MapData();
@@ -33,8 +33,8 @@ public:
     double endX() const;
     double endY() const;
 
-    double deltaX() const;
-    double deltaY() const;
+    double stepX() const;
+    double stepY() const;
 
     void setSizeX(uint size);
     void setSizeY(uint size);
@@ -45,8 +45,8 @@ public:
     void setEndX(double end);
     void setEndY(double end);
 
-    void setDeltaX(double delta);
-    void setDeltaY(double delta);
+    void setStepX(double step);
+    void setStepY(double step);
 
 signals:
     void sizeXChanged(uint sizeX);
@@ -58,8 +58,8 @@ signals:
     void endXChanged(double endX);
     void endYChanged(double endY);
 
-    void deltaXChanged(double deltaX);
-    void deltaYChanged(double deltaY);
+    void stepXChanged(double stepX);
+    void stepYChanged(double stepY);
 private:
 
     uint m_sizeX;
@@ -71,8 +71,8 @@ private:
     double m_endX;
     double m_endY;
 
-    double m_deltaX;
-    double m_deltaY;
+    double m_stepX;
+    double m_stepY;
 };
 }
 #endif // MAPDATA_H
