@@ -23,6 +23,8 @@ public:
     void setAxisY(bool draw);
     void setColorbar(bool draw);
     void setImage(QImage *image);
+    void setAxisLabelX(const QString &label);
+    void setAxisLabelY(const QString &label);
 
     QRect window();
     QRectF region();
@@ -30,17 +32,19 @@ public:
     bool axisY();
     bool colorbar();
 
-    void drawAxis(bool axis = true, bool arrow = false);
+    void drawAxis();
     void drawGrid(bool grid = true, bool ticks = true, unsigned int fontSize = 20,
                   double stepX = 0, double stepY = 0,
                   double stepFontX = 0, double stepFontY = 0);
     void drawText(QPointF point, QString text);
     void plotColorFunction(colorFunc2D & f, QRectF region);
     void plotColorFunction(colorFunc2D & f);
+
     QPointF getStep();
     QPoint getPoint(const QPointF point);
-
     QPointF getRealPoint(QPoint point);
+    QString getAxisLabelX() const;
+    QString getAxisLabelY() const;
 
 signals:
 private:

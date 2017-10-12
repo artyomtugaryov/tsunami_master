@@ -1,7 +1,10 @@
 #include "PlotLib/Plot2d.h"
 #include <QDebug>
 
-namespace PlotLib{
+namespace PlotLib {
+
+#define WIDTH_CHAR 12
+
 Plot2d::Plot2d(QObject *parent, QImage* image) :
     QObject(parent),
     m_image(image)
@@ -20,11 +23,8 @@ void Plot2d::setWindow(QRect window) {
         m_window = window;
     }
 
-    if (m_image->size() == QSize(0, 0)) {
-        m_painter.begin(m_image);
-        m_painter.fillRect(window, QColor(255, 255, 255));
-    }
-    else m_painter.fillRect(window, QColor(255, 255, 255));
+    m_painter.begin(m_image);
+    m_painter.fillRect(window, QColor(255, 255, 255));
     m_windowA = window;
 
     if (m_colorbar) {
@@ -87,6 +87,42 @@ bool Plot2d::colorbar()
     return m_colorbar;
 }
 
+void Plot2d::drawAxis()
+{
+    if(m_image == nullptr) {
+        return;
+    }
+
+    if(m_axisX) {
+        QPoint a = getPoint(QPointF(m_region.x(), m_region.y()));
+        QPoint b = getPoint(QPointF(m_region.x() + m_region.width(), m_region.y()));
+        m_painter.drawLine(a, b);
+    }
+
+    if(m_axisY) {
+        QPoint a = getPoint(QPointF(m_region.x(), m_region.y()));
+        QPoint b = getPoint(QPointF(m_region.x(), m_region.y() + m_region.height()));
+        m_painter.drawLine(a, b);
+    }
+
+    if (m_axisX && m_axisY) {
+        QPoint pointY = QPoint(m_window.x() - 35, m_window.y());
+        m_painter.drawText(pointY, m_axisLabelY);
+        if (m_colorbar){
+            QPoint pointX  = QPoint(static_cast<int>(m_window.x() + m_window.width() +
+                                          35 - WIDTH_CHAR * static_cast<int>(m_axisLabelX.size())),
+                                    static_cast<int>(m_window.y() + m_window.height()));
+            m_painter.drawText(pointX, m_axisLabelX);
+        }
+        else {
+            QPoint pointX  = QPoint(static_cast<int>(m_window.x() + m_window.width() -
+                                                     WIDTH_CHAR * static_cast<int>(m_axisLabelX.size()) + 35),
+                                    static_cast<int>(m_window.y() + m_window.height()) - 30);
+            m_painter.drawText(pointX, m_axisLabelX);
+        }
+    }
+}
+
 void Plot2d::plotColorFunction(colorFunc2D &f, QRectF region)
 {
     QPoint a = getPoint(QPointF(region.x(), region.y()));
@@ -99,8 +135,8 @@ void Plot2d::plotColorFunction(colorFunc2D &f, QRectF region)
     for (int x = 0; x < r.width(); x++) {
         for (int y = 0; y < r.height(); y++) {
             QPointF pt = getRealPoint(QPoint(x + a.x(), y + b.y()));
-            QColor col = f(pt.x(), pt.y());
-            m_image->setPixelColor(x, y, col);
+            QColor col = f(pt.x(), pt.y());            
+            m_image->setPixelColor(x + m_window.x(), y, col);
         }
     }
 }
@@ -137,6 +173,30 @@ QPointF Plot2d::getRealPoint(QPoint point)
                 ((double)m_window.y() + m_window.height() - point.y()) /
                 m_window.height() + m_region.y());
     return answer;
+}
+
+QString Plot2d::getAxisLabelX() const
+{
+    return m_axisLabelX;
+}
+
+void Plot2d::setAxisLabelX(const QString &label)
+{
+    if (m_axisLabelX != label) {
+        m_axisLabelX = label;
+    }
+}
+
+QString Plot2d::getAxisLabelY() const
+{
+    return m_axisLabelY;
+}
+
+void Plot2d::setAxisLabelY(const QString &label)
+{
+    if (m_axisLabelY != label) {
+    m_axisLabelY = label;
+    }
 }
 
 QPoint Plot2d::getPoint(const QPointF point)
