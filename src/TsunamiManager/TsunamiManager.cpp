@@ -47,7 +47,7 @@ void TsunamiManagerInfo::TsunamiManager::readBathymetryFromFile()
 
 void TsunamiManagerInfo::TsunamiManager::plotBathametry()
 {
-
+    m_plot->setColorbar(true);
     m_plot->setRegion(QRectF( QPointF(m_mapData->startX() + m_mapData->stepX() / 2.,
                                       m_mapData->startY() + m_mapData->stepY() / 2.),
                               QPointF(m_mapData->endX() - m_mapData->stepX() / 2.,
@@ -55,7 +55,7 @@ void TsunamiManagerInfo::TsunamiManager::plotBathametry()
 
     m_plot->setWindow(QRect(0, 0, m_mapData->sizeX() + 300, m_mapData->sizeY() + 20));
 
-    ColorMap colorMap({{0, QColor(0, 255, 0)},{3000, QColor(0, 70, 0)}});
+    ColorMap colorMap({{0, QColor(0, 255, 0)}, {3000, QColor(0, 70, 0)}});
 
     colorFunc2D f = [&colorMap, this](double x, double y)->QColor{
         QColor c;
@@ -70,9 +70,25 @@ void TsunamiManagerInfo::TsunamiManager::plotBathametry()
     m_plot->plotColorFunction(f);
     m_plot->setAxisX(true);
     m_plot->setAxisY(true);
+    m_plot->setAxisLabelY("N");
     m_plot->setAxisLabelX("E");
-    m_plot->setAxisLabelX("N");
-    m_plot->drawAxis();
+    m_plot->drawAxis(28);
+    m_plot->drawGrid(false, 28, 1, 0, 2, 0);
+
+    ColorMap colorbarMap({{-3, QColor(38, 0, 255)},
+                          {-0.1, QColor(222, 255, 248)},
+                          {0, QColor(222, 255, 248)},
+                          {1, QColor(128, 0, 128)},
+                          {3, QColor(255, 0, 0)},
+                          {5, QColor(255, 128, 0)},
+                          {8, QColor(255, 255, 0)},
+                          {11, QColor(0, 255, 0 )}});
+
+    std::vector<double> ticks;
+    for(int i = -3; i < 11; i++) {
+        ticks.push_back(i);
+    }
+    m_plot->drawColorbar(colorbarMap, ticks, 22);
 }
 
 void TsunamiManagerInfo::TsunamiManager::setPath(QString path)

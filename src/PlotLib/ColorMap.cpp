@@ -23,6 +23,14 @@ ColorMap::ColorMap(funcColorMap<double> funcColor, QObject *parent) :
 
 }
 
+double ColorMap::min() const{
+    return m_mapColor.begin()->first;
+}
+
+double ColorMap::max() const  {
+    return m_mapColor.rbegin()->first;
+}
+
 QColor operator * (QColor x, double y)
 {
     return QColor{ static_cast<int>(x.red() * y), static_cast<int>(x.green() * y), static_cast<int>(x.blue() * y) };

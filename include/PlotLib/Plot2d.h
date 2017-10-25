@@ -5,6 +5,7 @@
 #include <QImage>
 #include <QPainter>
 #include <functional>
+#include "ColorMap.h"
 
 typedef std::function <QColor(double, double)> colorFunc2D;
 
@@ -32,13 +33,14 @@ public:
     bool axisY();
     bool colorbar();
 
-    void drawAxis();
-    void drawGrid(bool grid = true, bool ticks = true, unsigned int fontSize = 20,
+    void drawAxis(int fontSize);
+    void drawGrid(bool grid = true, int fontSize = 20,
                   double stepX = 0, double stepY = 0,
                   double stepFontX = 0, double stepFontY = 0);
     void drawText(QPointF point, QString text);
     void plotColorFunction(colorFunc2D & f, QRectF region);
     void plotColorFunction(colorFunc2D & f);
+    void drawColorbar(ColorMap &colorMap, std::vector <double> ticks, int fontSize);
 
     QPointF getStep();
     QPoint getPoint(const QPointF point);
@@ -53,8 +55,8 @@ private:
     QRect m_window;
     QRect m_windowA;
     QRectF m_region;
-    bool m_axisX {true}, m_axisY{true};
-    double axis_x_base_ = 10.0, axis_y_base_ = 10.0;//Check
+    bool m_axisX{true}, m_axisY{true};
+    double m_axis_x_base = 10.0, m_axis_y_base = 10.0;//Check
     QString m_axisLabelX, m_axisLabelY;
     bool m_colorbar{false};
 };

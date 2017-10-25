@@ -23,8 +23,8 @@ public:
 
     ColorMap(funcColorMap<double> funcColor, QObject *parent = nullptr);
     QColor getColor(double val) { return m_funcColor(val); }
-    double min() { return m_mapColor.begin()->first; }
-    double max()  { return m_mapColor.rbegin()->first; }
+    double min() const;
+    double max() const;
 public slots:
 
 signals:
