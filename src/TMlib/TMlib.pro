@@ -9,9 +9,11 @@ TEMPLATE = lib
 DEFINES += TMLIB_LIBRARY
 
 SOURCES += TMMapArea.cpp \
-           TMMapAreaWorker.cpp
+           TMMapAreaWorker.cpp \
+           TMSchemeGroundswell.cpp \
 
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../../include/TMlib/
 HEADERS += $${_PRO_FILE_PWD_}/../../include/TMlib/TMMapArea.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMMapAreaWorker.h \
-           $${_PRO_FILE_PWD_}/../../include/TMlib/TMException.h
+           $${_PRO_FILE_PWD_}/../../include/TMlib/TMException.h \
+           $${_PRO_FILE_PWD_}/../../include/TMlib/TMSchemeGroundswell.h \
