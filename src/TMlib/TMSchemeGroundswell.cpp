@@ -10,6 +10,6 @@ void TM::Scheme::Groundswell::setStepT(double t) {
     m_stepT = t;
 }
 
-void TM::Scheme::Groundswell::runSielecki() {
+void TM::Scheme::Groundswell::calculation(std::shared_ptr<TM::Map::MapAreaWorker>) {
 
 }

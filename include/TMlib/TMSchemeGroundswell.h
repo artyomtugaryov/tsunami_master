@@ -16,7 +16,7 @@ public:
     Groundswell() = default;
     void setStepT(double t);
     double getStepT();
-    void runSielecki();
+    virtual void calculation(std::shared_ptr<TM::Map::MapAreaWorker>);
 };
 }
 }
