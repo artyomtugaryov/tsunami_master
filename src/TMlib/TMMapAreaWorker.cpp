@@ -102,3 +102,37 @@ std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::bathymetry()
     return m_bathymetry;
 }
 
+std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::eta()
+{
+    return m_eta;
+}
+
+std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::etaCurrent()
+{
+    return m_etaCurrent;
+}
+
+std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::etaNext()
+{
+    return m_etaNext;
+}
+
+std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::uCurrent()
+{
+    return m_uCurrent;
+}
+
+std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::uNext()
+{
+    return m_uNext;
+}
+
+std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::vCurrent()
+{
+    return m_vCurrent;
+}
+
+std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::vNext()
+{
+    return m_vNext;
+}

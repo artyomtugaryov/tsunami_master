@@ -3,19 +3,21 @@
 
 #include <memory>
 #include <iostream>
-#include "TMMapAreaWorker.h"
+#include "TMMapAreaWorkerGroundswell.h"
 
 namespace TM{
 namespace Scheme{
 class Groundswell
 {
 private:
-    //std::shared_ptr<TMMapAreaWorker> m_areaWorker;
     double m_stepT; //шаг по времени
+    int m_timeStepsCount;
 public:
     Groundswell() = default;
     void setStepT(double t);
-    double getStepT();
+    double stepT();
+    void setTimeStepsCount(int count);
+    int timeStepsCount();
     virtual void calculation(std::shared_ptr<TM::Map::MapAreaWorker>);
 };
 }
