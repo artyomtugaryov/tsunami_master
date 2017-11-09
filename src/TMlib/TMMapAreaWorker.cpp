@@ -107,32 +107,12 @@ std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::eta()
     return m_eta;
 }
 
-std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::etaCurrent()
+std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::u()
 {
-    return m_etaCurrent;
+    return m_u;
 }
 
-std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::etaNext()
+std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::v()
 {
-    return m_etaNext;
-}
-
-std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::uCurrent()
-{
-    return m_uCurrent;
-}
-
-std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::uNext()
-{
-    return m_uNext;
-}
-
-std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::vCurrent()
-{
-    return m_vCurrent;
-}
-
-std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::vNext()
-{
-    return m_vNext;
+    return m_v;
 }

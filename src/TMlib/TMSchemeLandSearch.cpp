@@ -11,7 +11,7 @@ std::shared_ptr<TM::Map::MapArea <bool>> TM::Scheme::LandSearch::getLandMap(std:
     {
         for (int i = 0; i < map->bathymetry()->sizeX(); i++)
         {
-            if (map->etaCurrent()->getDataByIndex(i, j) + map->HCurrent()->getDataByIndex(i, j)
+            if (map->eta()->getDataByIndex(i, j) + map->H()->getDataByIndex(i, j)
                     < eps) //суша
             {
                 land->setDataByIndex(i, j, true);

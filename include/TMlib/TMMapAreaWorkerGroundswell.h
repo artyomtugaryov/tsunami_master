@@ -10,14 +10,13 @@ namespace Map{
 class MapAreaWorkerGroundswell : public MapAreaWorker
 {
 private:
-    std::shared_ptr<MapArea <double>> m_HCurrent;
-    std::shared_ptr<MapArea <double>> m_HPrevious;
+    std::shared_ptr<MapArea <double>> m_H;
     std::shared_ptr<MapArea <double>> m_uu;
     std::shared_ptr<MapArea <double>> m_vv;
 public:
+    void init(std::shared_ptr<MapAreaWorker>);
     MapAreaWorkerGroundswell() = default;
-    std::shared_ptr<MapArea <double>> HCurrent();
-    std::shared_ptr<MapArea <double>> HPrevious();
+    std::shared_ptr<MapArea <double>> H();
     std::shared_ptr<MapArea <double>> uu();
     std::shared_ptr<MapArea <double>> vv();
 };

@@ -1,14 +1,14 @@
 #include "TMlib/TMMapAreaWorkerGroundswell.h"
 #include <TMlib/TMException.h>
 
-std::shared_ptr<TM::Map::MapArea <double> > TM::Map::MapAreaWorkerGroundswell::HCurrent()
+void TM::Map::MapAreaWorkerGroundswell::init(std::shared_ptr<TM::Map::MapAreaWorker> map)
 {
-    return m_HCurrent;
+
 }
 
-std::shared_ptr<TM::Map::MapArea <double> > TM::Map::MapAreaWorkerGroundswell::HPrevious()
+std::shared_ptr<TM::Map::MapArea <double> > TM::Map::MapAreaWorkerGroundswell::H()
 {
-    return m_HPrevious;
+    return m_H;
 }
 
 std::shared_ptr<TM::Map::MapArea <double> > TM::Map::MapAreaWorkerGroundswell::uu()
