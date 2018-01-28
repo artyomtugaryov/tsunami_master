@@ -12,18 +12,17 @@
 class SourceGUI : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(TsunamiManagerInfo::TsunamiManager* tsunamiManager READ TsunamiManager CONSTANT)
+    Q_PROPERTY(TsunamiManagerInfo::TsunamiManager* tsunamiManager READ tsunamiManager CONSTANT)
 
 public:
     SourceGUI(QObject *parent = 0);
     virtual ~SourceGUI();
 
-    TsunamiManagerInfo::TsunamiManager* TsunamiManager() const;
+    TsunamiManagerInfo::TsunamiManager* tsunamiManager() const;
     Q_INVOKABLE void startReadFromFile(const QString &path);
 
 private:
     TsunamiManagerInfo::TsunamiManager* m_tsunamiManager;
-    QThread* m_tsunamiManagerThread;
 };
 
 #endif // SOURCEGUI_H

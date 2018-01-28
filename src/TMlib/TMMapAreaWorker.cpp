@@ -48,7 +48,6 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
     double startY = minY - stepY / 2.;
     double endX = maxX + stepX / 2.;
     double endY = maxY + stepY / 2.;
-    std::cout<< stepY << std::endl;
     m_bathymetry = std::make_shared<TM::Map::MapArea<double>>(sizeX, sizeY);
 
     m_bathymetry->setEndX(endX);
@@ -101,4 +100,21 @@ std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::bathymetry()
 {
     return m_bathymetry;
 }
-
+//TODO: remove before implement calculation part
+void TM::Map::MapAreaWorker::startCalculationTest(int time)
+{
+    std::size_t sx = m_bathymetry.get()->sizeX();
+    std::size_t sy = m_bathymetry.get()->sizeY();
+    if (m_bathymetry.get()->sizeX() != 0 && m_bathymetry.get()->sizeY() != 0)
+    {
+        for (std::size_t x = 0; x < sx; x++)
+        {
+            for (std::size_t y = 0; y < sy; y++)
+            {
+                m_bathymetry.get()->setDataByIndex(x, y, m_bathymetry.get()->getDataByIndex(x, y) + time);
+                //std::cout << m_bathymetry.get()->getDataByIndex(x, y) << "\n";
+            }
+        }
+    }
+}
+//TODO: remove before implement calculation part

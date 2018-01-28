@@ -22,6 +22,7 @@ public:
     bool readBathymetryFromFile();
     bool setBathymetryPath(const std::string& path, bool readFromFile = false);
     std::shared_ptr<MapArea <double>> bathymetry();
+    void startCalculationTest(int time);
 };
 }
 }

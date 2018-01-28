@@ -17,7 +17,7 @@ FileDialog {
     sidebarVisible: true
     onAccepted: {
         console.log("Accepted: " + fileUrls)
-        _sourceGUI.startReadFromFile(fileUrls)
+        _sourceGUI.tsunamiManager.readBathymetryFromFile(fileUrls)
     }
     onRejected: { console.log("Rejected") }
 }

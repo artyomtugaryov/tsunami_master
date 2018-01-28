@@ -1,4 +1,4 @@
-QT += core
+QT += core quick
 
 include( $${_PRO_FILE_PWD_}/../../common.pri )
 include( $${_PRO_FILE_PWD_}/../../lib.pri )
@@ -9,10 +9,14 @@ TEMPLATE = lib
 DEFINES += TSUNAMIMANAGER_LIBRARY
 
 SOURCES+= TsunamiManager.cpp \
-          MapData.cpp
+          TsunamiWorker.cpp \
+          TsunamiPlotProvider.cpp \
+          TsunamiData.cpp
 
 HEADERS += $${_PRO_FILE_PWD_}/../../include/TsunamiManager/TsunamiManager.h \
-           $${_PRO_FILE_PWD_}/../../include/TsunamiManager/MapData.h \
+           $${_PRO_FILE_PWD_}/../../include/TsunamiManager/TsunamiData.h \
+           $${_PRO_FILE_PWD_}/../../include/TsunamiManager/TsunamiWorker.h \
+           $${_PRO_FILE_PWD_}/../../include/TsunamiManager/TsunamiPlotProvider.h \
            $${_PRO_FILE_PWD_}/../../include/PlotLib \
 
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../../include/TMlib/

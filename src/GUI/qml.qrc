@@ -1,17 +1,33 @@
 <RCC>
     <qresource prefix="/">
         <file>Resources/Main.qml</file>
-        <file>Resources/MainPage.qml</file>
-        <file>Resources/ItemGroup.qml</file>
-        <file>Resources/Assets/Biggest-Waves.jpg</file>
-        <file>Resources/MapData.qml</file>
-        <file>Resources/InstrumentPanel/InstrumentPanel.qml</file>
-        <file>Resources/InstrumentPanel/Assets/eye-flat.png</file>
-        <file>Resources/InstrumentPanel/Assets/checked.png</file>
-        <file>Resources/InstrumentPanel/ItemColumn.qml</file>
-        <file>Resources/Assets/Wallpaper_Of_Ocean_Waves.jpg</file>
-        <file>Resources/InstrumentPanel/Assets/InstrumentalPanel.png</file>
-        <file>Resources/InstrumentPanel/Assets/OpenIcon.png</file>
-        <file>Resources/InstrumentPanel/OpenDatFile.qml</file>
+        <file>Resources/MainPage/MainPage.qml</file>
+        <file>Resources/MainPage/ItemGroup.qml</file>
+        <file>Resources/MainPage/Assets/Biggest-Waves.jpg</file>
+        <file>Resources/MainPage/MapData.qml</file>
+        <file>Resources/MainPage/PathsWindow.qml</file>
+        <file>Resources/MainPage/InstrumentPanel.qml</file>
+        <file>Resources/Common/InstrumentPanel/Assets/eye-flat.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/checked.png</file>
+        <file>Resources/Common/InstrumentPanel/ItemColumn.qml</file>
+        <file>Resources/MainPage/Assets/Wallpaper_Of_Ocean_Waves.jpg</file>
+        <file>Resources/Common/InstrumentPanel/Assets/InstrumentalPanel.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/OpenIcon.png</file>
+        <file>Resources/Common/InstrumentPanel/OpenDatFile.qml</file>
+        <file>Resources/TabBarItem.qml</file>
+        <file>Resources/Assets/buttonTab.png</file>
+        <file>Resources/TsunamiPage/TsunamiPage.qml</file>
+        <file>Resources/TsunamiPage/Assets/tsunamiWave.jpg</file>
+        <file>Resources/TsunamiPage/Assets/InstrumentalPanel.png</file>
+        <file>Resources/TsunamiPage/DynamicItem.qml</file>
+        <file>Resources/TsunamiPage/InstrumentPanel.qml</file>
+        <file>Resources/Common/InstrumentPanel/Assets/buttonTab.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/start.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/pause.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/save.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/quick.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/image.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/showPaths.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/distribution.png</file>
     </qresource>
 </RCC>

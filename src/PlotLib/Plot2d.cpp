@@ -24,16 +24,19 @@ void Plot2d::setWindow(QRect window) {
         m_window = window;
     }
 
-    m_painter.begin(m_image);
+    if (!m_painter.isActive()) {
+        m_painter.begin(m_image);
+    }
+
     m_painter.fillRect(window, QColor(255, 255, 255));
     m_windowA = window;
-
     if (m_colorbar) {
         m_window.setRect(window.x() + 85, window.y(), window.width() - 200, window.height() - 40 );
     }
     else {
         m_window.setRect(window.x() + 85, window.y(), window.width() - 150, window.height() - 40);
     }
+    m_painter.end();
 }
 
 void Plot2d::setRegion(QRectF region) {
@@ -94,6 +97,10 @@ void Plot2d::drawAxis(int fontSize)
         return;
     }
 
+    if (!m_painter.isActive()) {
+        m_painter.begin(m_image);
+    }
+
     m_painter.setFont(QFont(FONT_FAMILY, fontSize, QFont::Bold));
 
     if(m_axisX) {
@@ -124,11 +131,15 @@ void Plot2d::drawAxis(int fontSize)
             m_painter.drawText(pointX, m_axisLabelX);
         }
     }
+    m_painter.end();
 }
 
 void Plot2d::drawGrid(bool grid, int fontSize, double stepX,
                       double stepY, double stepFontX, double stepFontY)
 {
+    if (!m_painter.isActive()) {
+        m_painter.begin(m_image);
+    }
     m_painter.setFont(QFont(FONT_FAMILY, fontSize, QFont::Bold));
     int k = (int)trunc(log(m_region.width()) / log(m_axis_x_base));
     double dx = exp(log(m_axis_x_base) * k), dxFont = dx;
@@ -203,6 +214,7 @@ void Plot2d::drawGrid(bool grid, int fontSize, double stepX,
         m_painter.drawLine(a + QPoint(-5, -2), a + QPoint(0, -2));
         m_painter.drawLine(a + QPoint(-5, 2), a + QPoint(0, 2));
     }
+    m_painter.end();
 }
 
 
@@ -231,6 +243,9 @@ void Plot2d::plotColorFunction(colorFunc2D &f)
 
 void Plot2d::drawColorbar(ColorMap &colorMap, std::vector<double> ticks, int fontSize)
 {
+    if (!m_painter.isActive()) {
+        m_painter.begin(m_image);
+    }
     m_painter.setFont(QFont(FONT_FAMILY, fontSize, QFont::Bold));
     double a = colorMap.min(), b = colorMap.max();
     int ay = m_window.y(), by = m_window.y() + m_window.height();
@@ -255,6 +270,7 @@ void Plot2d::drawColorbar(ColorMap &colorMap, std::vector<double> ticks, int fon
     m_painter.drawLine(QPoint(cx, by - ay), QPoint(cx, ay));
     m_painter.drawLine(QPoint(cx + w, by - ay), QPoint(cx + w, ay));
     m_painter.drawLine(QPoint(cx, by - ay), QPoint(cx + w, by - ay));
+    m_painter.end();
 }
 
 QPointF Plot2d::getStep()

@@ -1,13 +1,19 @@
 #ifndef TSUNAMIMANAGER_H
 #define TSUNAMIMANAGER_H
-#include <QObject>
-#include "MapData.h"
+
+#include "TsunamiData.h"
+#include "TsunamiWorker.h"
+#include "TsunamiPlotProvider.h"
+
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMException.h>
 #include <PlotLib/Plot2d.h>
 #include <PlotLib/ColorMap.h>
-#include <QImage>
 
+#include <QObject>
+#include <QSharedPointer>
+#include <QThread>
+#include <QImage>
 
 using namespace PlotLib;
 
@@ -15,29 +21,36 @@ namespace TsunamiManagerInfo {
 
 class TsunamiManager : public QObject {
     Q_OBJECT
-    Q_PROPERTY(MapData *mapData READ mapData CONSTANT)
-    Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
+    Q_PROPERTY(TsunamiData *tsunamiData READ tsunamiData CONSTANT)
+    Q_PROPERTY(int currentCalculationTime READ currentCalculationTime NOTIFY currentCalculationTimeChanged)
 public:
     TsunamiManager(QObject *parent = nullptr);
-
-    MapData * mapData() const;
-
-    QString path() const;
-    void setPath(QString path);
-
+    TsunamiData * tsunamiData() const;
+    TsunamiPlotProvider *plotProvider() const;
+    void setPlotProvider(TsunamiPlotProvider *plotProvider);
+    int currentCalculationTime();
+    void loadInitDataFromJson();
 public slots:
-    void readBathymetryFromFile();
-
-
+    void readBathymetryFromFile(QString path);
+    void readBrickDataFromFile(QString path);
+    void startCalculation();
+    void tsunamiWorkerThreadReaded();
+    void isUpdateTime(int currentTime);
+    void saveInitDataToJson();
+    void quickStart();
 signals:
     void pathChanged();
+    void currentCalculationTimeChanged();
+    void imageUpdate();
 private:
-    TsunamiManagerInfo::MapData* m_mapData;
-    TM::Map::MapAreaWorker* m_mapAreaWorker;
-    QString m_path;
+    TsunamiManagerInfo::TsunamiData* m_tsunamiData;
+    QSharedPointer<TM::Map::MapAreaWorker> m_mapAreaWorker;
+    TsunamiManagerInfo::TsunamiPlotProvider* m_plotProvider;
+    TsunamiWorker* m_tsunamiWorker;
+    QThread* m_tsunamiWorkerThread;
     QImage* m_bathymetryImage;
     Plot2d* m_plot;
-    void plotBathametry();
+    int m_currentCalculationTime;
 };
 }
 #endif //TSUNAMIMANAGER_H

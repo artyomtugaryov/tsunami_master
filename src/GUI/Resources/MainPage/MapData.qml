@@ -3,14 +3,14 @@ import QtQuick 2.7
 Item {
     id: root
 
-    property int sizeX: 965
-    property int sizeY: 1303
-    property real deltaX: 0.165
-    property real deltaY: 0.266
-    property real startX: 12.143
-    property real endX: 33.123
-    property real startY: 11.313
-    property real endY: 25.44
+    property int sizeX: 0
+    property int sizeY: 0
+    property real stepX: 0
+    property real stepY: 0
+    property real startX: 0
+    property real endX: 0
+    property real startY: 0
+    property real endY: 0
 
     Rectangle {
         id: informationGroup
@@ -79,7 +79,7 @@ Item {
             width: 130
             height: 30
             text: "Step x: "
-            value: deltaX
+            value: stepX
         }
 
     }
@@ -139,10 +139,8 @@ Item {
             width: 130
             height: 30
             text: "Step y: "
-            value: deltaY
+            value: stepY
         }
 
     }
 }
-//}
-//}

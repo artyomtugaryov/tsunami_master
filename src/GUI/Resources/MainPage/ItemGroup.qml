@@ -5,6 +5,9 @@ Item {
 
     property string text: ""
     property var value
+
+    onValueChanged: itemValue.text = value
+
     Rectangle {
         id: item
 
@@ -37,12 +40,12 @@ Item {
         anchors.leftMargin: 2
         anchors.rightMargin: 2
 
-        text: Number(root.value)
+        text: root.value
         font.bold: true
         horizontalAlignment: Text.AlignHCenter
         font.pointSize: 11
         verticalAlignment: Text.AlignVCenter
         onFocusChanged: focus ? selectAll() : 0
-        onTextChanged: text = Number(root.value)
+        onTextChanged: text = root.value
     }
 }

@@ -43,8 +43,21 @@ Item {
 
         anchors.fill: parent
         color: internal.defaultItemColor
-        radius: 10
         opacity: 0.8
+    }
+
+    Rectangle {
+        id: border
+
+        anchors.fill: parent
+        color: "transparent"
+        border.color: "black"
+    }
+
+    Image {
+    anchors.fill: parent
+    source: "Assets/buttonTab.png"
+    opacity: 0.7
     }
 
     Image {

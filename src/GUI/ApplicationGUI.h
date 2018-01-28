@@ -6,8 +6,6 @@
 #include <QQuickView>
 #include <QThread>
 #include "SourceGUI.h"
-//class QQuickView;
-//TODO: Create and include SourceGUI class
 
 class ApplicationGUI : public QGuiApplication
 {

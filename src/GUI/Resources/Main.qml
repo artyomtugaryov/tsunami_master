@@ -1,6 +1,8 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
+import "qrc:/Resources/MainPage/"
+import "qrc:/Resources/TsunamiPage/"
 
 Item {
     id: root
@@ -9,19 +11,47 @@ Item {
 
     visible: true
 
+    objectName: "_sourceGUI"
+    function onImageUpdate() {
+        tsunamiPage.imageUpdate();
+    }
+
+    TabBar {
+        id: tabBar
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        currentIndex: swipeView.currentIndex
+
+        TabBarItem {
+        label: "Home"
+        }
+
+        TabBarItem {
+            label: "Calculation"
+        }
+
+        TabBarItem {
+            label: "Mareographs"
+        }
+    }
+
     SwipeView {
         id: swipeView
-        anchors.fill: parent
-        currentIndex: 0
+
+        anchors.top: tabBar.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        currentIndex: tabBar.currentIndex
 
         MainPage {
         }
 
-        Page {
-            Label {
-                text: qsTr("First page")
-                anchors.centerIn: parent
-            }
+        TsunamiPage {
+        id: tsunamiPage
+        currentCalculationTime: _sourceGUI.tsunamiManager.currentCalculationTime
+
         }
 
         Page {
@@ -31,4 +61,6 @@ Item {
             }
         }
     }
+
+
 }

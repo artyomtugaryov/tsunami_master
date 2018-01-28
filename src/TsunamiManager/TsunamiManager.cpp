@@ -1,103 +1,207 @@
 #include "TsunamiManager/TsunamiManager.h"
 #include "PlotLib/Plot2d.h"
+
 #include <QDebug>
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+
 TsunamiManagerInfo::TsunamiManager::TsunamiManager(QObject *parent) :
     QObject(parent),
-    m_mapData(new TsunamiManagerInfo::MapData(this)),
-    m_mapAreaWorker(new TM::Map::MapAreaWorker),
-    m_plot(new Plot2d())
+    m_tsunamiData(new TsunamiManagerInfo::TsunamiData(this)),
+    m_mapAreaWorker(QSharedPointer<TM::Map::MapAreaWorker>(new TM::Map::MapAreaWorker())),
+    m_plotProvider(new TsunamiPlotProvider(m_tsunamiData, m_mapAreaWorker)),
+    m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker)),
+    m_tsunamiWorkerThread(new QThread),
+    m_plot(new Plot2d()),
+    m_currentCalculationTime(0)
 {
     m_bathymetryImage = nullptr;
+
+    m_tsunamiWorker->moveToThread(m_tsunamiWorkerThread);
+    connect(m_tsunamiWorkerThread, SIGNAL(started()),
+            m_tsunamiWorker, SLOT(execute()));
+    connect(m_tsunamiWorker, SIGNAL(finished()), m_tsunamiWorkerThread, SLOT(terminate()));
+    connect(m_tsunamiWorker, SIGNAL(readedFinished()), this, SLOT(tsunamiWorkerThreadReaded()));
+    connect(m_tsunamiWorker, SIGNAL(updateTime(int)), this, SLOT(isUpdateTime(int)));
+
+    loadInitDataFromJson();
 }
 
-TsunamiManagerInfo::MapData *TsunamiManagerInfo::TsunamiManager::mapData() const
+TsunamiManagerInfo::TsunamiData *TsunamiManagerInfo::TsunamiManager::tsunamiData() const
 {
-    return m_mapData;
+    return m_tsunamiData;
 }
 
-QString TsunamiManagerInfo::TsunamiManager::path() const
+static void doDeleteLater(TM::Map::MapAreaWorker *obj)
 {
-    return m_path;
+    delete obj;
 }
 
-void TsunamiManagerInfo::TsunamiManager::readBathymetryFromFile()
+void TsunamiManagerInfo::TsunamiManager::readBathymetryFromFile(QString path)
 {
-    if (m_mapAreaWorker->setBathymetryPath(m_path.toStdString(), true)) {
-        m_mapData->setStartX(m_mapAreaWorker->bathymetry()->startX());
-        m_mapData->setStartY(m_mapAreaWorker->bathymetry()->startY());
+    if (!m_mapAreaWorker.isNull())
+    {
+        qDebug()<< "1";
+        m_mapAreaWorker.reset(new TM::Map::MapAreaWorker(), doDeleteLater);
+        m_tsunamiWorker->setMapAreaWorker(m_mapAreaWorker);
+        m_plotProvider->setMapAreaWorker(m_mapAreaWorker);
+    }
+    path = path.remove("file:///");
+    m_tsunamiWorker->setBathymetryPath(path);
+    m_tsunamiData->setBathymetryPath(path);
+    m_tsunamiWorker->setCommand(TsunamiWorker::ThreadCommand::ReadBathymetry);
+    m_tsunamiWorkerThread->start();
+}
 
-        m_mapData->setEndX(m_mapAreaWorker->bathymetry()->endX());
-        m_mapData->setEndY(m_mapAreaWorker->bathymetry()->endY());
+void TsunamiManagerInfo::TsunamiManager::readBrickDataFromFile(QString path)
+{
+    path = path.remove("file:///");
+    m_tsunamiData->setBrickPath(path);
+}
 
-        m_mapData->setSizeX(m_mapAreaWorker->bathymetry()->sizeX());
-        m_mapData->setSizeY(m_mapAreaWorker->bathymetry()->sizeY());
+void TsunamiManagerInfo::TsunamiManager::startCalculation()
+{
+    if (m_tsunamiWorker->readed() && m_tsunamiWorkerThread->isFinished()) {
+        m_tsunamiWorker->setCommand(TsunamiWorker::ThreadCommand::RunCalculation);
+        m_tsunamiWorkerThread->start();
+    }
+}
 
-        m_mapData->setStepX(m_mapAreaWorker->bathymetry()->stepX());
-        m_mapData->setStepY(m_mapAreaWorker->bathymetry()->stepY());
+void TsunamiManagerInfo::TsunamiManager::tsunamiWorkerThreadReaded()
+{
+    m_tsunamiWorkerThread->terminate();
+    if (m_tsunamiWorker->readed())
+    {
+        m_tsunamiData->setStartX(m_mapAreaWorker->bathymetry()->startX());
+        m_tsunamiData->setStartY(m_mapAreaWorker->bathymetry()->startY());
+        qDebug()<< "4 " << m_mapAreaWorker->bathymetry()->startX();
+        m_tsunamiData->setEndX(m_mapAreaWorker->bathymetry()->endX());
+        m_tsunamiData->setEndY(m_mapAreaWorker->bathymetry()->endY());
+
+        m_tsunamiData->setSizeX(m_mapAreaWorker->bathymetry()->sizeX());
+        m_tsunamiData->setSizeY(m_mapAreaWorker->bathymetry()->sizeY());
+
+        m_tsunamiData->setStepX(m_mapAreaWorker->bathymetry()->stepX());
+        m_tsunamiData->setStepY(m_mapAreaWorker->bathymetry()->stepY());
+
+        m_plotProvider->setPlotImageSize(m_tsunamiData->sizeX(), m_tsunamiData->sizeY());
 
         if (m_bathymetryImage != nullptr) delete m_bathymetryImage;
-
-        m_bathymetryImage = new QImage(m_mapData->sizeX() + 300, m_mapData->sizeY() + 20, QImage::Format_RGB32);
+        m_bathymetryImage = new QImage(m_tsunamiData->sizeX() + 300, m_tsunamiData->sizeY() + 20, QImage::Format_RGB32);
         m_plot->setImage(m_bathymetryImage);
-        plotBathametry();
-        m_bathymetryImage->save("TEST2.png");
-        qDebug() << "Draw";
+        m_plotProvider->requestImage(QString("1"), NULL, QSize(0,0));
+        emit imageUpdate();
     }
 }
 
-void TsunamiManagerInfo::TsunamiManager::plotBathametry()
+void TsunamiManagerInfo::TsunamiManager::isUpdateTime(int currentTime)
 {
-    m_plot->setColorbar(true);
-    m_plot->setRegion(QRectF( QPointF(m_mapData->startX() + m_mapData->stepX() / 2.,
-                                      m_mapData->startY() + m_mapData->stepY() / 2.),
-                              QPointF(m_mapData->endX() - m_mapData->stepX() / 2.,
-                                      m_mapData->endY() - m_mapData->stepY() / 2.)));
-
-    m_plot->setWindow(QRect(0, 0, m_mapData->sizeX() + 300, m_mapData->sizeY() + 20));
-
-    ColorMap colorMap({{0, QColor(0, 255, 0)}, {3000, QColor(0, 70, 0)}});
-
-    colorFunc2D f = [&colorMap, this](double x, double y)->QColor{
-        QColor c;
-        double data = m_mapAreaWorker->bathymetry()->getDataByPoint(x, y);
-
-        if (data >= 0.0) {
-            c = colorMap.getColor(data);
-        }
-        else if (data < 0) c = QColor(38, 225, 255);
-        return c;
-    };
-    m_plot->plotColorFunction(f);
-    m_plot->setAxisX(true);
-    m_plot->setAxisY(true);
-    m_plot->setAxisLabelY("N");
-    m_plot->setAxisLabelX("E");
-    m_plot->drawAxis(28);
-    m_plot->drawGrid(false, 28, 1, 0, 2, 0);
-
-    ColorMap colorbarMap({{-3, QColor(38, 0, 255)},
-                          {-0.1, QColor(222, 255, 248)},
-                          {0, QColor(222, 255, 248)},
-                          {1, QColor(128, 0, 128)},
-                          {3, QColor(255, 0, 0)},
-                          {5, QColor(255, 128, 0)},
-                          {8, QColor(255, 255, 0)},
-                          {11, QColor(0, 255, 0 )}});
-
-    std::vector<double> ticks;
-    for(int i = -3; i < 11; i++) {
-        ticks.push_back(i);
-    }
-    m_plot->drawColorbar(colorbarMap, ticks, 22);
+    qDebug() << "time: " << currentTime;
+    m_currentCalculationTime = currentTime;
+    emit imageUpdate();
 }
 
-void TsunamiManagerInfo::TsunamiManager::setPath(QString path)
+void TsunamiManagerInfo::TsunamiManager::quickStart()
 {
-    if (m_path == path)
+    if (m_tsunamiWorker->bathymetryPath().size() > 5) {
+        readBathymetryFromFile(m_tsunamiWorker->bathymetryPath());
+    }
+}
+
+void TsunamiManagerInfo::TsunamiManager::saveInitDataToJson()
+{
+    QFile saveFile("INIT.json");
+
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        qWarning("Couldn't open save file.");
+    }
+
+    QJsonObject init;
+
+    QJsonObject paths;
+    paths["bathymetryPath"] = m_tsunamiData->bathymetryPath();
+    paths["brickPath"] = m_tsunamiData->brickPath();
+    paths["imageSavePath"] = m_tsunamiData->imageSavePath();
+    paths["distributionSavePath"] = m_tsunamiData->maxDistributionSavePath();
+    init["paths"] = paths;
+
+    QJsonObject mapData;
+    mapData["sizeX"] = static_cast<int> (m_tsunamiData->sizeX());
+    mapData["sizeY"] = static_cast<int> ( m_tsunamiData->sizeY());
+    mapData["startX"] = m_tsunamiData->startX();
+    mapData["startY"] = m_tsunamiData->startY();
+    mapData["endX"] = m_tsunamiData->endX();
+    mapData["endY"] = m_tsunamiData->endY();
+    mapData["stepX"] = m_tsunamiData->stepX();
+    mapData["stepY"] = m_tsunamiData->stepY();
+    init["mapData"] = mapData;
+
+    QJsonDocument saveDoc(init);
+    saveFile.write(saveDoc.toJson());
+}
+
+void TsunamiManagerInfo::TsunamiManager::loadInitDataFromJson()
+{
+    QFile loadFile(QStringLiteral("INIT.json"));
+
+    if (!loadFile.open(QIODevice::ReadOnly)) {
+        qWarning("Couldn't open init file.");
         return;
+    }
+    QByteArray saveData = loadFile.readAll();
+    QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+    QJsonObject init = loadDoc.object();
+    QJsonObject paths = init["paths"].toObject();
 
-    m_path = path.remove("file:///");
+    QString tmp = paths["bathymetryPath"].toString();
+    if (!tmp.isEmpty())
+    {
+        m_tsunamiWorker->setBathymetryPath(tmp);
+        m_tsunamiData->setBathymetryPath(tmp);
+    }
 
-    qDebug() << path;
-    emit pathChanged();
+    tmp = paths["brickPath"].toString();
+    if (!tmp.isEmpty())
+    {
+        m_tsunamiData->setBrickPath(tmp);
+    }
+
+    tmp = paths["imageSavePath"].toString();
+    if (!tmp.isEmpty())
+    {
+        m_tsunamiData->setImageSavePath(tmp);
+    }
+
+    tmp = paths["distributionSavePath"].toString();
+    if (!tmp.isEmpty())
+    {
+        m_tsunamiData->setMaxDistributionSavePath(tmp);
+    }
+
+    QJsonObject mapData = init["mapData"].toObject();
+    m_tsunamiData->setStartX(mapData["startX"].toDouble());
+    m_tsunamiData->setStartY(mapData["startY"].toDouble());
+    m_tsunamiData->setEndX(mapData["endX"].toDouble());
+    m_tsunamiData->setEndY(mapData["endY"].toDouble());
+    m_tsunamiData->setSizeX(mapData["sizeX"].toInt());
+    m_tsunamiData->setSizeY(mapData["sizeY"].toInt());
+    m_tsunamiData->setStepX(mapData["stepX"].toDouble());
+    m_tsunamiData->setStepY(mapData["stepY"].toDouble());
+}
+
+TsunamiManagerInfo::TsunamiPlotProvider *TsunamiManagerInfo::TsunamiManager::plotProvider() const
+{
+    return m_plotProvider;
+}
+
+void TsunamiManagerInfo::TsunamiManager::setPlotProvider(TsunamiPlotProvider *plotProvider)
+{
+    m_plotProvider = plotProvider;
+}
+
+int TsunamiManagerInfo::TsunamiManager::currentCalculationTime()
+{
+    return m_currentCalculationTime;
 }
