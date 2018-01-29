@@ -28,6 +28,8 @@ class TsunamiData : public QObject
     Q_PROPERTY(QString maxDistributionSavePath READ maxDistributionSavePath
                WRITE setMaxDistributionSavePath NOTIFY maxDistributionSavePathChanged)
 
+    Q_PROPERTY(bool readed READ readed NOTIFY readedChanged)
+
 public:
     TsunamiData(QObject *parent = 0);
     virtual ~TsunamiData();
@@ -64,6 +66,10 @@ public:
     void setBathymetryPath(const QString &bathymetryPath);
     void setBrickPath(const QString &brickPath);
 
+    bool readed() const;
+
+    void setReaded(bool readed);
+
 public slots:
     void setImageSavePath(QString imageSavePath);
     void setMaxDistributionSavePath(QString maxDistributionSavePath);
@@ -86,6 +92,8 @@ signals:
     void imageSavePathChanged();
     void maxDistributionSavePathChanged();
 
+    void readedChanged();
+
 private:
 
     uint m_sizeX;
@@ -99,10 +107,13 @@ private:
 
     double m_stepX;
     double m_stepY;
+
     QString m_bathymetryPath;
     QString m_brickPath;
     QString m_imageSavePath;
     QString m_maxDistributionSavePath;
+
+    bool m_readed;
 };
 }
 #endif // TSUNAMIDATA_H

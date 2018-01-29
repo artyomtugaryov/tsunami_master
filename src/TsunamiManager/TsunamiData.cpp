@@ -18,7 +18,8 @@ TsunamiManagerInfo::TsunamiData::TsunamiData(QObject *parent) :
     m_bathymetryPath(PathNone),
     m_brickPath(PathNone),
     m_imageSavePath(PathNone),
-    m_maxDistributionSavePath(PathNone)
+    m_maxDistributionSavePath(PathNone),
+    m_readed(false)
 {
 }
 
@@ -154,16 +155,33 @@ void TsunamiManagerInfo::TsunamiData::setMaxDistributionSavePath(QString maxDist
 {
     maxDistributionSavePath = maxDistributionSavePath.remove("file:///");
     if (m_maxDistributionSavePath == maxDistributionSavePath)
+    {
         return;
+    }
 
     m_maxDistributionSavePath = maxDistributionSavePath;
     emit maxDistributionSavePathChanged();
+}
+
+void TsunamiManagerInfo::TsunamiData::setReaded(bool readed)
+{
+    if (m_readed == readed)
+    {
+        return;
+    }
+    m_readed = readed;
+    emit readedChanged();
 }
 
 void TsunamiManagerInfo::TsunamiData::setBrickPath(const QString &brickPath)
 {
     m_brickPath = brickPath;
     emit brickPathChanged();
+}
+
+bool TsunamiManagerInfo::TsunamiData::readed() const
+{
+    return m_readed;
 }
 
 void TsunamiManagerInfo::TsunamiData::setBathymetryPath(const QString &bathymetryPath)

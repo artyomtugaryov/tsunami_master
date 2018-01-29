@@ -72,27 +72,19 @@ Item {
         PathsWindow {
             id: paths
 
-            function getShowPath(path) {
-                var maxSize = 23
-                if (path.length > maxSize) {
-                    return "..." + path.slice(path.length - maxSize)
-                }
-                return path
-            }
-
             width: (root.width - instrumentPanel.width) / 3
             height: 210
             opacity: 0
             visible: instrumentPanel.showPaths || pathsAnimation.running
 
             bathymetryPath: _sourceGUI.tsunamiManager
-                            ? getShowPath(_sourceGUI.tsunamiManager.tsunamiData.bathymetryPath) : "None"
+                            ? _sourceGUI.tsunamiManager.tsunamiData.bathymetryPath : "None"
             brickPath: _sourceGUI.tsunamiManager
-                       ? getShowPath(_sourceGUI.tsunamiManager.tsunamiData.brickPath) : "None"
+                       ? _sourceGUI.tsunamiManager.tsunamiData.brickPath : "None"
             imageSavePath: _sourceGUI.tsunamiManager
-                           ? getShowPath(_sourceGUI.tsunamiManager.tsunamiData.imageSavePath) : "None"
+                           ? _sourceGUI.tsunamiManager.tsunamiData.imageSavePath : "None"
             maxDistributionPath: _sourceGUI.tsunamiManager
-                                 ? getShowPath(_sourceGUI.tsunamiManager.tsunamiData.maxDistributionSavePath) : "None"
+                                 ? _sourceGUI.tsunamiManager.tsunamiData.maxDistributionSavePath : "None"
             OpacityAnimator {
                 id: pathsAnimation
                 target: paths

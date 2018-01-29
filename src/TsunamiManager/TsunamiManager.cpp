@@ -41,9 +41,9 @@ static void doDeleteLater(TM::Map::MapAreaWorker *obj)
 
 void TsunamiManagerInfo::TsunamiManager::readBathymetryFromFile(QString path)
 {
+    m_tsunamiData->setReaded(false);
     if (!m_mapAreaWorker.isNull())
     {
-        qDebug()<< "1";
         m_mapAreaWorker.reset(new TM::Map::MapAreaWorker(), doDeleteLater);
         m_tsunamiWorker->setMapAreaWorker(m_mapAreaWorker);
         m_plotProvider->setMapAreaWorker(m_mapAreaWorker);
@@ -72,11 +72,12 @@ void TsunamiManagerInfo::TsunamiManager::startCalculation()
 void TsunamiManagerInfo::TsunamiManager::tsunamiWorkerThreadReaded()
 {
     m_tsunamiWorkerThread->terminate();
+    m_tsunamiData->setReaded(m_tsunamiWorker->readed());
     if (m_tsunamiWorker->readed())
     {
         m_tsunamiData->setStartX(m_mapAreaWorker->bathymetry()->startX());
         m_tsunamiData->setStartY(m_mapAreaWorker->bathymetry()->startY());
-        qDebug()<< "4 " << m_mapAreaWorker->bathymetry()->startX();
+
         m_tsunamiData->setEndX(m_mapAreaWorker->bathymetry()->endX());
         m_tsunamiData->setEndY(m_mapAreaWorker->bathymetry()->endY());
 

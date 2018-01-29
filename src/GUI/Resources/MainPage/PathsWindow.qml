@@ -30,50 +30,65 @@ Item {
         ItemGroup {
             id: itemBathymetry
 
-            anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
             anchors.topMargin: 10
-            width: 330
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            anchors.right: parent.right
+            anchors.rightMargin: 10
             height: 30
             text: "Bathymetry: "
             value: bathymetryPath
+            bold: false
+            fontSize: 9
         }
 
         ItemGroup {
             id: itemBrick
 
-            anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: itemBathymetry.bottom
             anchors.topMargin: 10
-            width: 330
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            anchors.right: parent.right
+            anchors.rightMargin: 10
             height: 30
             text: "Brick: "
             value: brickPath
+            bold: false
+            fontSize: 9
         }
 
         ItemGroup {
             id: itemImageSave
 
-            anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: itemBrick.bottom
             anchors.topMargin: 10
-            width: 330
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            anchors.right: parent.right
+            anchors.rightMargin: 10
             height: 30
             text: "Image: "
             value: imageSavePath
+            bold: false
+            fontSize: 9
         }
 
         ItemGroup {
             id: itemMaxDistribution
 
-            anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: itemImageSave.bottom
-
             anchors.topMargin: 10
-            width: 330
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            anchors.right: parent.right
+            anchors.rightMargin: 10
             height: 30
             text: "Distribution: "
             value: maxDistributionPath
+            bold: false
+            fontSize: 9
         }
 
     }

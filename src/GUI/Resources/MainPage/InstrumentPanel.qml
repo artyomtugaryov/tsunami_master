@@ -42,17 +42,15 @@ Item {
 
         ItemColumn {
             id: openData
-            textAction: "Open"
+            textAction: _sourceGUI.tsunamiManager.tsunamiData.readed ? "Reopen" : "Open"
             textDescription: "bathymetry file"
             sourceIconLeft: "Assets/OpenIcon.png"
             pressed: mouseAreaOpenData.pressed
-
+            checked: _sourceGUI.tsunamiManager.tsunamiData.readed
             MouseArea {
                 id: mouseAreaOpenData
                 anchors.fill: parent
                 onClicked: {
-                    openData.checked = !openData.checked;
-                    openData.textAction = openData.checked ? "Reopen" : "Open"
                     openDatFileDialog.open()
                 }
             }

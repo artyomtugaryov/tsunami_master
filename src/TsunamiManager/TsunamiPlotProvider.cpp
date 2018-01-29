@@ -26,7 +26,6 @@ QImage TsunamiManagerInfo::TsunamiPlotProvider::requestImage(const QString &id,
 
     if(m_plotImage != nullptr)
     {
-        qDebug() << "Point 1";
         if(static_cast<int>(m_tsunamiData->sizeX()) != m_plotImage->width() - Width ||
                 static_cast<int>(m_tsunamiData->sizeY()) != m_plotImage->height() - Height)
         {
@@ -35,7 +34,6 @@ QImage TsunamiManagerInfo::TsunamiPlotProvider::requestImage(const QString &id,
         }
         if(m_plotImage->width() != 0 && m_plotImage->height() != 0)
         {
-            qDebug() << "Point 2";
             plotBathametry();
         }
     }
@@ -74,18 +72,14 @@ void TsunamiManagerInfo::TsunamiPlotProvider::setMapAreaWorker(const QSharedPoin
 
 void TsunamiManagerInfo::TsunamiPlotProvider::plotBathametry()
 {
-    qDebug() << "Point 3";
     m_plot->setColorbar(true);
     m_plot->setRegion(QRectF( QPointF(m_tsunamiData->startX() + m_tsunamiData->stepX() / 2.,
                                       m_tsunamiData->startY() + m_tsunamiData->stepY() / 2.),
                               QPointF(m_tsunamiData->endX() - m_tsunamiData->stepX() / 2.,
                                       m_tsunamiData->endY() - m_tsunamiData->stepY() / 2.)));
 
-    qDebug() << "Point 3.1";
     m_plot->setWindow(QRect(0, 0, m_tsunamiData->sizeX() + 300, m_tsunamiData->sizeY() + 20));
-    qDebug() << "Point 4";
     ColorMap colorMap({{0, QColor(0, 255, 0)}, {3000, QColor(0, 70, 0)}});
-    qDebug() << "Point 5";
     colorFunc2D f = [&colorMap, this](double x, double y)->QColor{
         QColor c;
         double data = m_mapAreaWorker->bathymetry()->getDataByPoint(x, y);
@@ -96,15 +90,12 @@ void TsunamiManagerInfo::TsunamiPlotProvider::plotBathametry()
         else if (data < 0) c = QColor(38, 225, 255);
         return c;
     };
-    qDebug() << "Point 6";
     m_plot->plotColorFunction(f);
-    qDebug() << "Point 6.1";
     m_plot->setAxisX(true);
     m_plot->setAxisY(true);
     m_plot->setAxisLabelY("N");
     m_plot->setAxisLabelX("E");
     m_plot->drawAxis(28);
-    qDebug() << "Point 7";
     m_plot->drawGrid(false, 28, 1, 0, 2, 0);
 
     ColorMap colorbarMap({{-3, QColor(38, 0, 255)},
@@ -120,6 +111,5 @@ void TsunamiManagerInfo::TsunamiPlotProvider::plotBathametry()
     for(int i = -3; i < 11; i++) {
         ticks.push_back(i);
     }
-    qDebug() << "Point 8";
     m_plot->drawColorbar(colorbarMap, ticks, 22);
 }
