@@ -2,6 +2,7 @@
 #include <TMlib/TMCommon.h>
 #include <TMlib/TMException.h>
 #include <ctime>
+#include"TMSignal.h"
 
 void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area) {
     size_t maxX = area->getMaxXIndex();
@@ -12,7 +13,8 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
     auto dt = getTimeStep(dPhi, dTetta);
     clock_t begin = clock();
     for (std::size_t t = 0; t <= dt; t += dt) {
-
+    std::shared_ptr<TM::Map::MapArea<double>> newEta =
+            std::make_shared<TM::Map::MapArea<double>>(area->getMaxXIndex(),area->getMaxYIndex(), 0);
 #pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
         for (j = 0; j < maxY; j++) {
             auto tetta = area->getLongitudeByIndex(j);
@@ -27,7 +29,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
                         auto Up = this->m_focus->getHeigthByIndex(k, j, t);
                         m_B0->setDataByIndex(k, j, m_B1->getDataByIndex(k, j));
                         m_B1->setDataByIndex(k, j, m_B1->getDataByIndex(k, j) + Up);
-                        area->eta()->setDataByIndex(k, j,
+                        newEta->setDataByIndex(k, j,
                                                     this->calcMainValueEta(area, k, j, dt, dPhi, dTetta, tetta, tetta2,
                                                                            tetta_2, M));
                         break;
@@ -71,8 +73,8 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
                 area->vVelocity()->setDataByIndex(k, j, v_new);
             }
         }
+        m_sender.emitSignal(newEta);
     }
-    area->eta()->saveMapAreaToTextFile("eta.txt", 3);
     clock_t end = clock();
     std::cout << "Time of calculation is: " << double(end - begin) * 1000. / CLOCKS_PER_SEC << " ms." << std::endl;
 }

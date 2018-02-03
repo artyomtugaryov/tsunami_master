@@ -5,6 +5,7 @@
 #include <TMlib/TMMapArea.h>
 #include <TMlib/TMFocus.h>
 #include <TMlib/TMScheme.h>
+#include <TMlib/TMSignal.h>
 
 namespace TM {
     namespace Scheme {
@@ -75,7 +76,7 @@ namespace TM {
             std::shared_ptr<TM::TMFocus> m_focus;
             std::shared_ptr<TM::Map::MapArea<double>> m_B0;
             std::shared_ptr<TM::Map::MapArea<double>> m_B1;
-
+            TM::TMSignal m_sender;
         };
     }
 }
