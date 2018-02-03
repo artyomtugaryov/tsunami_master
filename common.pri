@@ -11,7 +11,6 @@ CONFIG(debug, debug|release) {
     BUILD_FLAG = Release
 }
 linux-g++ {
-   QMAKE_CXXFLAGS += -Werror
    !contains(QT_ARCH, x86_64){
        ARCH=x32
        message("Compiling for 32bit system")

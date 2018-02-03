@@ -63,16 +63,7 @@ void TsunamiWorker::setCommand(const ThreadCommand &command)
 
 //TODO: remove before implement calculation part
 void TsunamiWorker::runCalculation()
-{
-    for(int i = 1; i < 100; i++) {
-        m_mapAreaWorker->startCalculationTest(i);
-        if (i % m_updateTime == 0)
-        {
-            qDebug() << "i: " << i;
-            emit updateTime(i);
-        }
-    }
-}
+{}
 //TODO: remove before implement calculation part
 bool TsunamiWorker::readed() const
 {

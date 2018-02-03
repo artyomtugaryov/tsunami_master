@@ -1,5 +1,6 @@
 #include "PlotLib/ColorMap.h"
 #include <cassert>
+
 namespace  PlotLib {
 
 ColorMap::ColorMap(QObject *parent) :

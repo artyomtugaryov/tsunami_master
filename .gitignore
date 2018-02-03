@@ -42,4 +42,8 @@ bin/*
 build/*
 
 # IDEA
-.idea/*
+*.idea/*
+*.xml
+.idea/
+bin/
+build/

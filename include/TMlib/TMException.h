@@ -108,7 +108,6 @@ namespace TM {
                         out << "  " << symbollist[i] << std::endl;
                     }
                 }
-
                 delete[] funcname;
                 free(symbollist);
                 return out.str();

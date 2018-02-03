@@ -27,8 +27,6 @@ ApplicationGUI::ApplicationGUI(int &argc, char **argv) :
     m_view->setMinimumSize(screenSize);
     setPositionByCenter();
     m_view->show();
-
-
 }
 
 ApplicationGUI::~ApplicationGUI()

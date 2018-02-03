@@ -2,6 +2,20 @@
 #include <TMlib/TMException.h>
 #include <fstream>
 #include <algorithm>
+#include <ctime>
+
+TM::Map::MapAreaWorker::MapAreaWorker(const std::string &path) {
+    clock_t begin = clock();
+    this->setBathymetryPath(path, true);
+    clock_t end = clock();
+    std::cout << "Reading bathymetry from file: "
+              << double(end - begin) * 1000. / CLOCKS_PER_SEC
+              << " ms."
+              << std::endl;
+    this->m_uVelocity = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
+    this->m_vVelocity = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
+    this->m_eta = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
+}
 
 void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
     std::vector<double> longitude; // y
@@ -42,53 +56,49 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
     maxY = *std::max_element(longitude.begin(), longitude.end());
     minX = *std::min_element(latitude.begin(), latitude.end());
     minY = *std::min_element(longitude.begin(), longitude.end());
-    double stepX = (maxX - minX) / (sizeX - 1);
-    double stepY = (maxY - minY) / (sizeY - 1);
-    double startX = minX - stepX / 2.;
-    double startY = minY - stepY / 2.;
-    double endX = maxX + stepX / 2.;
-    double endY = maxY + stepY / 2.;
+
     m_bathymetry = std::make_shared<TM::Map::MapArea<double>>(sizeX, sizeY);
 
-    m_bathymetry->setEndX(endX);
-    m_bathymetry->setEndY(endY);
+    m_bathymetry->setStepX((maxX - minX) / (sizeX - 1));
+    m_bathymetry->setStepY((maxY - minY) / (sizeY - 1));
+    m_bathymetry->setEndX(maxX);
+    m_bathymetry->setEndY(maxY);
+//    m_bathymetry->setEndX(maxX + m_bathymetry->stepX() / 2.);
+//    m_bathymetry->setEndY(maxY + m_bathymetry->stepY() / 2.);
     m_bathymetry->setSizeX(sizeX);
     m_bathymetry->setSizeY(sizeY);
-    m_bathymetry->setStartX(startX);
-    m_bathymetry->setStartY(startY);
-    m_bathymetry->setStepX(stepX);
-    m_bathymetry->setStepY(stepY);
+    m_bathymetry->setStartX(minX);
+    m_bathymetry->setStartY(minY);
+//    m_bathymetry->setStartX(minX - m_bathymetry->stepX() / 2.);
+//    m_bathymetry->setStartY(minY - m_bathymetry->stepY() / 2.);
 
-    for (int k = 0; k < (int) depth.size(); k++) {
+
+    for (std::size_t k = 0; k < static_cast<std::size_t >(depth.size()); k++) {
         m_bathymetry->setDataByPoint(latitude[k], longitude[k], depth[k]);
     }
-    //initMainArrays(size_y, size_x);
-    //init_old_arrays();
-    m_bathymetry->saveMapAreaToTextFile("testFile.mtx", 0);
 }
 
 bool TM::Map::MapAreaWorker::readBathymetryFromFile() {
     if (m_bathymetryPath.size() < 5) { //WHAT??? Why 5? -
-                                       //*.dat, *.mtx, *.grd - all formats can not be less than 5 characters
+        //*.txt, *.doc *.xls ???
+        //*.dat, *.mtx, *.grd - all formats can not be less than 5 characters
         if (m_bathymetryPath.empty()) {
             std::cerr << "Empty path.\n";
             return false;
-        } else {
-            std::cerr << "Incorrect path.";
-            return false;
         }
+        std::cerr << "Incorrect path.";
         return false;
+
     }
     if (m_bathymetryPath.substr(m_bathymetryPath.size() - 4, 4) == ".dat") {
         readBathymetryFromFileDat();
         return true;
-    } else {
-        std::cerr << "No supported format\n";
-        return false;
     }
+    std::cerr << "No supported format\n";
+    return false;
 }
 
-bool TM::Map::MapAreaWorker::setBathymetryPath(const std::string& path, bool readFromFile) {
+bool TM::Map::MapAreaWorker::setBathymetryPath(const std::string &path, bool readFromFile) {
     m_bathymetryPath = path;
     if (readFromFile) {
         return readBathymetryFromFile();
@@ -96,25 +106,55 @@ bool TM::Map::MapAreaWorker::setBathymetryPath(const std::string& path, bool rea
     return false;
 }
 
-std::shared_ptr<TM::Map::MapArea<double> > TM::Map::MapAreaWorker::bathymetry()
-{
+const std::shared_ptr<const TM::Map::MapArea<double>> TM::Map::MapAreaWorker::eta() const noexcept {
+    return m_eta;
+}
+
+const std::shared_ptr<TM::Map::MapArea<double>> TM::Map::MapAreaWorker::eta() noexcept {
+    return m_eta;
+}
+
+const std::shared_ptr<const TM::Map::MapArea<double>> TM::Map::MapAreaWorker::bathymetry() const noexcept {
     return m_bathymetry;
 }
-//TODO: remove before implement calculation part
-void TM::Map::MapAreaWorker::startCalculationTest(int time)
-{
-    std::size_t sx = m_bathymetry.get()->sizeX();
-    std::size_t sy = m_bathymetry.get()->sizeY();
-    if (m_bathymetry.get()->sizeX() != 0 && m_bathymetry.get()->sizeY() != 0)
-    {
-        for (std::size_t x = 0; x < sx; x++)
-        {
-            for (std::size_t y = 0; y < sy; y++)
-            {
-                m_bathymetry.get()->setDataByIndex(x, y, m_bathymetry.get()->getDataByIndex(x, y) + time);
-                //std::cout << m_bathymetry.get()->getDataByIndex(x, y) << "\n";
-            }
-        }
-    }
+
+
+const std::shared_ptr<TM::Map::MapArea<double>> TM::Map::MapAreaWorker::uVelocity() noexcept {
+    return m_uVelocity;
 }
-//TODO: remove before implement calculation part
+
+const std::shared_ptr<TM::Map::MapArea<double>> TM::Map::MapAreaWorker::vVelocity() noexcept {
+    return m_vVelocity;
+}
+
+size_t TM::Map::MapAreaWorker::getMaxXIndex() const {
+    return m_bathymetry->sizeX();
+}
+
+size_t TM::Map::MapAreaWorker::getMaxYIndex() const {
+    return m_bathymetry->sizeY();
+}
+
+double TM::Map::MapAreaWorker::getLatitudeByIndex(double i) const noexcept {
+    return m_bathymetry->startY() + m_bathymetry->stepY() * i;
+}
+
+double TM::Map::MapAreaWorker::getLongitudeByIndex(double i) const noexcept {
+    return m_bathymetry->startX() + m_bathymetry->stepX() * i;
+}
+
+double TM::Map::MapAreaWorker::getStepX() const noexcept {
+    return m_bathymetry->stepX();
+}
+
+double TM::Map::MapAreaWorker::getStepY() const noexcept {
+    return m_bathymetry->stepY();
+}
+
+double TM::Map::MapAreaWorker::getStepPhi() const noexcept {
+    return getStepX();
+}
+
+double TM::Map::MapAreaWorker::getStepTetta() const noexcept {
+    return getStepY();
+}

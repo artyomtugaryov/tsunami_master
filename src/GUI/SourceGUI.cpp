@@ -4,8 +4,7 @@
 SourceGUI::SourceGUI(QObject *parent) :
     QObject(parent),
     m_tsunamiManager(new TsunamiManagerInfo::TsunamiManager())
-{
-}
+{}
 
 SourceGUI::~SourceGUI()
 {

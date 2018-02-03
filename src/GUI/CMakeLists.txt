@@ -7,10 +7,11 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+set(CMAKE_PREFIX_PATH $ENV{QT_ROOT})
+
 find_package(Qt5Quick)
 find_package(Qt5Qml)
 find_package(Qt5Gui)
-
 find_package(Qt5Widgets)
 
 file(GLOB TMGUI_SRC ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
