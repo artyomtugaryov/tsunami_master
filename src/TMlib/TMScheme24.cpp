@@ -1,8 +1,8 @@
 #include <TMlib/TMScheme24.h>
 #include <TMlib/TMCommon.h>
 #include <TMlib/TMException.h>
+#include <TMlib/TMSignal.h>
 #include <ctime>
-#include"TMSignal.h"
 
 void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area) {
     size_t maxX = area->getMaxXIndex();
@@ -35,7 +35,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
                         break;
                     }
                     case BOUNDARY1: {
-                        area->eta()->setDataByIndex(k, j,
+                        newEta->setDataByIndex(k, j,
                                                     this->calcBoundaryType1ValueEta(area, k, j, dPhi, dTetta));
                         break;
                     }
