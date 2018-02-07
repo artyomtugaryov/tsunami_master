@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-TsunamiWorker::TsunamiWorker(QSharedPointer<TM::Map::MapAreaWorker> mapAreaWorker, QObject *parent) :
+TsunamiWorker::TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker, QObject *parent) :
     QObject(parent),
     m_mapAreaWorker(mapAreaWorker),
     m_readed(false),
@@ -50,9 +50,9 @@ void TsunamiWorker::readBathymetryFromFile()
     emit finished();
 }
 
-void TsunamiWorker::setMapAreaWorker(const QSharedPointer<TM::Map::MapAreaWorker> &mapAreaWorker)
+void TsunamiWorker::setMapAreaWorker(const std::shared_ptr<TM::Map::MapAreaWorker> &mapAreaWorker)
 {
-    m_mapAreaWorker.clear();
+    m_mapAreaWorker.reset();
     m_mapAreaWorker = mapAreaWorker;
 }
 

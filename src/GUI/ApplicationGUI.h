@@ -21,7 +21,6 @@ private:
     QQuickView *m_view;
     SourceGUI* m_sourceGUI;
     QThread *m_calculationThread;
-    TM::Map::MapAreaWorker *m_mapAreaWorker;
 };
 
 #endif // APPLICATIONGUI_H

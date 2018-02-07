@@ -10,12 +10,13 @@
 TsunamiManagerInfo::TsunamiManager::TsunamiManager(QObject *parent) :
     QObject(parent),
     m_tsunamiData(new TsunamiManagerInfo::TsunamiData(this)),
-    m_mapAreaWorker(QSharedPointer<TM::Map::MapAreaWorker>(new TM::Map::MapAreaWorker())),
+    m_mapAreaWorker(std::make_shared<TM::Map::MapAreaWorker>()),
     m_plotProvider(new TsunamiPlotProvider(m_tsunamiData, m_mapAreaWorker)),
     m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker)),
     m_tsunamiWorkerThread(new QThread),
     m_plot(new Plot2d()),
-    m_currentCalculationTime(0)
+    m_currentCalculationTime(0),
+    m_scheme(std::make_shared<TM::Scheme::TMScheme24>())
 {
     m_bathymetryImage = nullptr;
 
@@ -42,8 +43,9 @@ static void doDeleteLater(TM::Map::MapAreaWorker *obj)
 void TsunamiManagerInfo::TsunamiManager::readBathymetryFromFile(QString path)
 {
     m_tsunamiData->setReaded(false);
-    if (!m_mapAreaWorker.isNull())
+    if (m_mapAreaWorker.get() != NULL)
     {
+        //TODO: Artem check please reset
         m_mapAreaWorker.reset(new TM::Map::MapAreaWorker(), doDeleteLater);
         m_tsunamiWorker->setMapAreaWorker(m_mapAreaWorker);
         m_plotProvider->setMapAreaWorker(m_mapAreaWorker);

@@ -19,12 +19,12 @@ namespace TsunamiManagerInfo {
 class TsunamiPlotProvider : public QQuickImageProvider
 {
 public:
-    TsunamiPlotProvider(TsunamiManagerInfo::TsunamiData *data, QSharedPointer<TM::Map::MapAreaWorker> mapAreaWorker);
+    TsunamiPlotProvider(TsunamiManagerInfo::TsunamiData *data, std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker);
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
     TsunamiManagerInfo::TsunamiData *TsunamiData() const;
     void setTsunamiData(TsunamiManagerInfo::TsunamiData *TsunamiData);
     void setPlotImageSize(int width, int height);
-    void setMapAreaWorker(const QSharedPointer<TM::Map::MapAreaWorker> &mapAreaWorker);
+    void setMapAreaWorker(const std::shared_ptr<TM::Map::MapAreaWorker> &mapAreaWorker);
 
 private:
     void plotBathametry();
@@ -34,7 +34,7 @@ private:
     ColorMap m_bathymetryMap;
     ColorMap m_waterMap;
     TsunamiManagerInfo::TsunamiData *m_tsunamiData;
-    QSharedPointer<TM::Map::MapAreaWorker> m_mapAreaWorker;
+    std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
 };
 }
 #endif // TSUNAMIPLOTPROVIDER_H

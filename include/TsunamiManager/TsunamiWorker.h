@@ -19,13 +19,13 @@ public:
         ReadBathymetry,
         RunCalculation
     };
-    explicit TsunamiWorker(QSharedPointer<TM::Map::MapAreaWorker> mapAreaWorker, QObject *parent = 0);
+    explicit TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker, QObject *parent = 0);
     QString bathymetryPath() const;
     void setBathymetryPath(const QString &path);
     bool readed() const;
     void setCommand(const ThreadCommand &command);
     void runCalculation();
-    void setMapAreaWorker(const QSharedPointer<TM::Map::MapAreaWorker> &mapAreaWorker);
+    void setMapAreaWorker(const std::shared_ptr<TM::Map::MapAreaWorker> &mapAreaWorker);
 
 signals:
     void finished();
@@ -37,7 +37,7 @@ public slots:
 
 private:
     QString m_bathymetryPath;
-    QSharedPointer<TM::Map::MapAreaWorker> m_mapAreaWorker;
+    std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
     bool m_readed;
     ThreadCommand m_command;
     int m_updateTime;

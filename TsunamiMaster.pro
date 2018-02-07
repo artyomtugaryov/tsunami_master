@@ -3,7 +3,7 @@ SUBDIRS += \
     TMlib \
     TsunamiManager \
     GUI \
-    PlotLib
+    PlotLib \
 #    tests
 
 TMlib.subdir = src/TMlib

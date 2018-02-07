@@ -7,11 +7,11 @@ const int Height = 20;
 }
 
 TsunamiManagerInfo::TsunamiPlotProvider::TsunamiPlotProvider(TsunamiManagerInfo::TsunamiData *data,
-                                                             QSharedPointer<TM::Map::MapAreaWorker> mapAreaWorker) :
+                                                             std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker) :
     QQuickImageProvider(QQuickImageProvider::Image),
     m_plot(QSharedPointer<PlotLib::Plot2d>(new Plot2d())),
     m_tsunamiData(data),
-    m_mapAreaWorker(QSharedPointer<TM::Map::MapAreaWorker>(mapAreaWorker))
+    m_mapAreaWorker(std::shared_ptr<TM::Map::MapAreaWorker>(mapAreaWorker))
 {
     m_plotImage = nullptr;
 }
@@ -64,9 +64,9 @@ void TsunamiManagerInfo::TsunamiPlotProvider::setPlotImageSize(int width, int he
     m_plot->setImage(m_plotImage);
 }
 
-void TsunamiManagerInfo::TsunamiPlotProvider::setMapAreaWorker(const QSharedPointer<TM::Map::MapAreaWorker> &mapAreaWorker)
+void TsunamiManagerInfo::TsunamiPlotProvider::setMapAreaWorker(const std::shared_ptr<TM::Map::MapAreaWorker> &mapAreaWorker)
 {
-    m_mapAreaWorker.clear();
+    m_mapAreaWorker.reset();
     m_mapAreaWorker = mapAreaWorker;
 }
 
