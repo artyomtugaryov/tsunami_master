@@ -4,7 +4,7 @@
 #include <TMlib/TMSignal.h>
 #include <ctime>
 
-void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area) {
+void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area, const double timeEnd) {
     size_t maxX = area->getMaxXIndex();
     size_t maxY = area->getMaxYIndex();
     size_t j, k;
@@ -12,7 +12,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
     auto dTetta = area->getStepTetta();
     auto dt = getTimeStep(dPhi, dTetta);
     clock_t begin = clock();
-    for (std::size_t t = 0; t <= dt; t += dt) {
+    for (std::size_t t = 0; t <= timeEnd; t += dt) {
     std::shared_ptr<TM::Map::MapArea<double>> newEta =
             std::make_shared<TM::Map::MapArea<double>>(area->getMaxXIndex(),area->getMaxYIndex(), 0);
 #pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
@@ -88,7 +88,8 @@ double TM::Scheme::TMScheme24::getTimeStep(const double &dPhi, const double &dTe
 
 void TM::Scheme::TMScheme24::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                                        const std::shared_ptr<const TM::TMFocus> &focus,
-                                       const double &izobata) {
+                                       const double &izobata,
+                                       const double timeStep) {
     this->setTypesOfCells(area, izobata);
     if (focus) {
         this->m_focus = std::make_shared<TM::TMFocus>(*focus);
