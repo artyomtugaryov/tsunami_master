@@ -1,10 +1,11 @@
 #include <TMlib/TMScheme24.h>
 #include <TMlib/TMCommon.h>
 #include <TMlib/TMException.h>
-#include <TMlib/TMSignal.h>
 #include <ctime>
 
-void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area, const double timeEnd) {
+void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+                                         const double timeEnd,
+                                         const double gettingTimeStep) {
     size_t maxX = area->getMaxXIndex();
     size_t maxY = area->getMaxYIndex();
     size_t j, k;
@@ -12,7 +13,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
     auto dTetta = area->getStepTetta();
     auto dt = getTimeStep(dPhi, dTetta);
     clock_t begin = clock();
-    for (std::size_t t = 0; t <= timeEnd; t += dt) {
+    for (double t = 0; t <= timeEnd; t += dt) {
     std::shared_ptr<TM::Map::MapArea<double>> newEta =
             std::make_shared<TM::Map::MapArea<double>>(area->getMaxXIndex(),area->getMaxYIndex(), 0);
 #pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
@@ -29,18 +30,16 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
                         auto Up = this->m_focus->getHeigthByIndex(k, j, t);
                         m_B0->setDataByIndex(k, j, m_B1->getDataByIndex(k, j));
                         m_B1->setDataByIndex(k, j, m_B1->getDataByIndex(k, j) + Up);
-                        newEta->setDataByIndex(k, j,
-                                                    this->calcMainValueEta(area, k, j, dt, dPhi, dTetta, tetta, tetta2,
+                        newEta->setDataByIndex(k, j, this->calcMainValueEta(area, k, j, dt, dPhi, dTetta, tetta, tetta2,
                                                                            tetta_2, M));
                         break;
                     }
                     case BOUNDARY1: {
-                        newEta->setDataByIndex(k, j,
-                                                    this->calcBoundaryType1ValueEta(area, k, j, dPhi, dTetta));
+                        newEta->setDataByIndex(k, j, this->calcBoundaryType1ValueEta(area, k, j, dPhi, dTetta));
                         break;
                     }
                     case BOUNDARY2: {
-
+                        newEta->setDataByIndex(k, j, this->calcBoundaryType2ValueEta(area, k, j, dPhi, dTetta));
                         break;
                     }
                     default: //Land
@@ -73,7 +72,9 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
                 area->vVelocity()->setDataByIndex(k, j, v_new);
             }
         }
-        m_sender.emitSignal(newEta);
+        if (!fmod(t, gettingTimeStep)){
+            m_sender.emitSignal(newEta);
+        }
     }
     clock_t end = clock();
     std::cout << "Time of calculation is: " << double(end - begin) * 1000. / CLOCKS_PER_SEC << " ms." << std::endl;
@@ -88,8 +89,7 @@ double TM::Scheme::TMScheme24::getTimeStep(const double &dPhi, const double &dTe
 
 void TM::Scheme::TMScheme24::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                                        const std::shared_ptr<const TM::TMFocus> &focus,
-                                       const double &izobata,
-                                       const double timeStep) {
+                                       const double &izobata) {
     this->setTypesOfCells(area, izobata);
     if (focus) {
         this->m_focus = std::make_shared<TM::TMFocus>(*focus);
@@ -191,6 +191,21 @@ double TM::Scheme::TMScheme24::calcMainValueEta(const std::shared_ptr<TM::Map::M
 }
 
 double TM::Scheme::TMScheme24::calcBoundaryType1ValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+                                                         const std::size_t &k,
+                                                         const std::size_t &j,
+                                                         const double &dPhi,
+                                                         const double &dTetta) {
+    auto n01 = 0.;
+    auto n02 = 0.;
+    auto n10 = 0.;
+    auto n20 = 0.;
+    auto alpha = 0.;
+
+    return (dPhi * (4 * n10 - n20) * cos(alpha) + dTetta * (4 * n01 - n02) * sin(alpha)) /
+           3 * (dPhi * cos(alpha) + dTetta * sin(alpha));
+}
+
+double TM::Scheme::TMScheme24::calcBoundaryType2ValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
                                                          const std::size_t &k,
                                                          const std::size_t &j,
                                                          const double &dPhi,

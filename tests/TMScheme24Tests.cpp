@@ -40,7 +40,7 @@ TEST_F(TMScheme24Tests, configure) {
 
 TEST_F(TMScheme24Tests, calculation) {
     try {
-        m_scheme->calculation(m_area);
+        m_scheme->calculation(m_area, 10000000, 0);
     } catch (TM::details::TMException &ex) {
         std::cout << ex.what() << std::endl;
     }

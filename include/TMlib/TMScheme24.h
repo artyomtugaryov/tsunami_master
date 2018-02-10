@@ -15,12 +15,13 @@ namespace TM {
 
             ~TMScheme24() override = default;
 
-            void calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area, const double timeEnd) override;
+            void calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+                             const double timeEnd,
+                             const double gettingTimeStep) override;
 
             void configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                            const std::shared_ptr<const TM::TMFocus> &focus,
-                           const double &izobata,
-                           const double timeStep) override;
+                           const double &izobata) override;
 
             double getTimeStep(const double &dPhi, const double &dTetta) const override;
 
@@ -66,11 +67,10 @@ namespace TM {
                                              const double &dTetta);
 
             double calcBoundaryType2ValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
-                                             const std::size_t &k, const std::size_t &j,
-                                             const double &dt, const double &dPhi,
-                                             const double &dTetta, const double &tetta,
-                                             const double &tetta2, const double &tetta_2,
-                                             const double &M);
+                                             const std::size_t &k,
+                                             const std::size_t &j,
+                                             const double &dPhi,
+                                             const double &dTetta);
 
 
             std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> m_types_cells;
