@@ -28,11 +28,21 @@ TsunamiPlotData::TsunamiPlotData(QObject *parent) :
 {11, QColor(0, 255, 0 )}})
 {
     m_colorBarIntervals << -3 << 0 << 1 << 3 << 5 << 8 << 11;
-    m_colorBar << QColor(38, 0, 255) << QColor(222, 255, 248) << QColor(128, 0, 128)
-                                     << QColor(255, 0, 0) << QColor(255, 128, 0)
-                                     << QColor(255, 255, 0) << QColor(0, 255, 0 );
+
+    m_colors << QColor(38, 0, 255).name()
+               << QColor(222, 255, 248).name()
+               << QColor(128, 0, 128).name()
+               << QColor(255, 0, 0).name()
+               << QColor(255, 128, 0).name()
+               << QColor(255, 255, 0).name()
+               << QColor(0, 255, 0 ).name();
     //qDebug() << m_colorBar;
     setColorBarMap();
+    QColor a(255, 0, 123);
+    qDebug() << a.name();
+    qDebug() << a;
+    a.setNamedColor(a.name());
+    qDebug() << a;
 }
 
 uint TsunamiPlotData::width() const
@@ -95,14 +105,14 @@ bool TsunamiPlotData::isColorBarIntervalsAreCorrect() const
     return m_isColorBarIntervalsAreCorrect;
 }
 
-QList<QColor> TsunamiPlotData::colorBar() const
-{
-    return m_colorBar;
-}
-
 QList<double> TsunamiPlotData::colorBarIntervals() const
 {
     return m_colorBarIntervals;
+}
+
+QList<QString> TsunamiPlotData::colors() const
+{
+    return m_colors;
 }
 
 void TsunamiPlotData::setWidth(uint width)
@@ -224,16 +234,31 @@ void TsunamiPlotData::setColorIntervalByIndex(QColor color, double interval, uin
 
 void TsunamiPlotData::setColorBarMap()
 {
+    QList <QColor> colorBar;
+    for(int i = 0; i < 7; ++i)
+    {
+        QColor a;
+        a.setNamedColor(m_colors[i]);
+        colorBar << a;
+    }
     qDebug() << "OOOOOOOOOOOOOOOOOO";
-//    m_colorBarMap.resetColorMap({{m_colorBarIntervals[0], m_colorBar[0]},
-//                              {-0.01, m_colorBar[1]},
-//                              {m_colorBarIntervals[1], m_colorBar[1]},
-//                              {m_colorBarIntervals[2], m_colorBar[2]},
-//                              {m_colorBarIntervals[3], m_colorBar[3]},
-//                              {m_colorBarIntervals[4], m_colorBar[4]},
-//                              {m_colorBarIntervals[5], m_colorBar[5]},
-//                              {m_colorBarIntervals[6], m_colorBar[6]}});
-    qDebug() << "BBBBBBBBBBBBBBBBBB";
+    m_colorBarMap.resetColorMap({{m_colorBarIntervals[0], colorBar[0]},
+                              {-0.01, colorBar[1]},
+                              {m_colorBarIntervals[1], colorBar[1]},
+                              {m_colorBarIntervals[2], colorBar[2]},
+                              {m_colorBarIntervals[3], colorBar[3]},
+                              {m_colorBarIntervals[4], colorBar[4]},
+                              {m_colorBarIntervals[5], colorBar[5]},
+                              {m_colorBarIntervals[6], colorBar[6]}});
+//    m_colorBarMap.resetColorMap({{m_colorBarIntervals[0], QColor::setNamedColor(m_colors[0])},
+//                              {-0.01, QColor::setNamedColor(m_colors[1])},
+//                              {m_colorBarIntervals[1], QColor::setNamedColor(m_colors[1])},
+//                              {m_colorBarIntervals[2], QColor::setNamedColor(m_colors[2])},
+//                              {m_colorBarIntervals[3], QColor::setNamedColor(m_colors[3])},
+//                              {m_colorBarIntervals[4], QColor::setNamedColor(m_colors[4])},
+//                              {m_colorBarIntervals[5], QColor::setNamedColor(m_colors[5])},
+//                              {m_colorBarIntervals[6], QColor::setNamedColor(m_colors[6]}});
+            qDebug() << "BBBBBBBBBBBBBBBBBB";
 }
 
 TsunamiPlotData::~TsunamiPlotData() {}

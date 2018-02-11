@@ -1,91 +1,92 @@
 import QtQuick 2.7
 
+import QtQuick.Dialogs 1.0
+
 Item {
     id: root
 
+    QtObject {
+        id: internal
 
-ListView {
-    id: colors
-
-//    anchors.right: parent.horizontalCenter
-//    anchors.left: parent.left
-//    anchors.top: parent.top
-//    anchors.bottom: parent.bottom
-    anchors.fill: parent
-    spacing: 10
-
-    model: _sourceGUI.tsunamiManager.tsunamiData.plotData.colorBar
-    delegate: Rectangle {
-        width: 20
-        height: 20
-        border.color: "gray"
-        color: modelData//repeaterColors.model.data
-        Component.objectName: console.log(modelData)
+        property var colors: _sourceGUI.tsunamiManager.tsunamiData.plotData.colors
+        property var intervals: _sourceGUI.tsunamiManager.tsunamiData.plotData.colorBarIntervals
     }
-}
-//    Column {
-//        id: colors
 
-////        Rectangle {
+    Column {
+        id: colors
 
-////        color: "red"
-////        opacity: 0.5
-////        }
-//        anchors.right: parent.horizontalCenter
-//        anchors.left: parent.left
-//        anchors.top: parent.top
-//        anchors.bottom: parent.bottom
-//        spacing: 10
+        anchors.centerIn: parent
+        spacing: 10
 
-//        Repeater {
-//            id: repeaterColors
+        Repeater {
+            id: repeaterColors
 
-//            model: (_sourceGUI.tsunamiManager.tsunamiData.plotData.colorBar)
+            model: internal.colors.length
+            //Item {
+            //    property int i: index
+            Rectangle {
+                id: rec
 
-//            Rectangle {
-//                id: rec
-//                width: 20
-//                height: 20
-//                border.color: "gray"
-//                color: modelData;//repeaterColors.model.data
-//            }
-//        }
-//    }
+                width: 25
+                height: 25
+                border.color: "gray"
+                color: internal.colors[index];
+                MouseArea {
+                    id: area
 
+                    property int i: index
+                    anchors.fill: parent
 
-//    Column {
-//        id: intervals
+                    onClicked: {
+                        colorDialog.i = i
+                        colorDialog.visible = true
+                    }
+                }
+                TextEdit {
+                    id: edit
 
-////        Rectangle {
+                    property int i: index
+                    anchors.centerIn: parent
+                    text: (internal.intervals[i])
+                    horizontalAlignment: Text.AlignHCenter
+                    onFocusChanged: focus ? selectAll() : 0
+                    onTextChanged: {
+                        console.log(Number(text), internal.intervals[i], i)
 
-////        color: "red"
-////        opacity: 0.5
-////        }
-//        anchors.left: parent.horizontalCenter
-//        anchors.right: parent.right
-//        anchors.top: parent.top
-//        anchors.bottom: parent.bottom
-//        spacing: 10
+                        if(Number(text) > 99) {
+                            text = internal.intervals[i]
+                        }
+                        else if(i > 0
+                                && Number(text)
+                                <= internal.intervals[i - 1]) {
+                            console.log("1111111")
+                            text = internal.intervals[i]
+                        }
+                        else if(i < internal.intervals.length - 1
+                                && Number(text)
+                                >= internal.intervals[i + 1]) {
+                            text = internal.intervals[i]
+                            console.log("22222222")
+                        }
+                    }
+                }
 
-//        Repeater {
-//            id: repeaterIntervals
+                ColorDialog {
+                    id: colorDialog
 
-//            model: (_sourceGUI.tsunamiManager.tsunamiData.plotData.colorBarIntervals)
-
-//            Text {
-
-//                width: 20
-//                height: 20
-//                //border.color: "gray"
-//                text: modelData;//repeaterColors.model.data
-//            }
-//        }
-//    }
-    Component.onCompleted: {
-        var  a = _sourceGUI.tsunamiManager.tsunamiData.plotData.colorBarIntervals.length
-        console.log(a)
-        for(var i = 0; i < a; i++) {
-            console.log(_sourceGUI.tsunamiManager.tsunamiData.plotData.colorBar[i].r)
+                    property int i: 0
+                    title: "Please choose a color"
+                    onAccepted: {
+                        console.log("You chose: " + colorDialog.color)
+                        rec.color = colorDialog.color
+                        Qt.quit()
+                    }
+                    onRejected: {
+                        console.log("Canceled")
+                        Qt.quit()
+                    }
+                }
+            }
         }
-    }//console.log(_sourceGUI.tsunamiManager.tsunamiData.plotData.colorBar)
+    }
 }

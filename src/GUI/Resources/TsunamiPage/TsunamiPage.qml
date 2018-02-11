@@ -1,4 +1,5 @@
 import QtQuick 2.7
+
 import "qrc:/Resources/Common/InstrumentPanel/"
 
 Item {
@@ -38,30 +39,35 @@ Item {
         x: 320
         y: 20
 
-        width: 850
-        height: 350
+        width: 250//plotImage.sourceSize.width > 1 ?  plotImage.sourceSize.width + 10 : 5//plotImage. ? row.width + 5 : 5
+        height: 300//plotImage.sourceSize.height > 1 ? plotImage.sourceSize.height + 10 : 5//plotImage.enabled ? row.height + 5 : 5
 
-        minWidth: 850
-        minHeight: 350
+        minWidth: visible ? plotImage.sourceSize.width : 20//100//plotImage.enabled ? plotImage.sourceSize.width : 10
+        minHeight: visible ? plotImage.sourceSize.height : 20 //100//plotImage.enabled ? plotImage.sourceSize.height : 10
 
+        visible: _sourceGUI.tsunamiManager.tsunamiData.readed
         Row {
+            id: row
 
             anchors.fill: parent
             anchors.margins: 5
+
             Image {
                 id: plotImage
+
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 width: calculationWindow.width - arrows.width
                        - (calculationWindow.colorBarPresent ? colorBar.width : 0) - 10
                 //anchors.margins: 5
                 source: "image://plot/" + (internal.postfix).toString()
+                onSourceChanged: console.log(sourceSize.width, sourceSize.height)
             }
 
             ColorBar {
                 id: colorBar
 
-                width: 100
+                width: 40
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 visible: calculationWindow.colorBarPresent
@@ -71,7 +77,6 @@ Item {
                 id: arrows
 
                 anchors.verticalCenter: parent.verticalCenter
-                width: 30
                 source: "Assets/arrows"
                         + (calculationWindow.colorBarPresent ? "Left" : "Right")
                         + ".png"

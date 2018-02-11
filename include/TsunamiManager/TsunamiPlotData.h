@@ -35,7 +35,8 @@ class TsunamiPlotData : public QObject
                WRITE setIsColorBarIntervalsAreCorrect
                NOTIFY isColorBarIntervalsAreCorrectChanged)
 
-    Q_PROPERTY(QList <QColor> colorBar READ colorBar CONSTANT)
+
+    Q_PROPERTY(QList <QString> colors READ colors CONSTANT)
     Q_PROPERTY(QList <double> colorBarIntervals READ colorBarIntervals CONSTANT)
 
 public:
@@ -66,9 +67,9 @@ public:
 
     bool isColorBarIntervalsAreCorrect() const;
 
-    QList <QColor> colorBar() const;
-
     QList <double> colorBarIntervals() const;
+
+    QList <QString> colors() const;
 
 public slots:
     void setWidth(uint width);
@@ -132,8 +133,8 @@ private:
     uint m_stepColorBar;
     bool m_isColorBarIntervalsAreCorrect;
     PlotLib::ColorMap m_colorBarMap;
-    QList <QColor> m_colorBar;
     QList <double> m_colorBarIntervals;
+    QList <QString> m_colors;
 };
 }
 #endif // TSUNAMIPLOTDATA_H

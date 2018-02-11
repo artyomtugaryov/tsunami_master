@@ -56,6 +56,7 @@ private:
     Plot2d* m_plot;
     int m_currentCalculationTime;
     std::shared_ptr<TM::Scheme::TMScheme24> m_scheme;
+    std::shared_ptr<TM::TMFocus> m_focus;
 };
 }
 #endif //TSUNAMIMANAGER_H

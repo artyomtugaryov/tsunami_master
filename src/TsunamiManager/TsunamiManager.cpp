@@ -16,7 +16,8 @@ TsunamiManagerInfo::TsunamiManager::TsunamiManager(QObject *parent) :
     m_tsunamiWorkerThread(new QThread),
     m_plot(new Plot2d()),
     m_currentCalculationTime(0),
-    m_scheme(std::make_shared<TM::Scheme::TMScheme24>())
+    m_scheme(std::make_shared<TM::Scheme::TMScheme24>()),
+    m_focus(NULL)
 {
     m_bathymetryImage = nullptr;
 
@@ -61,6 +62,10 @@ void TsunamiManagerInfo::TsunamiManager::readBrickDataFromFile(QString path)
 {
     path = path.remove("file:///");
     m_tsunamiData->setBrickPath(path);
+    if (m_focus.get() != NULL)
+    {
+        m_focus.reset(new TM::TMFocus(path.toStdString()));
+    }
 }
 
 void TsunamiManagerInfo::TsunamiManager::startCalculation()
