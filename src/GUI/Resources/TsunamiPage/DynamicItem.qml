@@ -3,11 +3,34 @@ import QtQuick 2.7
 Item {
     id: root
 
+    property int maxWidth: 0
+    property int maxHeight: 0
+    property int minWidth: 0
+    property int minHeight: 0
+
     x: 20
     y: 20
 
     width: 650
     height: 350
+
+    onWidthChanged: {
+        if (maxWidth > 0) {
+            if (width > maxWidth) width = maxWidth
+        }
+        if (minWidth > 0) {
+            if (width < minWidth) width = minWidth
+        }
+    }
+
+    onHeightChanged: {
+        if (maxHeight > 0) {
+            if (height > maxHeight) height = maxHeight
+        }
+        if (minHeight > 0) {
+            if (height < minHeight) height = minHeight
+        }
+    }
 
     Rectangle {
         id: selComp

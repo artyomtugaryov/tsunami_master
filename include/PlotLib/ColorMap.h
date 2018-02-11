@@ -23,8 +23,11 @@ public:
 
     ColorMap(funcColorMap<double> funcColor, QObject *parent = nullptr);
     QColor getColor(double val) { return m_funcColor(val); }
+
     double min() const;
     double max() const;
+    void resetColorMap(std::map<double, QColor> map);
+//    void setColorIntervalByIndex(QColor color, double interval, double oldInterval);
 public slots:
 
 signals:

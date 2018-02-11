@@ -1,6 +1,8 @@
 #ifndef TSUNAMIDATA_H
 #define TSUNAMIDATA_H
 
+#include "TsunamiPlotData.h"
+
 #include <QObject>
 
 namespace TsunamiManagerInfo {
@@ -29,6 +31,8 @@ class TsunamiData : public QObject
                WRITE setMaxDistributionSavePath NOTIFY maxDistributionSavePathChanged)
 
     Q_PROPERTY(bool readed READ readed NOTIFY readedChanged)
+
+    Q_PROPERTY(TsunamiPlotData *plotData READ plotData CONSTANT)
 
 public:
     TsunamiData(QObject *parent = 0);
@@ -69,6 +73,8 @@ public:
     bool readed() const;
 
     void setReaded(bool readed);
+
+    TsunamiPlotData * plotData() const;
 
 public slots:
     void setImageSavePath(QString imageSavePath);
@@ -114,6 +120,7 @@ private:
     QString m_maxDistributionSavePath;
 
     bool m_readed;
+    TsunamiPlotData *m_plotData;
 };
 }
 #endif // TSUNAMIDATA_H

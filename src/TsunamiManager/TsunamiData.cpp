@@ -5,7 +5,9 @@ namespace
 QLatin1String PathNone("None");
 }
 
-TsunamiManagerInfo::TsunamiData::TsunamiData(QObject *parent) :
+using namespace TsunamiManagerInfo;
+
+TsunamiData::TsunamiData(QObject *parent) :
     QObject(parent),
     m_sizeX(0),
     m_sizeY(0),
@@ -19,129 +21,130 @@ TsunamiManagerInfo::TsunamiData::TsunamiData(QObject *parent) :
     m_brickPath(PathNone),
     m_imageSavePath(PathNone),
     m_maxDistributionSavePath(PathNone),
-    m_readed(false)
+    m_readed(false),
+    m_plotData(new TsunamiPlotData())
 {
 }
 
-TsunamiManagerInfo::TsunamiData::~TsunamiData() {}
+TsunamiData::~TsunamiData() {}
 
-uint TsunamiManagerInfo::TsunamiData::sizeX() const
+uint TsunamiData::sizeX() const
 {
     return m_sizeX;
 }
 
-uint TsunamiManagerInfo::TsunamiData::sizeY() const
+uint TsunamiData::sizeY() const
 {
     return m_sizeY;
 }
 
-double TsunamiManagerInfo::TsunamiData::startX() const
+double TsunamiData::startX() const
 {
     return m_startX;
 }
 
-double TsunamiManagerInfo::TsunamiData::startY() const
+double TsunamiData::startY() const
 {
     return m_startY;
 }
 
-double TsunamiManagerInfo::TsunamiData::endX() const
+double TsunamiData::endX() const
 {
     return m_endX;
 }
 
-double TsunamiManagerInfo::TsunamiData::endY() const
+double TsunamiData::endY() const
 {
     return m_endY;
 }
 
-double TsunamiManagerInfo::TsunamiData::stepX() const
+double TsunamiData::stepX() const
 {
     return m_stepX;
 }
 
-double TsunamiManagerInfo::TsunamiData::stepY() const
+double TsunamiData::stepY() const
 {
     return m_stepY;
 }
 
-QString TsunamiManagerInfo::TsunamiData::bathymetryPath() const
+QString TsunamiData::bathymetryPath() const
 {
     return m_bathymetryPath;
 }
 
-QString TsunamiManagerInfo::TsunamiData::brickPath() const
+QString TsunamiData::brickPath() const
 {
     return m_brickPath;
 }
 
-QString TsunamiManagerInfo::TsunamiData::imageSavePath() const
+QString TsunamiData::imageSavePath() const
 {
     return m_imageSavePath;
 }
 
-QString TsunamiManagerInfo::TsunamiData::maxDistributionSavePath() const
+QString TsunamiData::maxDistributionSavePath() const
 {
     return m_maxDistributionSavePath;
 }
 
-void TsunamiManagerInfo::TsunamiData::setSizeX(uint size) {
+void TsunamiData::setSizeX(uint size) {
     if (m_sizeX != size) {
         m_sizeX = size;
         emit sizeXChanged(size);
     }
 }
 
-void TsunamiManagerInfo::TsunamiData::setSizeY(uint size) {
+void TsunamiData::setSizeY(uint size) {
     if (m_sizeY != size) {
         m_sizeY = size;
         emit sizeYChanged(size);
     }
 }
 
-void TsunamiManagerInfo::TsunamiData::setStartX(double start) {
+void TsunamiData::setStartX(double start) {
     if (m_startX != start) {
         m_startX = start;
         emit startXChanged(start);
     }
 }
 
-void TsunamiManagerInfo::TsunamiData::setStartY(double start) {
+void TsunamiData::setStartY(double start) {
     if (m_startY != start) {
         m_startY = start;
         emit startYChanged(start);
     }
 }
 
-void TsunamiManagerInfo::TsunamiData::setEndX(double end) {
+void TsunamiData::setEndX(double end) {
     if (m_endX != end) {
         m_endX = end;
         emit endXChanged(end);
     }
 }
 
-void TsunamiManagerInfo::TsunamiData::setEndY(double end) {
+void TsunamiData::setEndY(double end) {
     if (m_endY != end) {
         m_endY = end;
         emit endYChanged(end);
     }
 }
 
-void TsunamiManagerInfo::TsunamiData::setStepX(double step) {
+void TsunamiData::setStepX(double step) {
     if (m_stepX != step) {
         m_stepX = step;
         emit stepXChanged(step);
     }
 }
 
-void TsunamiManagerInfo::TsunamiData::setStepY(double step) {
+void TsunamiData::setStepY(double step) {
     if (m_stepY != step) {
         m_stepY = step;
         emit stepYChanged(step);
     }
 }
 
-void TsunamiManagerInfo::TsunamiData::setImageSavePath(QString imageSavePath)
+void TsunamiData::setImageSavePath(QString imageSavePath)
 {
     imageSavePath = imageSavePath.remove("file:///");
     if (m_imageSavePath == imageSavePath)
@@ -151,7 +154,7 @@ void TsunamiManagerInfo::TsunamiData::setImageSavePath(QString imageSavePath)
     emit imageSavePathChanged();
 }
 
-void TsunamiManagerInfo::TsunamiData::setMaxDistributionSavePath(QString maxDistributionSavePath)
+void TsunamiData::setMaxDistributionSavePath(QString maxDistributionSavePath)
 {
     maxDistributionSavePath = maxDistributionSavePath.remove("file:///");
     if (m_maxDistributionSavePath == maxDistributionSavePath)
@@ -163,7 +166,7 @@ void TsunamiManagerInfo::TsunamiData::setMaxDistributionSavePath(QString maxDist
     emit maxDistributionSavePathChanged();
 }
 
-void TsunamiManagerInfo::TsunamiData::setReaded(bool readed)
+void TsunamiData::setReaded(bool readed)
 {
     if (m_readed == readed)
     {
@@ -173,18 +176,23 @@ void TsunamiManagerInfo::TsunamiData::setReaded(bool readed)
     emit readedChanged();
 }
 
-void TsunamiManagerInfo::TsunamiData::setBrickPath(const QString &brickPath)
+TsunamiPlotData *TsunamiData::plotData() const
+{
+    return m_plotData;
+}
+
+void TsunamiData::setBrickPath(const QString &brickPath)
 {
     m_brickPath = brickPath;
     emit brickPathChanged();
 }
 
-bool TsunamiManagerInfo::TsunamiData::readed() const
+bool TsunamiData::readed() const
 {
     return m_readed;
 }
 
-void TsunamiManagerInfo::TsunamiData::setBathymetryPath(const QString &bathymetryPath)
+void TsunamiData::setBathymetryPath(const QString &bathymetryPath)
 {
     m_bathymetryPath = bathymetryPath;
     emit bathymetryPathChanged();
