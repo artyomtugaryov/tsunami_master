@@ -36,13 +36,7 @@ TsunamiPlotData::TsunamiPlotData(QObject *parent) :
                << QColor(255, 128, 0).name()
                << QColor(255, 255, 0).name()
                << QColor(0, 255, 0 ).name();
-    //qDebug() << m_colorBar;
     setColorBarMap();
-    QColor a(255, 0, 123);
-    qDebug() << a.name();
-    qDebug() << a;
-    a.setNamedColor(a.name());
-    qDebug() << a;
 }
 
 uint TsunamiPlotData::width() const
@@ -228,8 +222,6 @@ void TsunamiPlotData::setColorIntervalByIndex(QColor color, double interval, uin
     Q_UNUSED(color)
     Q_UNUSED(interval)
     Q_UNUSED(index)
-
-
 }
 
 void TsunamiPlotData::setColorBarMap()
@@ -241,7 +233,7 @@ void TsunamiPlotData::setColorBarMap()
         a.setNamedColor(m_colors[i]);
         colorBar << a;
     }
-    qDebug() << "OOOOOOOOOOOOOOOOOO";
+
     m_colorBarMap.resetColorMap({{m_colorBarIntervals[0], colorBar[0]},
                               {-0.01, colorBar[1]},
                               {m_colorBarIntervals[1], colorBar[1]},
@@ -250,15 +242,6 @@ void TsunamiPlotData::setColorBarMap()
                               {m_colorBarIntervals[4], colorBar[4]},
                               {m_colorBarIntervals[5], colorBar[5]},
                               {m_colorBarIntervals[6], colorBar[6]}});
-//    m_colorBarMap.resetColorMap({{m_colorBarIntervals[0], QColor::setNamedColor(m_colors[0])},
-//                              {-0.01, QColor::setNamedColor(m_colors[1])},
-//                              {m_colorBarIntervals[1], QColor::setNamedColor(m_colors[1])},
-//                              {m_colorBarIntervals[2], QColor::setNamedColor(m_colors[2])},
-//                              {m_colorBarIntervals[3], QColor::setNamedColor(m_colors[3])},
-//                              {m_colorBarIntervals[4], QColor::setNamedColor(m_colors[4])},
-//                              {m_colorBarIntervals[5], QColor::setNamedColor(m_colors[5])},
-//                              {m_colorBarIntervals[6], QColor::setNamedColor(m_colors[6]}});
-            qDebug() << "BBBBBBBBBBBBBBBBBB";
 }
 
 TsunamiPlotData::~TsunamiPlotData() {}

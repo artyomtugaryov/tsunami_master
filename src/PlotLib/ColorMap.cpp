@@ -35,8 +35,7 @@ double ColorMap::max() const  {
 void ColorMap::resetColorMap(std::map <double, QColor> map)
 {
     m_mapColor.clear();
-    //for
-    //m_mapColor = map;
+    m_mapColor = map;
 }
 
 //void ColorMap::setColorIntervalByIndex(QColor color, double interval, double oldInterval)

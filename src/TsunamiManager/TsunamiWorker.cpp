@@ -2,9 +2,14 @@
 
 #include <QDebug>
 
-TsunamiWorker::TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker, QObject *parent) :
+TsunamiWorker::TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker,
+                             std::shared_ptr<TM::Scheme::TMScheme24> scheme,
+                             std::shared_ptr<TM::TMFocus> focus,
+                             QObject *parent) :
     QObject(parent),
     m_mapAreaWorker(mapAreaWorker),
+    m_scheme(scheme),
+    m_focus(focus),
     m_readed(false),
     m_command(ThreadCommand::None),
     m_updateTime(1)
@@ -50,6 +55,28 @@ void TsunamiWorker::readBathymetryFromFile()
     emit finished();
 }
 
+std::shared_ptr<TM::Scheme::TMScheme24> TsunamiWorker::scheme() const
+{
+    return m_scheme;
+}
+
+std::shared_ptr<TM::TMFocus> TsunamiWorker::focus() const
+{
+    return m_focus;
+}
+
+void TsunamiWorker::setFocus(const std::shared_ptr<TM::TMFocus> &focus)
+{
+    m_focus.reset();
+    m_focus = focus;
+}
+
+void TsunamiWorker::setScheme(const std::shared_ptr<TM::Scheme::TMScheme24> &scheme)
+{
+    m_scheme.reset();
+    m_scheme = scheme;
+}
+
 void TsunamiWorker::setMapAreaWorker(const std::shared_ptr<TM::Map::MapAreaWorker> &mapAreaWorker)
 {
     m_mapAreaWorker.reset();
@@ -63,7 +90,9 @@ void TsunamiWorker::setCommand(const ThreadCommand &command)
 
 //TODO: remove before implement calculation part
 void TsunamiWorker::runCalculation()
-{}
+{
+
+}
 //TODO: remove before implement calculation part
 bool TsunamiWorker::readed() const
 {

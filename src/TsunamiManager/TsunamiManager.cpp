@@ -11,13 +11,13 @@ TsunamiManagerInfo::TsunamiManager::TsunamiManager(QObject *parent) :
     QObject(parent),
     m_tsunamiData(new TsunamiManagerInfo::TsunamiData(this)),
     m_mapAreaWorker(std::make_shared<TM::Map::MapAreaWorker>()),
+    m_scheme(NULL),
+    m_focus(NULL),
     m_plotProvider(new TsunamiPlotProvider(m_tsunamiData, m_mapAreaWorker)),
-    m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker)),
+    m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker, m_scheme, m_focus)),
     m_tsunamiWorkerThread(new QThread),
     m_plot(new Plot2d()),
-    m_currentCalculationTime(0),
-    m_scheme(std::make_shared<TM::Scheme::TMScheme24>()),
-    m_focus(NULL)
+    m_currentCalculationTime(0)
 {
     m_bathymetryImage = nullptr;
 
@@ -36,10 +36,10 @@ TsunamiManagerInfo::TsunamiData *TsunamiManagerInfo::TsunamiManager::tsunamiData
     return m_tsunamiData;
 }
 
-static void doDeleteLater(TM::Map::MapAreaWorker *obj)
-{
-    delete obj;
-}
+//static void doDeleteLater(TM::Map::MapAreaWorker *obj)
+//{
+//    delete obj;
+//}
 
 void TsunamiManagerInfo::TsunamiManager::readBathymetryFromFile(QString path)
 {
@@ -47,10 +47,14 @@ void TsunamiManagerInfo::TsunamiManager::readBathymetryFromFile(QString path)
     if (m_mapAreaWorker.get() != NULL)
     {
         //TODO: Artem check please reset
-        m_mapAreaWorker.reset(new TM::Map::MapAreaWorker(), doDeleteLater);
+        m_mapAreaWorker.reset();
+        m_mapAreaWorker = std::make_shared<TM::Map::MapAreaWorker>();
         m_tsunamiWorker->setMapAreaWorker(m_mapAreaWorker);
         m_plotProvider->setMapAreaWorker(m_mapAreaWorker);
     }
+//    if (m_scheme != NULL) {
+//        m_scheme.reset();
+//    }
     path = path.remove("file:///");
     m_tsunamiWorker->setBathymetryPath(path);
     m_tsunamiData->setBathymetryPath(path);
@@ -64,13 +68,23 @@ void TsunamiManagerInfo::TsunamiManager::readBrickDataFromFile(QString path)
     m_tsunamiData->setBrickPath(path);
     if (m_focus.get() != NULL)
     {
-        m_focus.reset(new TM::TMFocus(path.toStdString()));
+        m_focus.reset();
     }
+    m_focus = std::make_shared<TM::TMFocus>(path.toStdString());
+    m_tsunamiWorker->setFocus(m_focus);
 }
 
 void TsunamiManagerInfo::TsunamiManager::startCalculation()
 {
-    if (m_tsunamiWorker->readed() && m_tsunamiWorkerThread->isFinished()) {
+    if (m_tsunamiWorker->readed()
+            && m_tsunamiWorkerThread->isFinished()
+            && m_focus.get() != NULL)
+    {
+        if (m_scheme.get() != NULL)
+        {
+            m_scheme.reset();
+        }
+        m_tsunamiWorker->setScheme(m_scheme);
         m_tsunamiWorker->setCommand(TsunamiWorker::ThreadCommand::RunCalculation);
         m_tsunamiWorkerThread->start();
     }
@@ -113,7 +127,8 @@ void TsunamiManagerInfo::TsunamiManager::isUpdateTime(int currentTime)
 
 void TsunamiManagerInfo::TsunamiManager::quickStart()
 {
-    if (m_tsunamiWorker->bathymetryPath().size() > 5) {
+    if (m_tsunamiWorker->bathymetryPath().size() > 5)
+    {
         readBathymetryFromFile(m_tsunamiWorker->bathymetryPath());
     }
 }
@@ -122,7 +137,8 @@ void TsunamiManagerInfo::TsunamiManager::saveInitDataToJson()
 {
     QFile saveFile("INIT.json");
 
-    if (!saveFile.open(QIODevice::WriteOnly)) {
+    if (!saveFile.open(QIODevice::WriteOnly))
+    {
         qWarning("Couldn't open save file.");
     }
 
@@ -154,7 +170,8 @@ void TsunamiManagerInfo::TsunamiManager::loadInitDataFromJson()
 {
     QFile loadFile(QStringLiteral("INIT.json"));
 
-    if (!loadFile.open(QIODevice::ReadOnly)) {
+    if (!loadFile.open(QIODevice::ReadOnly))
+    {
         qWarning("Couldn't open init file.");
         return;
     }
