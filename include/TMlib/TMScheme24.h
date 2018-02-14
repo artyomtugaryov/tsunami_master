@@ -16,14 +16,15 @@ namespace TM {
             ~TMScheme24() override = default;
 
             void calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
-                             const double timeEnd,
-                             const double gettingTimeStep) override;
+                             const double timeEnd) override;
 
             void configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                            const std::shared_ptr<const TM::TMFocus> &focus,
                            const double &izobata) override;
 
-            double getTimeStep(const double &dPhi, const double &dTetta) const override;
+            double getTimeStep(const double &dPhi, const double &dTetta, const double Hm) const;
+
+            void setSendingTimeStep(const double);
 
         private:
 
