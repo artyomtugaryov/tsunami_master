@@ -1,7 +1,7 @@
 #include "TMlib/TMMapArea.h"
 #include "TMlib/TMException.h"
 #include "TMlib/TMScheme.h"
-
+#include <algorithm>
 #include <fstream>
 #include <iomanip>
 
@@ -153,6 +153,11 @@ void TM::Map::MapArea<DataType>::saveMapAreaToBinFile(std::string path) {
 
         }
     }
+}
+
+template<typename DataType>
+const DataType TM::Map::MapArea<DataType>::getMaxValue() const {
+    return *std::max_element(this->m_data.begin(), this->m_data.end());
 }
 
 template

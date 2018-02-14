@@ -20,14 +20,12 @@ namespace TM {
 
             virtual ~TMScheme() = default;
 
-            virtual void calculation(const std::shared_ptr<TM::Map::MapAreaWorker>&) = 0;
+            virtual void calculation(const std::shared_ptr<TM::Map::MapAreaWorker>&,
+                                     const double) = 0;
 
             virtual void configure(const std::shared_ptr<const TM::Map::MapAreaWorker>&,
                                    const std::shared_ptr<const TM::TMFocus>&,
                                    const double &) = 0;
-
-            virtual double getTimeStep(const double &dPhi, const double &dTetta) const = 0;
-
         };
     }
 }

@@ -45,6 +45,8 @@ namespace TM {
 
             double getStepTetta() const noexcept;
 
+            double getMaxDepth() const noexcept ;
+
         private:
             std::shared_ptr<MapArea<double>> m_eta;
             std::shared_ptr<MapArea<double>> m_uVelocity;
