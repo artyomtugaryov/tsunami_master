@@ -72,7 +72,6 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
 //    m_bathymetry->setStartX(minX - m_bathymetry->stepX() / 2.);
 //    m_bathymetry->setStartY(minY - m_bathymetry->stepY() / 2.);
 
-
     for (std::size_t k = 0; k < static_cast<std::size_t >(depth.size()); k++) {
         m_bathymetry->setDataByPoint(latitude[k], longitude[k], depth[k]);
     }

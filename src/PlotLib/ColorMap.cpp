@@ -32,6 +32,24 @@ double ColorMap::max() const  {
     return m_mapColor.rbegin()->first;
 }
 
+void ColorMap::resetColorMap(std::map <double, QColor> map)
+{
+    m_mapColor.clear();
+    m_mapColor = map;
+}
+
+//void ColorMap::setColorIntervalByIndex(QColor color, double interval, double oldInterval)
+//{
+//    if (m_mapColor.size() >= index)
+//    {
+//        m_mapColor.[index];// = {interval, color};
+//    }
+//    else
+//    {
+//        qWarning() << "Out of range";
+//    }
+//}
+
 QColor operator * (QColor x, double y)
 {
     return QColor{ static_cast<int>(x.red() * y), static_cast<int>(x.green() * y), static_cast<int>(x.blue() * y) };

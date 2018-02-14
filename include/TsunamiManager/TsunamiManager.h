@@ -7,6 +7,8 @@
 
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMException.h>
+#include <TMlib/TMScheme24.h>
+#include <TMlib/TMFocus.h>
 #include <PlotLib/Plot2d.h>
 #include <PlotLib/ColorMap.h>
 
@@ -14,6 +16,7 @@
 #include <QSharedPointer>
 #include <QThread>
 #include <QImage>
+#include <memory>
 
 using namespace PlotLib;
 
@@ -44,7 +47,9 @@ signals:
     void imageUpdate();
 private:
     TsunamiManagerInfo::TsunamiData* m_tsunamiData;
-    QSharedPointer<TM::Map::MapAreaWorker> m_mapAreaWorker;
+    std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
+    std::shared_ptr<TM::Scheme::TMScheme24> m_scheme;
+    std::shared_ptr<TM::TMFocus> m_focus;
     TsunamiManagerInfo::TsunamiPlotProvider* m_plotProvider;
     TsunamiWorker* m_tsunamiWorker;
     QThread* m_tsunamiWorkerThread;

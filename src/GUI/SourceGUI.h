@@ -19,7 +19,6 @@ public:
     virtual ~SourceGUI();
 
     TsunamiManagerInfo::TsunamiManager* tsunamiManager() const;
-    Q_INVOKABLE void startReadFromFile(const QString &path);
 
 private:
     TsunamiManagerInfo::TsunamiManager* m_tsunamiManager;

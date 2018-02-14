@@ -19,8 +19,11 @@
         <file>Resources/TsunamiPage/TsunamiPage.qml</file>
         <file>Resources/TsunamiPage/Assets/tsunamiWave.jpg</file>
         <file>Resources/TsunamiPage/Assets/InstrumentalPanel.png</file>
+        <file>Resources/TsunamiPage/Assets/arrowsRight.png</file>
+        <file>Resources/TsunamiPage/Assets/arrowsLeft.png</file>
         <file>Resources/TsunamiPage/DynamicItem.qml</file>
         <file>Resources/TsunamiPage/InstrumentPanel.qml</file>
+        <file>Resources/TsunamiPage/ColorBar.qml</file>
         <file>Resources/Common/InstrumentPanel/Assets/buttonTab.png</file>
         <file>Resources/Common/InstrumentPanel/Assets/start.png</file>
         <file>Resources/Common/InstrumentPanel/Assets/pause.png</file>

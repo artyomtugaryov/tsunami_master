@@ -21,8 +21,8 @@ std::size_t TM::Map::MapArea<DataType>::getIndex(std::size_t x, std::size_t y) c
 
 template<typename DataType>
 std::size_t TM::Map::MapArea<DataType>::getIndexByPoint(double lat, double lon) const {
-    std::size_t x = static_cast<std::size_t>(((lat - m_startX) / m_stepX));
-    std::size_t y = m_sizeY - 1 - static_cast<std::size_t>(((lon - m_startY) / m_stepY));
+    std::size_t x = static_cast<std::size_t>(((lat - m_startX) / m_stepX) + 0.5);
+    std::size_t y = m_sizeY - 1 - static_cast<std::size_t>(((lon - m_startY) / m_stepY) + 0.5);
     return getIndex(x, y);
 }
 
