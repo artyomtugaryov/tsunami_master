@@ -9,6 +9,7 @@
 #include <TMlib/TMException.h>
 #include <TMlib/TMScheme24.h>
 #include <TMlib/TMFocus.h>
+#include <TMlib/TMSignal.h>
 #include <PlotLib/Plot2d.h>
 #include <PlotLib/ColorMap.h>
 
@@ -33,14 +34,17 @@ public:
     void setPlotProvider(TsunamiPlotProvider *plotProvider);
     int currentCalculationTime();
     void loadInitDataFromJson();
+    std::shared_ptr<TM::Map::MapArea<double> > eta() const;
+
 public slots:
     void readBathymetryFromFile(QString path);
     void readBrickDataFromFile(QString path);
     void startCalculation();
-    void tsunamiWorkerThreadReaded();
-    void isUpdateTime(int currentTime);
+    void tsunamiWorkerThreadReaded(); 
     void saveInitDataToJson();
     void quickStart();
+private slots:
+    void isUpdateTime(std::shared_ptr<TM::Map::MapArea<double>> eta);
 signals:
     void pathChanged();
     void currentCalculationTimeChanged();
@@ -50,6 +54,8 @@ private:
     std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
     std::shared_ptr<TM::Scheme::TMScheme24> m_scheme;
     std::shared_ptr<TM::TMFocus> m_focus;
+    std::shared_ptr<TM::TMSignal> m_signal;
+    std::shared_ptr<TM::Map::MapArea<double> > m_eta;
     TsunamiManagerInfo::TsunamiPlotProvider* m_plotProvider;
     TsunamiWorker* m_tsunamiWorker;
     QThread* m_tsunamiWorkerThread;

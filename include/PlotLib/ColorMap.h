@@ -18,6 +18,7 @@ template <typename T> using funcColorMap = std::function <QColor(T val)>;
 class ColorMap : public QObject {
     Q_OBJECT
 public:
+
     ColorMap(QObject *parent = nullptr);
     ColorMap(std::map <double, QColor> map, bool interpalation = true, QObject *parent = nullptr);
 
@@ -28,6 +29,8 @@ public:
     double max() const;
     void resetColorMap(std::map<double, QColor> map);
 //    void setColorIntervalByIndex(QColor color, double interval, double oldInterval);
+    std::map<double, QColor> getMapColor() const;
+
 public slots:
 
 signals:
@@ -49,5 +52,6 @@ private:
             }
         })};
 };
+
 }
 #endif //COLORMAP_H

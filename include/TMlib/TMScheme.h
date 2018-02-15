@@ -5,6 +5,7 @@
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMFocus.h>
 #include <TMlib/TMConstants.h>
+#include <TMlib/TMSignal.h>
 
 namespace TM {
     namespace Scheme {
@@ -21,6 +22,7 @@ namespace TM {
             virtual ~TMScheme() = default;
 
             virtual void calculation(const std::shared_ptr<TM::Map::MapAreaWorker>&,
+                                     const std::shared_ptr<TMSignal> &,
                                      const double) = 0;
 
             virtual void configure(const std::shared_ptr<const TM::Map::MapAreaWorker>&,

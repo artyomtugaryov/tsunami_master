@@ -38,6 +38,11 @@ void ColorMap::resetColorMap(std::map <double, QColor> map)
     m_mapColor = map;
 }
 
+std::map<double, QColor> ColorMap::getMapColor() const
+{
+    return m_mapColor;
+}
+
 //void ColorMap::setColorIntervalByIndex(QColor color, double interval, double oldInterval)
 //{
 //    if (m_mapColor.size() >= index)

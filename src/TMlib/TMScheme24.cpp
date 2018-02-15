@@ -4,6 +4,7 @@
 #include <ctime>
 
 void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+                                         const std::shared_ptr<TMSignal> &sender,
                                          const double timeEnd) {
     size_t maxX = area->getMaxXIndex();
     size_t maxY = area->getMaxYIndex();
@@ -74,8 +75,8 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
             }
         }
         //TODO: It's no good. How we can do this better?
-        if (!fmod(t, m_sender.m_SendingTimeStep)) {
-            m_sender.emitSignal(newEta);
+        if (!fmod(t, sender->sendingTimeStep())) {
+            sender->emitSignal(newEta);
         }
     }
     clock_t end = clock();
@@ -87,11 +88,6 @@ double TM::Scheme::TMScheme24::getTimeStep(const double &dPhi, const double &dTe
     auto dt = (M * R_EACH * dPhi * dTetta) / sqrt(G * Hm * (pow(dPhi, 2) + pow(dTetta, 2)));
     return dt;
 }
-
-void TM::Scheme::TMScheme24::setSendingTimeStep(const double sendingTimeStep){
-    this->m_sender.m_SendingTimeStep = sendingTimeStep;
-}
-
 
 void TM::Scheme::TMScheme24::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                                        const std::shared_ptr<const TM::TMFocus> &focus,
@@ -218,7 +214,6 @@ double TM::Scheme::TMScheme24::calcBoundaryType2ValueEta(const std::shared_ptr<T
                                                          const double &dTetta) {
 
 }
-
 
 double TM::Scheme::TMScheme24::calcUVelocity(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
                                              const std::size_t &k,

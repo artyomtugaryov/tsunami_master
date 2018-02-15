@@ -5,25 +5,28 @@
 #include <memory>
 #include "TMlib/TMMapArea.h"
 
-namespace TM{
+namespace TM {
 class TMSignal : public QObject {
     Q_OBJECT
 public:
-    TMSignal(QObject *parent = 0): m_updateSendingTimeStep(true), m_SendingTimeStep(0){};
-    void emitSignal(std::shared_ptr<TM::Map::MapArea<double>> map){
-        emit signalUpdate(map);
-    }
+    explicit TMSignal(QObject *parent = 0, double sendingTimeStep = 0);
 
-    bool m_updateSendingTimeStep;
-    double m_SendingTimeStep;
+    void emitSignal(std::shared_ptr<TM::Map::MapArea<double>> map);
+
+    double sendingTimeStep() const;
+    bool updateSendingTimeStep() const;
+
+    void setSendingTimeStep(double sendingTimeStep);
+    void setUpdateSendingTimeStep(bool updateSendingTimeStep);
+
 signals:
     void signalUpdate(std::shared_ptr<TM::Map::MapArea<double>>);
 
 public slots:
-    void  updateSendingTimeStep(double const sendingTimeStep){
-        m_SendingTimeStep = sendingTimeStep;
-        m_updateSendingTimeStep = true;
-    };
+    void  updateSendingTimeStep(double const sendingTimeStep);
+private:
+    bool m_updateSendingTimeStep;
+    double m_sendingTimeStep;
 };
 }
 

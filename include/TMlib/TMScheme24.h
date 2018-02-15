@@ -16,6 +16,7 @@ namespace TM {
             ~TMScheme24() override = default;
 
             void calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+                             const std::shared_ptr<TMSignal> &sender,
                              const double timeEnd) override;
 
             void configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
@@ -78,7 +79,6 @@ namespace TM {
             std::shared_ptr<TM::TMFocus> m_focus;
             std::shared_ptr<TM::Map::MapArea<double>> m_B0;
             std::shared_ptr<TM::Map::MapArea<double>> m_B1;
-            TM::TMSignal m_sender;
         };
     }
 }

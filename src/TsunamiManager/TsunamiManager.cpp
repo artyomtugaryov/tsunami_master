@@ -13,6 +13,7 @@ TsunamiManagerInfo::TsunamiManager::TsunamiManager(QObject *parent) :
     m_mapAreaWorker(std::make_shared<TM::Map::MapAreaWorker>()),
     m_scheme(NULL),
     m_focus(NULL),
+    m_signal(std::make_shared<TM::TMSignal>()),
     m_plotProvider(new TsunamiPlotProvider(m_tsunamiData, m_mapAreaWorker)),
     m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker, m_scheme, m_focus)),
     m_tsunamiWorkerThread(new QThread),
@@ -26,8 +27,8 @@ TsunamiManagerInfo::TsunamiManager::TsunamiManager(QObject *parent) :
             m_tsunamiWorker, SLOT(execute()));
     connect(m_tsunamiWorker, SIGNAL(finished()), m_tsunamiWorkerThread, SLOT(terminate()));
     connect(m_tsunamiWorker, SIGNAL(readedFinished()), this, SLOT(tsunamiWorkerThreadReaded()));
-    connect(m_tsunamiWorker, SIGNAL(updateTime(int)), this, SLOT(isUpdateTime(int)));
-
+    //connect(m_tsunamiWorker, SIGNAL(updateTime(int)), this, SLOT(isUpdateTime(int)));
+    connect(m_signal.get(), &TM::TMSignal::signalUpdate, this, &isUpdateTime);
     loadInitDataFromJson();
 }
 
@@ -118,11 +119,18 @@ void TsunamiManagerInfo::TsunamiManager::tsunamiWorkerThreadReaded()
     }
 }
 
-void TsunamiManagerInfo::TsunamiManager::isUpdateTime(int currentTime)
+void TsunamiManagerInfo::TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::MapArea<double> > eta)
 {
-    qDebug() << "time: " << currentTime;
-    m_currentCalculationTime = currentTime;
+    //qDebug() << "time: " << eta;
+    //m_currentCalculationTime = eta;
+    m_eta.reset();
+    m_eta = eta;
     emit imageUpdate();
+}
+
+std::shared_ptr<TM::Map::MapArea<double> > TsunamiManagerInfo::TsunamiManager::eta() const
+{
+    return m_eta;
 }
 
 void TsunamiManagerInfo::TsunamiManager::quickStart()

@@ -1,4 +1,5 @@
 #include "TsunamiManager/TsunamiPlotProvider.h"
+#include "TsunamiManager/TsunamiPlotData.h"
 #include <QDebug>
 
 namespace {
@@ -70,6 +71,12 @@ void TsunamiManagerInfo::TsunamiPlotProvider::setMapAreaWorker(const std::shared
     m_mapAreaWorker = mapAreaWorker;
 }
 
+void TsunamiManagerInfo::TsunamiPlotProvider::setEta(const std::shared_ptr<TM::Map::MapArea<double> > &eta)
+{
+    m_eta.reset();
+    m_eta = eta;
+}
+
 void TsunamiManagerInfo::TsunamiPlotProvider::plotBathametry()
 {
     m_plot->setColorbar(true);
@@ -80,14 +87,25 @@ void TsunamiManagerInfo::TsunamiPlotProvider::plotBathametry()
 
     m_plot->setWindow(QRect(0, 0, m_tsunamiData->sizeX() + 300, m_tsunamiData->sizeY() + 20));
     ColorMap colorMap({{0, QColor(0, 255, 0)}, {3000, QColor(0, 70, 0)}});
-    colorFunc2D f = [&colorMap, this](double x, double y)->QColor{
+    ColorMap colorMapEta({{-3, QColor(38, 0, 255)},
+                          {-0.1, QColor(222, 255, 248)},
+                          {0, QColor(222, 255, 248)},
+                          {1, QColor(128, 0, 128)},
+                          {3, QColor(255, 0, 0)},
+                          {5, QColor(255, 128, 0)},
+                          {8, QColor(255, 255, 0)},
+                          {11, QColor(0, 255, 0 )}});
+    colorFunc2D f = [&colorMapEta, &colorMap, this](double x, double y)->QColor{
         QColor c;
         double data = m_mapAreaWorker->bathymetry()->getDataByPoint(x, y);
-
-        if (data >= 0.0) {
+        double eta = m_eta->getDataByPoint(x, y);
+        if (data > 0.0) {
             c = colorMap.getColor(data);
         }
-        else if (data < 0) c = QColor(38, 225, 255);
+        else
+        {
+            c = colorMapEta.getColor(eta);
+        }//(data < 0) c = QColor(38, 225, 255);
         return c;
     };
     m_plot->plotColorFunction(f);

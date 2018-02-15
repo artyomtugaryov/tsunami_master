@@ -25,6 +25,7 @@ public:
     void setTsunamiData(TsunamiManagerInfo::TsunamiData *TsunamiData);
     void setPlotImageSize(int width, int height);
     void setMapAreaWorker(const std::shared_ptr<TM::Map::MapAreaWorker> &mapAreaWorker);
+    void setEta(const std::shared_ptr<TM::Map::MapArea<double> > &eta);
 
 private:
     void plotBathametry();
@@ -35,6 +36,7 @@ private:
     ColorMap m_waterMap;
     TsunamiManagerInfo::TsunamiData *m_tsunamiData;
     std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
+    std::shared_ptr<TM::Map::MapArea<double> > m_eta;
 };
 }
 #endif // TSUNAMIPLOTPROVIDER_H

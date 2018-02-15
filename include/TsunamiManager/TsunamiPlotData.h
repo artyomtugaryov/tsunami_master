@@ -71,6 +71,8 @@ public:
 
     QList <QString> colors() const;
 
+   // PlotLib::ColorMap colorBarMap() const;
+
 public slots:
     void setWidth(uint width);
     void setHeight(uint height);

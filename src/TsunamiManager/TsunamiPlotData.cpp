@@ -244,5 +244,10 @@ void TsunamiPlotData::setColorBarMap()
                               {m_colorBarIntervals[6], colorBar[6]}});
 }
 
+//PlotLib::ColorMap TsunamiPlotData::colorBarMap() const
+//{
+//    return m_colorBarMap;
+//}
+
 TsunamiPlotData::~TsunamiPlotData() {}
 
