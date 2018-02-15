@@ -63,7 +63,7 @@ namespace TM {
 
             void saveMapAreaToBinFile(std::string path);
 
-            const DataType getMaxValue() const;
+            const DataType getMinValue() const;
 
         private:
             std::size_t m_sizeX;

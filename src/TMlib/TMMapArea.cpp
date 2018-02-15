@@ -156,8 +156,8 @@ void TM::Map::MapArea<DataType>::saveMapAreaToBinFile(std::string path) {
 }
 
 template<typename DataType>
-const DataType TM::Map::MapArea<DataType>::getMaxValue() const {
-    return *std::max_element(this->m_data.begin(), this->m_data.end());
+const DataType TM::Map::MapArea<DataType>::getMinValue() const {
+    return *std::min_element(this->m_data.begin(), this->m_data.end());
 }
 
 template
