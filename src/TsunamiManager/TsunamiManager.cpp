@@ -15,7 +15,7 @@ TsunamiManagerInfo::TsunamiManager::TsunamiManager(QObject *parent) :
     m_focus(NULL),
     m_signal(std::make_shared<TM::TMSignal>()),
     m_plotProvider(new TsunamiPlotProvider(m_tsunamiData, m_mapAreaWorker)),
-    m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker, m_scheme, m_focus)),
+    m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker, m_scheme, m_focus, m_signal)),
     m_tsunamiWorkerThread(new QThread),
     m_plot(new Plot2d()),
     m_currentCalculationTime(0)
@@ -28,6 +28,7 @@ TsunamiManagerInfo::TsunamiManager::TsunamiManager(QObject *parent) :
     connect(m_tsunamiWorker, SIGNAL(finished()), m_tsunamiWorkerThread, SLOT(terminate()));
     connect(m_tsunamiWorker, SIGNAL(readedFinished()), this, SLOT(tsunamiWorkerThreadReaded()));
     //connect(m_tsunamiWorker, SIGNAL(updateTime(int)), this, SLOT(isUpdateTime(int)));
+    m_signal->setSendingTimeStep(10);
     connect(m_signal.get(), &TM::TMSignal::signalUpdate, this, &isUpdateTime);
     loadInitDataFromJson();
 }
@@ -60,6 +61,7 @@ void TsunamiManagerInfo::TsunamiManager::readBathymetryFromFile(QString path)
     m_tsunamiWorker->setBathymetryPath(path);
     m_tsunamiData->setBathymetryPath(path);
     m_tsunamiWorker->setCommand(TsunamiWorker::ThreadCommand::ReadBathymetry);
+    qDebug() << "Zhopa 0.5";
     m_tsunamiWorkerThread->start();
 }
 
@@ -72,7 +74,9 @@ void TsunamiManagerInfo::TsunamiManager::readBrickDataFromFile(QString path)
         m_focus.reset();
     }
     m_focus = std::make_shared<TM::TMFocus>(path.toStdString());
+    qDebug() << "Zhopa 4";
     m_tsunamiWorker->setFocus(m_focus);
+    qDebug() << "Zhopa 5";
 }
 
 void TsunamiManagerInfo::TsunamiManager::startCalculation()
@@ -95,6 +99,7 @@ void TsunamiManagerInfo::TsunamiManager::tsunamiWorkerThreadReaded()
 {
     m_tsunamiWorkerThread->terminate();
     m_tsunamiData->setReaded(m_tsunamiWorker->readed());
+    qDebug() << "Zhopa 2";
     if (m_tsunamiWorker->readed())
     {
         m_tsunamiData->setStartX(m_mapAreaWorker->bathymetry()->startX());
@@ -117,6 +122,7 @@ void TsunamiManagerInfo::TsunamiManager::tsunamiWorkerThreadReaded()
         m_plotProvider->requestImage(QString("1"), NULL, QSize(0,0));
         emit imageUpdate();
     }
+    qDebug() << "Zhopa 3";
 }
 
 void TsunamiManagerInfo::TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::MapArea<double> > eta)

@@ -98,7 +98,12 @@ void TsunamiManagerInfo::TsunamiPlotProvider::plotBathametry()
     colorFunc2D f = [&colorMapEta, &colorMap, this](double x, double y)->QColor{
         QColor c;
         double data = m_mapAreaWorker->bathymetry()->getDataByPoint(x, y);
-        double eta = m_eta->getDataByPoint(x, y);
+
+        double eta = 0;
+        if (m_eta != NULL)
+        {
+            m_eta->getDataByPoint(x, y);
+        }
         if (data > 0.0) {
             c = colorMap.getColor(data);
         }
