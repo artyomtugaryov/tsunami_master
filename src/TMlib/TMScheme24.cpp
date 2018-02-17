@@ -1,6 +1,7 @@
 #include <TMlib/TMScheme24.h>
 #include <TMlib/TMCommon.h>
 #include <TMlib/TMException.h>
+#include <cmath>
 #include <ctime>
 
 void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
@@ -12,7 +13,6 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
     auto dTetta = area->getStepTetta();
     auto Hm = area->bathymetry()->getMinValue();
     auto dt = getTimeStep(dPhi, dTetta, Hm);
-    std::cout << "DT is: " << dt << std::endl;
     clock_t begin = clock();
     for (double t = 0; t <= timeEnd; t += dt) {
         std::shared_ptr<TM::Map::MapArea<double>> newEta =
@@ -46,7 +46,6 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
                     default:
                         break;
                 }
-
             }
         }
         auto f = TM::Common::coefCoriolis(j);
@@ -83,8 +82,8 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
 }
 
 double TM::Scheme::TMScheme24::getTimeStep(const double &dPhi, const double &dTetta, const double Hm) const {
-    auto M = sqrt(1.0 + pow(TM::Common::coefCoriolis(0) + 1, 0.5)) / 2.0;
-    auto dt = (M * R_EACH * dPhi * dTetta) / sqrt(G * abs(Hm) * (pow(dPhi, 2) + pow(dTetta, 2)));
+    auto M = sqrt(1.0 + sqrt(TM::Common::coefCoriolis(0) + 1) / 2.0);
+    auto dt = (M * R_EACH * dPhi * dTetta) / sqrt(G * fabs(Hm) * (dPhi * dPhi + dTetta * dTetta));
     return dt;
 }
 
