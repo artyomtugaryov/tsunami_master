@@ -10,7 +10,7 @@ namespace TM {
         double m_x;
         double m_y;
 
-        TMBrickPoint(double x, double y) : m_x(x), m_y(y) {};
+        TMBrickPoint(double x, double y) : m_x(x), m_y(y) {}
     };
 
     struct TMBrickUp {
@@ -18,7 +18,7 @@ namespace TM {
         int m_brickUpT; // Time Up the block
         double m_heightUp; // Height Up the  block
 
-        TMBrickUp(int b, double h) : m_brickUpT(b), m_heightUp(h) {};
+        TMBrickUp(int b, double h) : m_brickUpT(b), m_heightUp(h) {}
     };
 
     struct TMBlock {

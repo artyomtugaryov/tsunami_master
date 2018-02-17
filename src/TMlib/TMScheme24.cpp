@@ -4,12 +4,10 @@
 #include <ctime>
 
 void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
-                                         const std::shared_ptr<TMSignal> &sender,
-                                         const double timeEnd) {
-    std::cout << "Zhopa 8" << std::endl;
+                                         const double &timeEnd) {
     size_t maxX = area->getMaxXIndex();
     size_t maxY = area->getMaxYIndex();
-    size_t j, k;
+    size_t j(0), k(0);
     auto dPhi = area->getStepPhi();
     auto dTetta = area->getStepTetta();
     auto Hm = area->bathymetry()->getMaxValue();
@@ -76,8 +74,8 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
             }
         }
         //TODO: It's no good. How we can do this better?
-        if (!fmod(t, sender->sendingTimeStep())) {
-            sender->emitSignal(newEta);
+        if (!fmod(t, m_sender->sendingTimeStep())) {
+            m_sender->emitSignal(newEta);
         }
     }
     clock_t end = clock();
@@ -90,43 +88,35 @@ double TM::Scheme::TMScheme24::getTimeStep(const double &dPhi, const double &dTe
     return dt;
 }
 
-void TM::Scheme::TMScheme24::configure(std::shared_ptr<const TM::Map::MapAreaWorker> area,
-                                       std::shared_ptr<const TM::TMFocus> focus,
-                                       double izobata) {
-    if(area.get() == NULL) std::cout << "Zhopa 6.1" << std::endl;
-    std::cout << "Zhopa 6.11" << std::endl;
+void TM::Scheme::TMScheme24::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
+                                       const std::shared_ptr<const TM::TMFocus> &focus,
+                                       const double &izobata,
+                                       const std::shared_ptr<TMSignal> &sender){
     this->setTypesOfCells(area, izobata);
-    std::cout << "Zhopa 6.12" << std::endl;
     if (focus) {
         this->m_focus = std::make_shared<TM::TMFocus>(*focus);
     } else {
-        std::cout << "[WARNING] Focus did not set." << std::endl;
+        std::cout << "[ WARNING ] Focus did not set." << std::endl;
         this->m_focus = std::make_shared<TM::TMFocus>();
     }
-    std::cout << "Zhopa 6.2" << std::endl;
     this->setUpBArrays(area->getMaxXIndex(), area->getMaxXIndex());
-    std::cout << "Zhopa 6.3" << std::endl;
+    this->m_sender = sender;
 }
 
-void TM::Scheme::TMScheme24::setTypesOfCells(std::shared_ptr<const Map::MapAreaWorker> area,
-                                             double izobata) {
-    std::cout << "Zhopa 6.13" << std::endl;
-    this->m_types_cells = std::make_shared<TM::Map::MapArea<TM::Scheme::types_cells>>(/*area->getMaxXIndex(),
-                                                                                      area->getMaxYIndex()*/);
-    std::cout << "Zhopa 6.14" << std::endl;
+void TM::Scheme::TMScheme24::setTypesOfCells(const std::shared_ptr<const Map::MapAreaWorker> &area,
+                                             const double &izobata) {
+    this->m_types_cells = std::make_shared<TM::Map::MapArea<TM::Scheme::types_cells>>(area->getMaxXIndex(),
+                                                                                      area->getMaxYIndex());
     size_t maxX = this->m_types_cells->sizeX();
     size_t maxY = this->m_types_cells->sizeY();
-    std::cout << "Zhopa 6.15" << std::endl;
     auto bathymetry = area->bathymetry();
-    std::cout << "Zhopa 6.16" << std::endl;
     auto types_of_cells = this->m_types_cells;
-    std::cout << "Zhopa 6.17" << std::endl;
-    std::size_t i, j;
+    std::size_t i(0), j(0);
     clock_t begin = clock();
 #pragma omp parallel for private(i)
-    for (i = 0; i < maxY; i++) {
+    for (i = 0; i < maxX; i++) {
 #pragma omp parallel for shared(bathymetry, types_of_cells) private(j)
-         for (j = 0; j < maxX; j++) {
+         for (j = 0; j < maxY; j++) {
             auto v = bathymetry->getDataByIndex(i, j);
             if (v >= izobata)
                 types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::LAND);
@@ -156,7 +146,6 @@ void TM::Scheme::TMScheme24::setTypesOfCells(std::shared_ptr<const Map::MapAreaW
                     THROW_TM_EXCEPTION << "Can not set type of the cell: (" << i << "," << j << ") val is " << v;
             }
         }
-         std::cout << "Zhopa 6.18" << std::endl;
     }
     clock_t end = clock();
     std::cout << "Time of setTypesOfCells is: " << static_cast<double>(end - begin) * 1000.0 / double(CLOCKS_PER_SEC)

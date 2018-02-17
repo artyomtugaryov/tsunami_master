@@ -31,3 +31,6 @@ HEADERS += $${_PRO_FILE_PWD_}/../../include/TMlib/TMMapArea.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMSignal.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMCommon.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMConstants.h
+
+QMAKE_CXXFLAGS += -fopenmp
+LIBS += -fopenmp

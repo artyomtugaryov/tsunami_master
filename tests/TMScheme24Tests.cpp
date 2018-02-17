@@ -6,9 +6,6 @@
 
 using namespace testing;
 
-typedef std::shared_ptr<TM::Scheme::TMScheme24> Scheme24_ptr;
-typedef std::shared_ptr<TM::Map::MapAreaWorker> MapAreaWorker_ptr;
-
 class TMScheme24Tests : public ::testing::Test {
 protected:
     static void SetUpTestCase() {
@@ -17,14 +14,17 @@ protected:
             throw std::runtime_error("FILE with bathymetry not found");
         m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
         m_area = std::make_shared<TM::Map::MapAreaWorker>(bPath);
+        m_signal = std::make_shared<TM::TMSignal>();
     }
 
-    static Scheme24_ptr m_scheme;
-    static MapAreaWorker_ptr m_area;
+    static std::shared_ptr<TM::Scheme::TMScheme24>  m_scheme;
+    static std::shared_ptr<TM::Map::MapAreaWorker> m_area;
+    static std::shared_ptr<TM::TMSignal> m_signal;
 };
 
-Scheme24_ptr TMScheme24Tests::m_scheme;
-MapAreaWorker_ptr TMScheme24Tests::m_area;
+std::shared_ptr<TM::Scheme::TMScheme24> TMScheme24Tests::m_scheme;
+std::shared_ptr<TM::Map::MapAreaWorker> TMScheme24Tests::m_area;
+std::shared_ptr<TM::TMSignal> TMScheme24Tests::m_signal;
 
 TEST_F(TMScheme24Tests, configure) {
     try {
@@ -32,7 +32,8 @@ TEST_F(TMScheme24Tests, configure) {
         if (fPath == nullptr)
             throw std::runtime_error("FILE with focus not found");
         std::shared_ptr<TM::TMFocus> focus = std::make_shared<TM::TMFocus>(fPath);
-        m_scheme->configure(m_area, focus, -5);
+
+        m_scheme->configure(m_area, focus, -5, m_signal);
     } catch (TM::details::TMException &ex) {
         std::cout << ex.what() << std::endl;
     }

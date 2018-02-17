@@ -4,7 +4,7 @@ SUBDIRS += \
     TsunamiManager \
     GUI \
     PlotLib \
-#    tests
+    #tests
 
 TMlib.subdir = src/TMlib
 TsunamiManager.subdir  = src/TsunamiManager
@@ -13,5 +13,5 @@ PlotLib.subdir = src/PlotLib
 #tests.subdir  = tests
 
 GUI.depends = TMlib TsunamiManager PlotLib
-#tests.depends = TMlib TsunamiManager PlotLib
+#tests.depends = TMlib
 TsunamiManager.depends = TMlib PlotLib

@@ -10,6 +10,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_PREFIX_PATH $ENV{QT_ROOT})
 
 find_package(Qt5Core)
+find_package(Qt5Quick)
 
 file(GLOB TsunamiManager_SRC ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 file(GLOB TsunamiManager_HEADERS ${COMMON_INCLUDE_DIR}/TsunamiManager/*.h)
@@ -24,5 +25,5 @@ add_library(${PROJECT_NAME} SHARED  ${TsunamiManager_SRC}
 
 add_dependencies(${PROJECT_NAME} PlotLib)
 
-target_link_libraries(${PROJECT_NAME} Qt5::Core TMlib PlotLib)
+target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Quick TMlib PlotLib)
 

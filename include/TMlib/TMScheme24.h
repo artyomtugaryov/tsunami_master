@@ -16,12 +16,12 @@ namespace TM {
             ~TMScheme24() override = default;
 
             void calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
-                             const std::shared_ptr<TMSignal> &sender,
-                             const double timeEnd) override;
+                             const double &timeEnd) override;
 
-            void configure(std::shared_ptr<const Map::MapAreaWorker> area,
-                           std::shared_ptr<const TMFocus> focus,
-                           double izobata);
+            void configure(const std::shared_ptr<const Map::MapAreaWorker> &area,
+                           const std::shared_ptr<const TMFocus> &focus,
+                           const double &izobata,
+                           const std::shared_ptr<TMSignal> &sender);
 
             double getTimeStep(const double &dPhi, const double &dTetta, const double Hm) const;
 
@@ -29,8 +29,8 @@ namespace TM {
 
         private:
 
-            void setTypesOfCells(std::shared_ptr<const TM::Map::MapAreaWorker> area,
-                                 double izobata);
+            void setTypesOfCells(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
+                                 const double &izobata);
 
             void setUpBArrays(std::size_t &&x, std::size_t &&y);
 
@@ -79,6 +79,7 @@ namespace TM {
             std::shared_ptr<TM::TMFocus> m_focus;
             std::shared_ptr<TM::Map::MapArea<double>> m_B0;
             std::shared_ptr<TM::Map::MapArea<double>> m_B1;
+            std::shared_ptr<TMSignal> m_sender;
         };
     }
 }

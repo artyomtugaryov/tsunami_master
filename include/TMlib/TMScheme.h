@@ -15,6 +15,7 @@ namespace TM {
             BOUNDARY1,  //near land
             BOUNDARY2   //end of grid
         };
+
         class TMScheme {
         public:
             TMScheme() = default;
@@ -22,12 +23,12 @@ namespace TM {
             virtual ~TMScheme() = default;
 
             virtual void calculation(const std::shared_ptr<TM::Map::MapAreaWorker>&,
-                                     const std::shared_ptr<TMSignal> &,
-                                     const double) = 0;
+                                     const double&) = 0;
 
             virtual void configure(const std::shared_ptr<const TM::Map::MapAreaWorker>&,
                                    const std::shared_ptr<const TM::TMFocus>&,
-                                   const double &) = 0;
+                                   const double&,
+                                   const std::shared_ptr<TMSignal>&) = 0;
         };
     }
 }
