@@ -1,6 +1,7 @@
 #include <TMlib/TMScheme24.h>
 #include <TMlib/TMCommon.h>
 #include <TMlib/TMException.h>
+#include <cmath>
 #include <ctime>
 
 void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
@@ -10,22 +11,23 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
     size_t j(0), k(0);
     auto dPhi = area->getStepPhi();
     auto dTetta = area->getStepTetta();
-    auto Hm = area->bathymetry()->getMaxValue();
+    auto Hm = area->bathymetry()->getMinValue();
     auto dt = getTimeStep(dPhi, dTetta, Hm);
-    std::cout << "DT is: " << dt << std::endl;
+    std::cout << "Step by time is: " << dt << std::endl;
+    std::cout << "Max depth is: " << Hm << std::endl;
     clock_t begin = clock();
     for (double t = 0; t <= timeEnd; t += dt) {
         std::shared_ptr<TM::Map::MapArea<double>> newEta =
                 std::make_shared<TM::Map::MapArea<double>>(area->getMaxXIndex(), area->getMaxYIndex(), 0);
 #pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
-        for (j = 0; j < maxY; j++) {
+        for (j = 1; j < maxY - 1; j++) {
             auto tetta = area->getLongitudeByIndex(j);
             auto tetta2 = area->getLongitudeByIndex(j + 1. / 2.);
             auto tetta_2 = area->getLongitudeByIndex(j - 1. / 2.);
             auto M = dt / (2 * R_EACH * sin(tetta));
 
 #pragma omp parallel for  shared(dPhi, dTetta, dt, tetta, tetta2, tetta_2) private(k)
-            for (k = 1; k < maxX; k++) {
+            for (k = 1; k < maxX - 1; k++) {
                 switch (this->m_types_cells->getDataByIndex(k, j)) {
                     case WATER: {
                         auto Up = this->m_focus->getHeigthByIndex(k, j, t);
@@ -46,7 +48,6 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
                     default:
                         break;
                 }
-
             }
         }
         auto f = TM::Common::coefCoriolis(j);
@@ -83,15 +84,15 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
 }
 
 double TM::Scheme::TMScheme24::getTimeStep(const double &dPhi, const double &dTetta, const double Hm) const {
-    auto M = sqrt(1.0 + pow(TM::Common::coefCoriolis(0) + 1, 0.5)) / 2.0;
-    auto dt = (M * R_EACH * dPhi * dTetta) / sqrt(G * Hm * (pow(dPhi, 2) + pow(dTetta, 2)));
+    auto M = sqrt(1.0 + sqrt(TM::Common::coefCoriolis(0) + 1) / 2.0);
+    auto dt = (M * R_EACH * dPhi * dTetta) / sqrt(G * fabs(Hm) * (dPhi * dPhi + dTetta * dTetta));
     return dt;
 }
 
 void TM::Scheme::TMScheme24::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                                        const std::shared_ptr<const TM::TMFocus> &focus,
                                        const double &izobata,
-                                       const std::shared_ptr<TMSignal> &sender){
+                                       const std::shared_ptr<TMSignal> &sender) {
     this->setTypesOfCells(area, izobata);
     if (focus) {
         this->m_focus = std::make_shared<TM::TMFocus>(*focus);
@@ -116,7 +117,7 @@ void TM::Scheme::TMScheme24::setTypesOfCells(const std::shared_ptr<const Map::Ma
 #pragma omp parallel for private(i)
     for (i = 0; i < maxX; i++) {
 #pragma omp parallel for shared(bathymetry, types_of_cells) private(j)
-         for (j = 0; j < maxY; j++) {
+        for (j = 0; j < maxY; j++) {
             auto v = bathymetry->getDataByIndex(i, j);
             if (v >= izobata)
                 types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::LAND);
