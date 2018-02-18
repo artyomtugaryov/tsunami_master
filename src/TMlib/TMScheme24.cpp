@@ -13,21 +13,19 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
     auto dTetta = area->getStepTetta();
     auto Hm = area->bathymetry()->getMinValue();
     auto dt = getTimeStep(dPhi, dTetta, Hm);
-    std::cout << "Step by time is: " << dt << std::endl;
-    std::cout << "Max depth is: " << Hm << std::endl;
     clock_t begin = clock();
     for (double t = 0; t <= timeEnd; t += dt) {
         std::shared_ptr<TM::Map::MapArea<double>> newEta =
                 std::make_shared<TM::Map::MapArea<double>>(area->getMaxXIndex(), area->getMaxYIndex(), 0);
 #pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
-        for (j = 1; j < maxY - 1; j++) {
+        for (j = 1; j < maxY; j++) {
             auto tetta = area->getLongitudeByIndex(j);
             auto tetta2 = area->getLongitudeByIndex(j + 1. / 2.);
             auto tetta_2 = area->getLongitudeByIndex(j - 1. / 2.);
             auto M = dt / (2 * R_EACH * sin(tetta));
 
 #pragma omp parallel for  shared(dPhi, dTetta, dt, tetta, tetta2, tetta_2) private(k)
-            for (k = 1; k < maxX - 1; k++) {
+            for (k = 1; k < maxX; k++) {
                 switch (this->m_types_cells->getDataByIndex(k, j)) {
                     case WATER: {
                         auto Up = this->m_focus->getHeigthByIndex(k, j, t);
@@ -126,13 +124,13 @@ void TM::Scheme::TMScheme24::setTypesOfCells(const std::shared_ptr<const Map::Ma
             switch (types_of_cells->getDataByIndex(i, j)) {
                 case TM::Scheme::types_cells::WATER:
                     try {
-                        if (bathymetry->getDataByIndex(i - 1, j - 1) >= izobata &&
-                            bathymetry->getDataByIndex(i - 1, j) >= izobata &&
-                            bathymetry->getDataByIndex(i - 1, j + 1) >= izobata &&
-                            bathymetry->getDataByIndex(i + 1, j - 1) >= izobata &&
-                            bathymetry->getDataByIndex(i + 1, j) >= izobata &&
-                            bathymetry->getDataByIndex(i + 1, j + 1) >= izobata &&
-                            bathymetry->getDataByIndex(i, j - 1) >= izobata &&
+                        if (bathymetry->getDataByIndex(i - 1, j - 1) >= izobata ||
+                            bathymetry->getDataByIndex(i - 1, j) >= izobata ||
+                            bathymetry->getDataByIndex(i - 1, j + 1) >= izobata ||
+                            bathymetry->getDataByIndex(i + 1, j - 1) >= izobata ||
+                            bathymetry->getDataByIndex(i + 1, j) >= izobata ||
+                            bathymetry->getDataByIndex(i + 1, j + 1) >= izobata ||
+                            bathymetry->getDataByIndex(i, j - 1) >= izobata ||
                             bathymetry->getDataByIndex(i, j + 1) >= izobata
                                 ) {
                             types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::BOUNDARY1);

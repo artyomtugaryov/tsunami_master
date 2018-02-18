@@ -2,8 +2,9 @@
 #include <QDebug>
 
 namespace PlotLib {
-
+//TODO: use const?
 #define WIDTH_CHAR 12
+//TODO: use const?
 #define FONT_FAMILY "Times New Roman"
 
 Plot2d::Plot2d(QObject *parent, QImage* image) :
