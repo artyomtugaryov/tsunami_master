@@ -97,9 +97,7 @@ void TsunamiWorker::runCalculation()
     qDebug() << "Zhopa 6";
     if(m_focus) qDebug() << "Zhopa 6.01";
     if(m_mapAreaWorker) qDebug() << "Zhopa 6.01";
-    //std::shared_ptr<TM::TMFocus> focus = std::make_shared<TM::TMFocus>("double_brick_10mup.txt");
-    //m_scheme->configure(m_area, focus, -5);
-    //std::shared_ptr<TM::Map::MapAreaWorker> area = std::make_shared<TM::Map::MapAreaWorker>("work.dat");
+    if (!m_scheme) m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
     m_scheme->configure(m_mapAreaWorker, m_focus, -5, m_signal);
     qDebug() << "Zhopa 7";
     //m_scheme->calculation(m_mapAreaWorker, m_signal, 10000000);

@@ -11,8 +11,8 @@ TsunamiManagerInfo::TsunamiManager::TsunamiManager(QObject *parent) :
     QObject(parent),
     m_tsunamiData(new TsunamiManagerInfo::TsunamiData(this)),
     m_mapAreaWorker(std::make_shared<TM::Map::MapAreaWorker>()),
-    m_scheme(NULL),
-    m_focus(NULL),
+    m_scheme(std::make_shared<TM::Scheme::TMScheme24>()),
+    m_focus(std::make_shared<TM::TMFocus>()),
     m_signal(std::make_shared<TM::TMSignal>()),
     m_plotProvider(new TsunamiPlotProvider(m_tsunamiData, m_mapAreaWorker)),
     m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker, m_scheme, m_focus, m_signal)),
@@ -29,7 +29,7 @@ TsunamiManagerInfo::TsunamiManager::TsunamiManager(QObject *parent) :
     connect(m_tsunamiWorker, SIGNAL(readedFinished()), this, SLOT(tsunamiWorkerThreadReaded()));
     //connect(m_tsunamiWorker, SIGNAL(updateTime(int)), this, SLOT(isUpdateTime(int)));
     m_signal->setSendingTimeStep(10);
-    connect(m_signal.get(), &TM::TMSignal::signalUpdate, this, &isUpdateTime);
+    connect(m_signal.get(), &TM::TMSignal::signalUpdate, this, &TsunamiManagerInfo::TsunamiManager::isUpdateTime);
     loadInitDataFromJson();
 }
 
@@ -54,10 +54,11 @@ void TsunamiManagerInfo::TsunamiManager::readBathymetryFromFile(QString path)
         m_tsunamiWorker->setMapAreaWorker(m_mapAreaWorker);
         m_plotProvider->setMapAreaWorker(m_mapAreaWorker);
     }
-//    if (m_scheme != NULL) {
-//        m_scheme.reset();
-//    }
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     path = path.remove("file:///");
+#else
+    path = path.remove("file://");
+#endif
     m_tsunamiWorker->setBathymetryPath(path);
     m_tsunamiData->setBathymetryPath(path);
     m_tsunamiWorker->setCommand(TsunamiWorker::ThreadCommand::ReadBathymetry);
@@ -67,9 +68,13 @@ void TsunamiManagerInfo::TsunamiManager::readBathymetryFromFile(QString path)
 
 void TsunamiManagerInfo::TsunamiManager::readBrickDataFromFile(QString path)
 {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     path = path.remove("file:///");
+#else
+    path = path.remove("file://");
+#endif
     m_tsunamiData->setBrickPath(path);
-    if (m_focus.get() != NULL)
+    if (m_focus)
     {
         m_focus.reset();
     }
@@ -83,9 +88,9 @@ void TsunamiManagerInfo::TsunamiManager::startCalculation()
 {
     if (m_tsunamiWorker->readed()
             && m_tsunamiWorkerThread->isFinished()
-            && m_focus.get() != NULL)
+            && m_focus)
     {
-        if (m_scheme.get() != NULL)
+        if (m_scheme)
         {
             m_scheme.reset();
         }
