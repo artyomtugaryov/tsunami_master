@@ -4,6 +4,7 @@
 #include <QObject>
 #include <map>
 #include <PlotLib/ColorMap.h>
+#include <memory>
 
 namespace TsunamiManagerInfo {
 class TsunamiPlotData : public QObject
@@ -29,12 +30,6 @@ class TsunamiPlotData : public QObject
     Q_PROPERTY(uint stepY READ stepY WRITE setStepY NOTIFY stepYChanged)
     Q_PROPERTY(uint stepColorBar READ stepColorBar WRITE setStepColorBar
                NOTIFY stepColorBarChanged)
-
-    Q_PROPERTY(bool isColorBarIntervalsAreCorrect
-               READ isColorBarIntervalsAreCorrect
-               WRITE setIsColorBarIntervalsAreCorrect
-               NOTIFY isColorBarIntervalsAreCorrectChanged)
-
 
     Q_PROPERTY(QList <QString> colors READ colors CONSTANT)
     Q_PROPERTY(QList <double> colorBarIntervals READ colorBarIntervals CONSTANT)
@@ -65,13 +60,9 @@ public:
 
     uint stepColorBar() const;
 
-    bool isColorBarIntervalsAreCorrect() const;
-
     QList <double> colorBarIntervals() const;
 
     QList <QString> colors() const;
-
-   // PlotLib::ColorMap colorBarMap() const;
 
 public slots:
     void setWidth(uint width);
@@ -88,9 +79,9 @@ public slots:
     void setStepY(uint stepY);
     void setStepColorBar(uint stepColorBar);
 
-    void setIsColorBarIntervalsAreCorrect(bool isColorBarIntervalsAreCorrect);
+    void setColorIntervalByIndex(QString color, double interval, uint index);
 
-    void setColorIntervalByIndex(QColor color, double interval, uint index);
+    void setColorBarMap();
 signals:
 
 
@@ -116,12 +107,9 @@ signals:
 
     void stepColorBarChanged(uint stepColorBar);
 
-    void isColorBarIntervalsAreCorrectChanged(bool isColorBarIntervalsAreCorrect);
+    void colorBarChanged(const std::shared_ptr<PlotLib::ColorMap> &colorBarMap);
 
 private:
-
-    void setColorBarMap();
-
     uint m_width;
     uint m_height;
     uint m_fontSize;
@@ -133,8 +121,7 @@ private:
     uint m_stepX;
     uint m_stepY;
     uint m_stepColorBar;
-    bool m_isColorBarIntervalsAreCorrect;
-    PlotLib::ColorMap m_colorBarMap;
+    std::shared_ptr<PlotLib::ColorMap> m_colorBarMap;
     QList <double> m_colorBarIntervals;
     QList <QString> m_colors;
 };

@@ -16,19 +16,46 @@ Item {
         id: colors
 
         anchors.centerIn: parent
-        spacing: 10
+        spacing: 5
+
+        Rectangle {
+            id: reset
+
+            width: 22
+            height: 22
+            border.color: "gray"
+            color: resetArea.pressed ? "blue" : "transparent";
+            MouseArea {
+                id: resetArea
+
+                anchors.fill: parent
+
+                onClicked: {
+                    for(var i = 0; i < internal.colors.length; i++) {
+                        var item = repeaterColors.itemAt(i)
+                        item.color = internal.colors[i]
+                        item.setText((internal.intervals[i]).toString())
+                    }
+                }
+            }
+            Image {
+                id: resetColorBar
+
+                anchors.centerIn: parent
+                source: "Assets/resetColorBar.png"
+            }
+        }
 
         Repeater {
             id: repeaterColors
 
             model: internal.colors.length
-            //Item {
-            //    property int i: index
+
             Rectangle {
                 id: rec
 
-                width: 25
-                height: 25
+                width: 22
+                height: 22
                 border.color: "gray"
                 color: internal.colors[index];
                 MouseArea {
@@ -42,7 +69,7 @@ Item {
                         colorDialog.visible = true
                     }
                 }
-                TextEdit {
+                TextInput {
                     id: edit
 
                     property int i: index
@@ -51,7 +78,6 @@ Item {
                     horizontalAlignment: Text.AlignHCenter
                     onFocusChanged: focus ? selectAll() : 0
                     onTextChanged: {
-                        console.log(Number(text), internal.intervals[i], i)
 
                         if(Number(text) > 99) {
                             text = internal.intervals[i]
@@ -59,14 +85,12 @@ Item {
                         else if(i > 0
                                 && Number(text)
                                 <= internal.intervals[i - 1]) {
-                            console.log("1111111")
                             text = internal.intervals[i]
                         }
                         else if(i < internal.intervals.length - 1
                                 && Number(text)
                                 >= internal.intervals[i + 1]) {
                             text = internal.intervals[i]
-                            console.log("22222222")
                         }
                     }
                 }
@@ -86,6 +110,40 @@ Item {
                         Qt.quit()
                     }
                 }
+
+                function setText(t) {
+                    edit.text = t
+                }
+                function getText() {
+                    return edit.text
+                }
+            }
+        }
+        Rectangle {
+            id: apply
+
+            width: 22
+            height: 22
+            border.color: "gray"
+            color: applyArea.pressed ? "blue" : "transparent";
+            MouseArea {
+                id: applyArea
+
+                anchors.fill: parent
+
+                onClicked: {
+                    for(var i = 0; i < internal.colors.length; i++) {
+                        var item = repeaterColors.itemAt(i)
+                        _sourceGUI.tsunamiManager.tsunamiData.plotData.setColorIntervalByIndex(item.color, Number(item.getText()), i)
+                    }
+                    _sourceGUI.tsunamiManager.tsunamiData.plotData.setColorBarMap();
+                }
+            }
+            Image {
+                id: applyColorBar
+
+                anchors.centerIn: parent
+                source: "Assets/checkColorBar.png"
             }
         }
     }

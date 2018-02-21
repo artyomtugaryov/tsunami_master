@@ -5,6 +5,7 @@
 namespace {
 const int Width = 300;
 const int Height = 20;
+const int scaleValue = 630;
 }
 
 TsunamiManagerInfo::TsunamiPlotProvider::TsunamiPlotProvider(TsunamiManagerInfo::TsunamiData *data,
@@ -12,7 +13,15 @@ TsunamiManagerInfo::TsunamiPlotProvider::TsunamiPlotProvider(TsunamiManagerInfo:
     QQuickImageProvider(QQuickImageProvider::Image),
     m_plot(QSharedPointer<PlotLib::Plot2d>(new Plot2d())),
     m_tsunamiData(data),
-    m_mapAreaWorker(std::shared_ptr<TM::Map::MapAreaWorker>(mapAreaWorker))
+    m_mapAreaWorker(std::shared_ptr<TM::Map::MapAreaWorker>(mapAreaWorker)),
+    m_colorBarMap(new PlotLib::ColorMap({{-3, QColor(38, 0, 255)},
+                                         {-0.1, QColor(222, 255, 248)},
+                                         {0, QColor(222, 255, 248)},
+                                         {1, QColor(128, 0, 128)},
+                                         {3, QColor(255, 0, 0)},
+                                         {5, QColor(255, 128, 0)},
+                                         {8, QColor(255, 255, 0)},
+                                         {11, QColor(0, 255, 0 )}}))
 {
     m_plotImage = nullptr;
 }
@@ -43,6 +52,19 @@ QImage TsunamiManagerInfo::TsunamiPlotProvider::requestImage(const QString &id,
         return QImage(1,1,QImage::Format_RGB32);
     }
 
+    if (m_plotImage->width() > scaleValue && m_plotImage->height() > scaleValue)
+    {
+        int w, h;
+        double coef;
+        coef = m_plotImage->width() > m_plotImage->height()
+                ? static_cast<double>(m_plotImage->width()) / scaleValue
+                : static_cast<double>(m_plotImage->height()) / scaleValue;
+        w = static_cast<int> (static_cast<double>(m_plotImage->width()) / coef + 0.5);
+        h = static_cast<int> (static_cast<double>(m_plotImage->height()) / coef + 0.5);
+        QImage requestImage = m_plotImage->scaled(w, h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        requestImage.save(QString("test2.png"), "PNG");
+        return requestImage;
+    }
     return *m_plotImage;
 }
 
@@ -77,6 +99,12 @@ void TsunamiManagerInfo::TsunamiPlotProvider::setEta(const std::shared_ptr<TM::M
     m_eta = eta;
 }
 
+void TsunamiManagerInfo::TsunamiPlotProvider::setColorBarMap(const std::shared_ptr<PlotLib::ColorMap> &colorBarMap)
+{
+    m_colorBarMap.reset();
+    m_colorBarMap = colorBarMap;
+}
+
 void TsunamiManagerInfo::TsunamiPlotProvider::plotBathametry()
 {
     m_plot->setColorbar(true);
@@ -87,19 +115,10 @@ void TsunamiManagerInfo::TsunamiPlotProvider::plotBathametry()
 
     m_plot->setWindow(QRect(0, 0, m_tsunamiData->sizeX() + 300, m_tsunamiData->sizeY() + 20));
     ColorMap colorMap({{0, QColor(0, 255, 0)}, {3000, QColor(0, 70, 0)}});
-    ColorMap colorMapEta({{-3, QColor(38, 0, 255)},
-                          {-0.1, QColor(222, 255, 248)},
-                          {0, QColor(222, 255, 248)},
-                          {1, QColor(128, 0, 128)},
-                          {3, QColor(255, 0, 0)},
-                          {5, QColor(255, 128, 0)},
-                          {8, QColor(255, 255, 0)},
-                          {11, QColor(0, 255, 0 )}});
-    colorFunc2D f = [&colorMapEta, &colorMap, this](double x, double y)->QColor{
+    colorFunc2D f = [&colorMap, this](double x, double y)->QColor{
         QColor c;
         double data = m_mapAreaWorker->bathymetry()->getDataByPoint(x, y);
 
-        double eta = 0;
         if (m_eta != NULL)
         {
             m_eta->getDataByPoint(x, y);
@@ -109,10 +128,16 @@ void TsunamiManagerInfo::TsunamiPlotProvider::plotBathametry()
         }
         else
         {
-            c = colorMapEta.getColor(eta);
-        }//(data < 0) c = QColor(38, 225, 255);
+            double eta = 0;
+            if(m_eta)
+            {
+                eta = m_eta->getDataByPoint(x, y);
+            }
+            c = m_colorBarMap->getColor(eta);
+        }
         return c;
     };
+
     m_plot->plotColorFunction(f);
     m_plot->setAxisX(true);
     m_plot->setAxisY(true);
@@ -121,18 +146,9 @@ void TsunamiManagerInfo::TsunamiPlotProvider::plotBathametry()
     m_plot->drawAxis(28);
     m_plot->drawGrid(false, 28, 1, 0, 2, 0);
 
-    ColorMap colorbarMap({{-3, QColor(38, 0, 255)},
-                          {-0.1, QColor(222, 255, 248)},
-                          {0, QColor(222, 255, 248)},
-                          {1, QColor(128, 0, 128)},
-                          {3, QColor(255, 0, 0)},
-                          {5, QColor(255, 128, 0)},
-                          {8, QColor(255, 255, 0)},
-                          {11, QColor(0, 255, 0 )}});
-
     std::vector<double> ticks;
-    for(int i = -3; i < 11; i++) {
+    for(int i = m_colorBarMap->min(); i < m_colorBarMap->max(); i++) {
         ticks.push_back(i);
     }
-    m_plot->drawColorbar(colorbarMap, ticks, 22);
+    m_plot->drawColorbar(*m_colorBarMap, ticks, 22);
 }

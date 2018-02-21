@@ -9,7 +9,7 @@
 #include <TMlib/TMException.h>
 #include <TMlib/TMScheme24.h>
 #include <TMlib/TMFocus.h>
-#include <TMlib/TMSignal.h>
+#include "TMSignal.h"
 #include <PlotLib/Plot2d.h>
 #include <PlotLib/ColorMap.h>
 
@@ -43,6 +43,7 @@ public slots:
     void tsunamiWorkerThreadReaded(); 
     void saveInitDataToJson();
     void quickStart();
+    void colorBarProvide(const std::shared_ptr<ColorMap> &colorBarMap);
 private slots:
     void isUpdateTime(std::shared_ptr<TM::Map::MapArea<double>> eta);
 signals:

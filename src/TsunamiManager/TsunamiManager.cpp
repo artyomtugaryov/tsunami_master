@@ -7,7 +7,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-TsunamiManagerInfo::TsunamiManager::TsunamiManager(QObject *parent) :
+using namespace TsunamiManagerInfo;
+
+TsunamiManager::TsunamiManager(QObject *parent) :
     QObject(parent),
     m_tsunamiData(new TsunamiManagerInfo::TsunamiData(this)),
     m_mapAreaWorker(std::make_shared<TM::Map::MapAreaWorker>()),
@@ -23,32 +25,28 @@ TsunamiManagerInfo::TsunamiManager::TsunamiManager(QObject *parent) :
     m_bathymetryImage = nullptr;
 
     m_tsunamiWorker->moveToThread(m_tsunamiWorkerThread);
+    connect(m_tsunamiData->plotData(), &TsunamiPlotData::colorBarChanged,
+            this, &TsunamiManager::colorBarProvide);
     connect(m_tsunamiWorkerThread, SIGNAL(started()),
             m_tsunamiWorker, SLOT(execute()));
     connect(m_tsunamiWorker, SIGNAL(finished()), m_tsunamiWorkerThread, SLOT(terminate()));
     connect(m_tsunamiWorker, SIGNAL(readedFinished()), this, SLOT(tsunamiWorkerThreadReaded()));
-    //connect(m_tsunamiWorker, SIGNAL(updateTime(int)), this, SLOT(isUpdateTime(int)));
-    m_signal->setSendingTimeStep(10);
-    connect(m_signal.get(), &TM::TMSignal::signalUpdate, this, &TsunamiManagerInfo::TsunamiManager::isUpdateTime);
+
+    qRegisterMetaType<std::shared_ptr<TM::Map::MapArea<double>>>("std::shared_ptr<TM::Map::MapArea<double>>");
+    connect(m_signal.get(), &TM::TMSignal::signalUpdate, this, &TsunamiManager::isUpdateTime);
     loadInitDataFromJson();
 }
 
-TsunamiManagerInfo::TsunamiData *TsunamiManagerInfo::TsunamiManager::tsunamiData() const
+TsunamiData *TsunamiManager::tsunamiData() const
 {
     return m_tsunamiData;
 }
 
-//static void doDeleteLater(TM::Map::MapAreaWorker *obj)
-//{
-//    delete obj;
-//}
-
-void TsunamiManagerInfo::TsunamiManager::readBathymetryFromFile(QString path)
+void TsunamiManager::readBathymetryFromFile(QString path)
 {
     m_tsunamiData->setReaded(false);
     if (m_mapAreaWorker.get() != NULL)
     {
-        //TODO: Artem check please reset
         m_mapAreaWorker.reset();
         m_mapAreaWorker = std::make_shared<TM::Map::MapAreaWorker>();
         m_tsunamiWorker->setMapAreaWorker(m_mapAreaWorker);
@@ -65,7 +63,7 @@ void TsunamiManagerInfo::TsunamiManager::readBathymetryFromFile(QString path)
     m_tsunamiWorkerThread->start();
 }
 
-void TsunamiManagerInfo::TsunamiManager::readBrickDataFromFile(QString path)
+void TsunamiManager::readBrickDataFromFile(QString path)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     path = path.remove("file:///");
@@ -81,7 +79,7 @@ void TsunamiManagerInfo::TsunamiManager::readBrickDataFromFile(QString path)
     m_tsunamiWorker->setFocus(m_focus);
 }
 
-void TsunamiManagerInfo::TsunamiManager::startCalculation()
+void TsunamiManager::startCalculation()
 {
     if (m_tsunamiWorker->readed()
             && m_tsunamiWorkerThread->isFinished()
@@ -91,13 +89,14 @@ void TsunamiManagerInfo::TsunamiManager::startCalculation()
         {
             m_scheme.reset();
         }
+        m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
         m_tsunamiWorker->setScheme(m_scheme);
         m_tsunamiWorker->setCommand(TsunamiWorker::ThreadCommand::RunCalculation);
         m_tsunamiWorkerThread->start();
     }
 }
 
-void TsunamiManagerInfo::TsunamiManager::tsunamiWorkerThreadReaded()
+void TsunamiManager::tsunamiWorkerThreadReaded()
 {
     m_tsunamiWorkerThread->terminate();
     m_tsunamiData->setReaded(m_tsunamiWorker->readed());
@@ -125,21 +124,19 @@ void TsunamiManagerInfo::TsunamiManager::tsunamiWorkerThreadReaded()
     }
 }
 
-void TsunamiManagerInfo::TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::MapArea<double> > eta)
+void TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::MapArea<double> > eta)
 {
-    //qDebug() << "time: " << eta;
-    //m_currentCalculationTime = eta;
     m_eta.reset();
     m_eta = eta;
     emit imageUpdate();
 }
 
-std::shared_ptr<TM::Map::MapArea<double> > TsunamiManagerInfo::TsunamiManager::eta() const
+std::shared_ptr<TM::Map::MapArea<double> > TsunamiManager::eta() const
 {
     return m_eta;
 }
 
-void TsunamiManagerInfo::TsunamiManager::quickStart()
+void TsunamiManager::quickStart()
 {
     if (m_tsunamiWorker->bathymetryPath().size() > 5)
     {
@@ -147,7 +144,13 @@ void TsunamiManagerInfo::TsunamiManager::quickStart()
     }
 }
 
-void TsunamiManagerInfo::TsunamiManager::saveInitDataToJson()
+void TsunamiManager::colorBarProvide(const std::shared_ptr<PlotLib::ColorMap> &colorBarMap)
+{
+    m_plotProvider->setColorBarMap(colorBarMap);
+    emit imageUpdate();
+}
+
+void TsunamiManager::saveInitDataToJson()
 {
     QFile saveFile("INIT.json");
 
@@ -180,7 +183,7 @@ void TsunamiManagerInfo::TsunamiManager::saveInitDataToJson()
     saveFile.write(saveDoc.toJson());
 }
 
-void TsunamiManagerInfo::TsunamiManager::loadInitDataFromJson()
+void TsunamiManager::loadInitDataFromJson()
 {
     QFile loadFile(QStringLiteral("INIT.json"));
 
@@ -230,17 +233,17 @@ void TsunamiManagerInfo::TsunamiManager::loadInitDataFromJson()
     m_tsunamiData->setStepY(mapData["stepY"].toDouble());
 }
 
-TsunamiManagerInfo::TsunamiPlotProvider *TsunamiManagerInfo::TsunamiManager::plotProvider() const
+TsunamiPlotProvider *TsunamiManager::plotProvider() const
 {
     return m_plotProvider;
 }
 
-void TsunamiManagerInfo::TsunamiManager::setPlotProvider(TsunamiPlotProvider *plotProvider)
+void TsunamiManager::setPlotProvider(TsunamiPlotProvider *plotProvider)
 {
     m_plotProvider = plotProvider;
 }
 
-int TsunamiManagerInfo::TsunamiManager::currentCalculationTime()
+int TsunamiManager::currentCalculationTime()
 {
     return m_currentCalculationTime;
 }

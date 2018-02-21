@@ -46,7 +46,6 @@ void TsunamiWorker::setBathymetryPath(const QString &path)
         return;
     }
     m_bathymetryPath = path;
-    qDebug() << path;
 }
 
 void TsunamiWorker::readBathymetryFromFile()
