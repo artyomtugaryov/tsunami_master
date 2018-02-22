@@ -55,7 +55,6 @@ void TsunamiWorker::readBathymetryFromFile()
     m_command = ThreadCommand::None;
     emit readedFinished();
     emit finished();
-    qDebug() << "Zhopa 1";
 }
 
 std::shared_ptr<TM::Scheme::TMScheme24> TsunamiWorker::scheme() const
@@ -94,13 +93,11 @@ void TsunamiWorker::setCommand(const ThreadCommand &command)
 //TODO: remove before implement calculation part
 void TsunamiWorker::runCalculation()
 {
-    qDebug() << "Zhopa 6";
-    if(m_focus) qDebug() << "Zhopa 6.01";
-    if(m_mapAreaWorker) qDebug() << "Zhopa 6.01";
+    if(!m_focus) return;
+    if(!m_mapAreaWorker) return;
     if (!m_scheme) m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
     m_scheme->configure(m_mapAreaWorker, m_focus, -5, m_signal);
-    qDebug() << "Zhopa 7";
-    //m_scheme->calculation(m_mapAreaWorker, m_signal, 10000000);
+    m_scheme->calculation(m_mapAreaWorker, 10000000);
 }
 //TODO: remove before implement calculation part
 bool TsunamiWorker::readed() const

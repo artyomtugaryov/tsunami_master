@@ -23,7 +23,6 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
             auto tetta2 = area->getLongitudeByIndex(j + 1. / 2.);
             auto tetta_2 = area->getLongitudeByIndex(j - 1. / 2.);
             auto M = dt / (2 * R_EACH * sin(tetta));
-
 #pragma omp parallel for  shared(dPhi, dTetta, dt, tetta, tetta2, tetta_2) private(k)
             for (k = 1; k < maxX; k++) {
                 switch (this->m_types_cells->getDataByIndex(k, j)) {

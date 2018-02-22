@@ -75,6 +75,9 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
     for (std::size_t k = 0; k < static_cast<std::size_t >(depth.size()); k++) {
         m_bathymetry->setDataByPoint(latitude[k], longitude[k], depth[k]);
     }
+    this->m_uVelocity = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
+    this->m_vVelocity = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
+    this->m_eta = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
 }
 
 bool TM::Map::MapAreaWorker::readBathymetryFromFile() {

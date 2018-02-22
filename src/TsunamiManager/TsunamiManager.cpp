@@ -62,7 +62,6 @@ void TsunamiManagerInfo::TsunamiManager::readBathymetryFromFile(QString path)
     m_tsunamiWorker->setBathymetryPath(path);
     m_tsunamiData->setBathymetryPath(path);
     m_tsunamiWorker->setCommand(TsunamiWorker::ThreadCommand::ReadBathymetry);
-    qDebug() << "Zhopa 0.5";
     m_tsunamiWorkerThread->start();
 }
 
@@ -79,9 +78,7 @@ void TsunamiManagerInfo::TsunamiManager::readBrickDataFromFile(QString path)
         m_focus.reset();
     }
     m_focus = std::make_shared<TM::TMFocus>(path.toStdString());
-    qDebug() << "Zhopa 4";
     m_tsunamiWorker->setFocus(m_focus);
-    qDebug() << "Zhopa 5";
 }
 
 void TsunamiManagerInfo::TsunamiManager::startCalculation()
@@ -104,7 +101,6 @@ void TsunamiManagerInfo::TsunamiManager::tsunamiWorkerThreadReaded()
 {
     m_tsunamiWorkerThread->terminate();
     m_tsunamiData->setReaded(m_tsunamiWorker->readed());
-    qDebug() << "Zhopa 2";
     if (m_tsunamiWorker->readed())
     {
         m_tsunamiData->setStartX(m_mapAreaWorker->bathymetry()->startX());
@@ -127,7 +123,6 @@ void TsunamiManagerInfo::TsunamiManager::tsunamiWorkerThreadReaded()
         m_plotProvider->requestImage(QString("1"), NULL, QSize(0,0));
         emit imageUpdate();
     }
-    qDebug() << "Zhopa 3";
 }
 
 void TsunamiManagerInfo::TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::MapArea<double> > eta)
