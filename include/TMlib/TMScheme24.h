@@ -3,9 +3,7 @@
 
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMMapArea.h>
-#include <TMlib/TMFocus.h>
 #include <TMlib/TMScheme.h>
-#include <TMlib/TMSignal.h>
 
 namespace TM {
     namespace Scheme {
@@ -21,11 +19,9 @@ namespace TM {
             void configure(const std::shared_ptr<const Map::MapAreaWorker> &area,
                            const std::shared_ptr<const TMFocus> &focus,
                            const double &izobata,
-                           const std::shared_ptr<TMSignal> &sender);
+                           const std::shared_ptr<TMTimeManager> &sender);
 
             double getTimeStep(const double &dPhi, const double &dTetta, const double Hm) const;
-
-            void setSendingTimeStep(const double);
 
         private:
 
@@ -76,10 +72,8 @@ namespace TM {
 
 
             std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> m_types_cells;
-            std::shared_ptr<TM::TMFocus> m_focus;
             std::shared_ptr<TM::Map::MapArea<double>> m_B0;
             std::shared_ptr<TM::Map::MapArea<double>> m_B1;
-            std::shared_ptr<TMSignal> m_sender;
         };
     }
 }

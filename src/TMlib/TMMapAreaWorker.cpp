@@ -116,6 +116,11 @@ const std::shared_ptr<TM::Map::MapArea<double>> TM::Map::MapAreaWorker::eta() no
     return m_eta;
 }
 
+void TM::Map::MapAreaWorker::setEta(std::shared_ptr<TM::Map::MapArea<double>> newEta) noexcept {
+    m_eta = newEta;
+}
+
+
 const std::shared_ptr<const TM::Map::MapArea<double>> TM::Map::MapAreaWorker::bathymetry() const noexcept {
     return m_bathymetry;
 }

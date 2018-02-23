@@ -1,23 +1,25 @@
-#ifndef TMSIGNAL_H
-#define TMSIGNAL_H
+#ifndef TMTIMEMANAGER_H
+#define TMTIMEMANAGER_H
 
 #include <QObject>
 #include <memory>
 #include "TMlib/TMMapArea.h"
 
 namespace TM {
-class TMSignal : public QObject {
+class TMTimeManager : public QObject {
     Q_OBJECT
 public:
-    explicit TMSignal(QObject *parent = 0, double sendingTimeStep = 0);
+    explicit TMTimeManager(QObject *parent = 0, double timestep = 0);
 
     void emitSignal(std::shared_ptr<TM::Map::MapArea<double>> map);
 
     double sendingTimeStep() const;
-    bool updateSendingTimeStep() const;
 
     void setSendingTimeStep(double sendingTimeStep);
-    void setUpdateSendingTimeStep(bool updateSendingTimeStep);
+
+    void setMaxTimeStep(double m_maxTimeStep) const noexcept;
+
+    double step() const noexcept;
 
 signals:
     void signalUpdate(std::shared_ptr<TM::Map::MapArea<double>>);
@@ -25,9 +27,10 @@ signals:
 public slots:
     void  updateSendingTimeStep(double const sendingTimeStep);
 private:
-    bool m_updateSendingTimeStep;
+    double m_timestep;
+    double m_maxTimeStep;
     double m_sendingTimeStep;
 };
 }
 
-#endif // TMSIGNAL_H
+#endif // TMTIMEMANAGER_H

@@ -12,9 +12,9 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
     auto dPhi = area->getStepPhi();
     auto dTetta = area->getStepTetta();
     auto Hm = area->bathymetry()->getMinValue();
-    auto dt = getTimeStep(dPhi, dTetta, Hm);
     clock_t begin = clock();
-    for (double t = 0; t <= timeEnd; t += dt) {
+    for (double t = 0; t <= timeEnd; t += m_time->step()) {
+        auto dt = this->m_time->step();
         std::shared_ptr<TM::Map::MapArea<double>> newEta =
                 std::make_shared<TM::Map::MapArea<double>>(area->getMaxXIndex(), area->getMaxYIndex(), 0);
 #pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
@@ -71,9 +71,11 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
                 area->vVelocity()->setDataByIndex(k, j, v_new);
             }
         }
+
+        area->setEta(newEta);
         //TODO: It's no good. How we can do this better?
-        if (!fmod(t, m_sender->sendingTimeStep())) {
-            m_sender->emitSignal(newEta);
+        if (!fmod(t, m_time->sendingTimeStep())) {
+            m_time->emitSignal(newEta);
         }
     }
     clock_t end = clock();
@@ -89,7 +91,7 @@ double TM::Scheme::TMScheme24::getTimeStep(const double &dPhi, const double &dTe
 void TM::Scheme::TMScheme24::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                                        const std::shared_ptr<const TM::TMFocus> &focus,
                                        const double &izobata,
-                                       const std::shared_ptr<TMSignal> &sender) {
+                                       const std::shared_ptr<TMTimeManager> &sender) {
     this->setTypesOfCells(area, izobata);
     if (focus) {
         this->m_focus = std::make_shared<TM::TMFocus>(*focus);
@@ -98,7 +100,11 @@ void TM::Scheme::TMScheme24::configure(const std::shared_ptr<const TM::Map::MapA
         this->m_focus = std::make_shared<TM::TMFocus>();
     }
     this->setUpBArrays(area->getMaxXIndex(), area->getMaxXIndex());
-    this->m_sender = sender;
+    this->m_time = sender;
+    auto dPhi = area->getStepPhi();
+    auto dTetta = area->getStepTetta();
+    auto Hm = area->bathymetry()->getMinValue();
+    this->m_time->setMaxTimeStep(getTimeStep(dPhi, dTetta, Hm));
 }
 
 void TM::Scheme::TMScheme24::setTypesOfCells(const std::shared_ptr<const Map::MapAreaWorker> &area,
