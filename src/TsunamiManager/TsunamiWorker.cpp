@@ -5,13 +5,13 @@
 TsunamiWorker::TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker,
                              std::shared_ptr<TM::Scheme::TMScheme24> scheme,
                              std::shared_ptr<TM::TMFocus> focus,
-                             std::shared_ptr<TM::TMTimeManager> signal,
+                             std::shared_ptr<TM::TMTimeManager> timemanager,
                              QObject *parent) :
     QObject(parent),
     m_mapAreaWorker(mapAreaWorker),
     m_scheme(scheme),
     m_focus(focus),
-    m_signal(signal),
+    m_signal(timemanager),
     m_readed(false),
     m_command(ThreadCommand::None),
     m_updateTime(1)

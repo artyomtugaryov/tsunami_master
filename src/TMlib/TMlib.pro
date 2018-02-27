@@ -15,7 +15,8 @@ SOURCES += TMMapArea.cpp \
            TMFocus.cpp \
            TMBlock.cpp \
            TMException.cpp \
-           TMTimeManager.cpp
+           TMTimeManager.cpp \
+    TMSignal.cpp
 
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../../include/TMlib/
 
@@ -30,7 +31,8 @@ HEADERS += $${_PRO_FILE_PWD_}/../../include/TMlib/TMMapArea.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMBlock.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMTimeManager.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMCommon.h \
-           $${_PRO_FILE_PWD_}/../../include/TMlib/TMConstants.h
+           $${_PRO_FILE_PWD_}/../../include/TMlib/TMConstants.h \
+    ../../include/TMlib/TMSignal.h
 
 QMAKE_CXXFLAGS += -fopenmp
 LIBS += -fopenmp

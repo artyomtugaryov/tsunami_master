@@ -11,8 +11,6 @@ class TMTimeManager : public QObject {
 public:
     explicit TMTimeManager(QObject *parent = 0, double timestep = 0);
 
-    void emitSignal(std::shared_ptr<TM::Map::MapArea<double>> map);
-
     double sendingTimeStep() const;
 
     void setSendingTimeStep(double sendingTimeStep);
@@ -20,9 +18,6 @@ public:
     void setMaxTimeStep(double m_maxTimeStep) const noexcept;
 
     double step() const noexcept;
-
-signals:
-    void signalUpdate(std::shared_ptr<TM::Map::MapArea<double>>);
 
 public slots:
     void  updateSendingTimeStep(double const sendingTimeStep);
