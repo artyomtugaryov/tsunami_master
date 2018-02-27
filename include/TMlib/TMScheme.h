@@ -6,6 +6,7 @@
 #include <TMlib/TMFocus.h>
 #include <TMlib/TMConstants.h>
 #include <TMlib/TMTimeManager.h>
+#include <TMlib/TMSignal.h>
 
 namespace TM {
     namespace Scheme {
@@ -33,6 +34,7 @@ namespace TM {
         protected:
             std::shared_ptr<TM::TMFocus> m_focus;
             std::shared_ptr<TMTimeManager> m_time;
+            std::shared_ptr<TMSignal> m_signal;
         };
     }
 }

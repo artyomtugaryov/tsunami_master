@@ -25,7 +25,7 @@ public:
     explicit TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker,
                            std::shared_ptr<TM::Scheme::TMScheme24> scheme,
                            std::shared_ptr<TM::TMFocus> focus,
-                           std::shared_ptr<TM::TMTimeManager> signal,
+                           std::shared_ptr<TM::TMTimeManager> timemanager,
                            QObject *parent = 0);
     QString bathymetryPath() const;
     void setBathymetryPath(const QString &path);

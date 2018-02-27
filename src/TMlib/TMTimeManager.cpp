@@ -7,11 +7,6 @@ TM::TMTimeManager::TMTimeManager(QObject *parent, double timestep):
 {
 }
 
-void TM::TMTimeManager::emitSignal(std::shared_ptr<TM::Map::MapArea<double> > map)
-{
-    emit signalUpdate(map);
-}
-
 double TM::TMTimeManager::sendingTimeStep() const
 {
     return m_sendingTimeStep;

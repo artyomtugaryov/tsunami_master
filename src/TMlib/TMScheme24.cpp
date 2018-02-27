@@ -75,7 +75,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
         area->setEta(newEta);
         //TODO: It's no good. How we can do this better?
         if (!fmod(t, m_time->sendingTimeStep())) {
-            m_time->emitSignal(newEta);
+            m_signal->emitSignal(newEta);
         }
     }
     clock_t end = clock();
