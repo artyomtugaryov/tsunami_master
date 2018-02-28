@@ -14,17 +14,17 @@ protected:
             throw std::runtime_error("FILE with bathymetry not found");
         m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
         m_area = std::make_shared<TM::Map::MapAreaWorker>(bPath);
-        m_signal = std::make_shared<TM::TMSignal>();
+        m_signal = std::make_shared<TM::TMTimeManager>();
     }
 
     static std::shared_ptr<TM::Scheme::TMScheme24>  m_scheme;
     static std::shared_ptr<TM::Map::MapAreaWorker> m_area;
-    static std::shared_ptr<TM::TMSignal> m_signal;
+    static std::shared_ptr<TM::TMTimeManager> m_signal;
 };
 
 std::shared_ptr<TM::Scheme::TMScheme24> TMScheme24Tests::m_scheme;
 std::shared_ptr<TM::Map::MapAreaWorker> TMScheme24Tests::m_area;
-std::shared_ptr<TM::TMSignal> TMScheme24Tests::m_signal;
+std::shared_ptr<TM::TMTimeManager> TMScheme24Tests::m_signal;
 
 TEST_F(TMScheme24Tests, configure) {
     try {

@@ -5,6 +5,7 @@
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMFocus.h>
 #include <TMlib/TMConstants.h>
+#include <TMlib/TMTimeManager.h>
 #include <TMlib/TMSignal.h>
 
 namespace TM {
@@ -28,7 +29,12 @@ namespace TM {
             virtual void configure(const std::shared_ptr<const TM::Map::MapAreaWorker>&,
                                    const std::shared_ptr<const TM::TMFocus>&,
                                    const double&,
-                                   const std::shared_ptr<TMSignal>&) = 0;
+                                   const std::shared_ptr<TMTimeManager>&) = 0;
+
+        protected:
+            std::shared_ptr<TM::TMFocus> m_focus;
+            std::shared_ptr<TMTimeManager> m_time;
+            std::shared_ptr<TMSignal> m_signal;
         };
     }
 }
