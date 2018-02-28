@@ -4,6 +4,7 @@
 #include "TsunamiData.h"
 #include "TsunamiWorker.h"
 #include "TsunamiPlotProvider.h"
+#include "TMSignal.h"
 
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMException.h>
