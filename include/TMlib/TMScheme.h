@@ -29,7 +29,8 @@ namespace TM {
             virtual void configure(const std::shared_ptr<const TM::Map::MapAreaWorker>&,
                                    const std::shared_ptr<const TM::TMFocus>&,
                                    const double&,
-                                   const std::shared_ptr<TMTimeManager>&) = 0;
+                                   const std::shared_ptr<TMTimeManager>&,
+                                   const std::shared_ptr<TMSignal> &) = 0;
 
         protected:
             std::shared_ptr<TM::TMFocus> m_focus;

@@ -6,12 +6,14 @@ TsunamiWorker::TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWork
                              std::shared_ptr<TM::Scheme::TMScheme24> scheme,
                              std::shared_ptr<TM::TMFocus> focus,
                              std::shared_ptr<TM::TMTimeManager> timemanager,
+                             std::shared_ptr<TM::TMSignal> tmsignal,
                              QObject *parent) :
     QObject(parent),
     m_mapAreaWorker(mapAreaWorker),
     m_scheme(scheme),
     m_focus(focus),
-    m_signal(timemanager),
+    m_timemanager(timemanager),
+    m_signal(tmsignal),
     m_readed(false),
     m_command(ThreadCommand::None),
     m_updateTime(1)
@@ -95,7 +97,7 @@ void TsunamiWorker::runCalculation()
     if(!m_focus) return;
     if(!m_mapAreaWorker) return;
     if (!m_scheme) m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
-    m_scheme->configure(m_mapAreaWorker, m_focus, -5, m_signal);
+    m_scheme->configure(m_mapAreaWorker, m_focus, -5, m_timemanager, m_signal);
     m_scheme->calculation(m_mapAreaWorker, 10000000);
 }
 //TODO: remove before implement calculation part

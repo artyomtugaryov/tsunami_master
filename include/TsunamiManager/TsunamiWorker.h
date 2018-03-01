@@ -26,6 +26,7 @@ public:
                            std::shared_ptr<TM::Scheme::TMScheme24> scheme,
                            std::shared_ptr<TM::TMFocus> focus,
                            std::shared_ptr<TM::TMTimeManager> timemanager,
+                           std::shared_ptr<TM::TMSignal> tmsignal,
                            QObject *parent = 0);
     QString bathymetryPath() const;
     void setBathymetryPath(const QString &path);
@@ -52,7 +53,8 @@ private:
     std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
     std::shared_ptr<TM::Scheme::TMScheme24> m_scheme;
     std::shared_ptr<TM::TMFocus> m_focus;
-    std::shared_ptr<TM::TMTimeManager> m_signal;
+    std::shared_ptr<TM::TMTimeManager> m_timemanager;
+    std::shared_ptr<TM::TMSignal> m_signal;
     bool m_readed;
     ThreadCommand m_command;
     int m_updateTime;

@@ -18,7 +18,7 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     m_signal(std::make_shared<TM::TMSignal>()),
     m_timemanager(std::make_shared<TM::TMTimeManager>()),
     m_plotProvider(new TsunamiPlotProvider(m_tsunamiData, m_mapAreaWorker)),
-    m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker, m_scheme, m_focus, m_timemanager)),
+    m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker, m_scheme, m_focus, m_timemanager, m_signal)),
     m_tsunamiWorkerThread(new QThread),
     m_plot(new Plot2d()),
     m_currentCalculationTime(0)
