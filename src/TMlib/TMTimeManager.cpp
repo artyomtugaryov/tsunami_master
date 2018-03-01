@@ -14,7 +14,7 @@ double TM::TMTimeManager::sendingTimeStep() const
 
 void TM::TMTimeManager::setSendingTimeStep(double sendingTimeStep)
 {
-    m_sendingTimeStep = sendingTimeStep;
+    updateSendingTimeStep(sendingTimeStep);
 }
 
 void TM::TMTimeManager::updateSendingTimeStep(const double sendingTimeStep){
@@ -23,15 +23,13 @@ void TM::TMTimeManager::updateSendingTimeStep(const double sendingTimeStep){
         m_timestep = sendingTimeStep;
         return;
     }
-    if (sendingTimeStep > m_maxTimeStep){
-        m_timestep = m_maxTimeStep;
-    }
+    m_timestep = m_maxTimeStep;
 }
 
 double TM::TMTimeManager::step() const noexcept {
     return m_timestep;
 }
 
-void TM::TMTimeManager::setMaxTimeStep(double m_maxTimeStep) const noexcept {
-    m_maxTimeStep = m_maxTimeStep;
+void TM::TMTimeManager::setMaxTimeStep(double maxTimeStep) noexcept {
+    this->m_maxTimeStep = maxTimeStep;
 }

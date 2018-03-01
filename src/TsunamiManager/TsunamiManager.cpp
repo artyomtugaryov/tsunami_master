@@ -23,6 +23,7 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     m_plot(new Plot2d()),
     m_currentCalculationTime(0)
 {
+
     m_bathymetryImage = nullptr;
 
     m_tsunamiWorker->moveToThread(m_tsunamiWorkerThread);

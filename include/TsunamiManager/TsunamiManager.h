@@ -4,12 +4,12 @@
 #include "TsunamiData.h"
 #include "TsunamiWorker.h"
 #include "TsunamiPlotProvider.h"
-#include "TMSignal.h"
 
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMException.h>
 #include <TMlib/TMScheme24.h>
 #include <TMlib/TMFocus.h>
+#include <TMlib/TMSignal.h>
 #include <TMlib/TMTimeManager.h>
 #include <PlotLib/Plot2d.h>
 #include <PlotLib/ColorMap.h>
