@@ -1,7 +1,8 @@
-#include "TMlib/TMFocus.h"
-#include "TMlib/TMException.h"
 #include <fstream>
 #include <iostream>
+
+#include "TMlib/TMFocus.h"
+#include "TMlib/TMException.h"
 
 TM::TMFocus::TMFocus(const std::string &path) {
     std::fstream blocksFile(path, std::ios_base::in);
@@ -13,7 +14,6 @@ TM::TMFocus::TMFocus(const std::string &path) {
     blocksFile >> countAngles; //Read count of blocks
     this->m_blocks.resize(terrCnt);
 
-
     for (std::size_t i = 0; i < terrCnt; i++) {
         int countBrickUp;
         for (int j = 0; j < countAngles; j++) {
@@ -22,8 +22,8 @@ TM::TMFocus::TMFocus(const std::string &path) {
             blocksFile >> y;
             this->m_blocks[i].m_points.emplace_back(x, y);
         }
-
-        blocksFile >> m_blocks[i].m_beginT;
+        std::sort(m_blocks[i].m_points.begin(), m_blocks[i].m_points.end());
+        blocksFile >> m_blocks[i].m_beginT ;
         blocksFile >> countBrickUp;
 
         for (int j = 0; j < countBrickUp; j++) {
@@ -34,7 +34,6 @@ TM::TMFocus::TMFocus(const std::string &path) {
             m_blocks[i].m_numberUp.emplace_back(tmpBrickUpT, tmpHeightUp);
         }
     }
-
     blocksFile.close();
 }
 

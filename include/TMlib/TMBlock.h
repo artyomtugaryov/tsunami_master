@@ -11,6 +11,12 @@ namespace TM {
         double m_y;
 
         TMBrickPoint(double x, double y) : m_x(x), m_y(y) {}
+
+        inline bool operator< (const TMBrickPoint &other)
+        {
+            // less
+            return (m_x < other.m_x) &&  (m_y <= other.m_y);
+        }
     };
 
     struct TMBrickUp {
@@ -22,6 +28,9 @@ namespace TM {
     };
 
     struct TMBlock {
+        TMBlock():m_beginT(0){
+
+        }
 
         bool has(double lat, double lon);
 
@@ -38,7 +47,7 @@ namespace TM {
 
         static bool
         intersect(const TMBrickPoint &a, const TMBrickPoint &b, const TMBrickPoint &c, const TMBrickPoint &d) {
-            return rotate(a, b, c) * rotate(a, b, d) <= 0 && rotate(c, d, a) * rotate(c, d, b) < 0;
+            return ((rotate(a, b, c) * rotate(a, b, d)) <= 0) && ((rotate(c, d, a) * rotate(c, d, b)) < 0);
         }
 
 

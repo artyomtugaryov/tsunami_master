@@ -94,9 +94,15 @@ void TsunamiWorker::setCommand(const ThreadCommand &command)
 //TODO: remove before implement calculation part
 void TsunamiWorker::runCalculation()
 {
-    if(!m_focus) return;
-    if(!m_mapAreaWorker) return;
-    if (!m_scheme) m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
+    if(!m_focus) {
+        return;
+    }
+    if(!m_mapAreaWorker) {
+        return;
+    }
+    if (!m_scheme) {
+        m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
+    }
     m_scheme->configure(m_mapAreaWorker, m_focus, -5, m_timemanager, m_signal);
     m_scheme->calculation(m_mapAreaWorker, 10000000);
 }

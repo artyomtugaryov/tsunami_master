@@ -13,7 +13,6 @@ double TM::TMBlock::getUpHeihgt(double t) {
             return speed * t;
         }
     }
-
 }
 
 bool TM::TMBlock::pointloc(const TMBrickPoint &a) {
