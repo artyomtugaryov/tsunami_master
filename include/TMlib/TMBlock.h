@@ -10,12 +10,11 @@ namespace TM {
         double m_x;
         double m_y;
 
+        TMBrickPoint() = default;
         TMBrickPoint(double x, double y) : m_x(x), m_y(y) {}
 
-        inline bool operator< (const TMBrickPoint &other)
-        {
-            // less
-            return (m_x < other.m_x) &&  (m_y <= other.m_y);
+        inline bool operator<(const TMBrickPoint &other) {
+            return (m_x < other.m_x);
         }
     };
 
@@ -28,7 +27,7 @@ namespace TM {
     };
 
     struct TMBlock {
-        TMBlock():m_beginT(0){
+        TMBlock() : m_beginT(0) {
 
         }
 
@@ -48,6 +47,29 @@ namespace TM {
         static bool
         intersect(const TMBrickPoint &a, const TMBrickPoint &b, const TMBrickPoint &c, const TMBrickPoint &d) {
             return ((rotate(a, b, c) * rotate(a, b, d)) <= 0) && ((rotate(c, d, a) * rotate(c, d, b)) < 0);
+        }
+
+
+        void build_block(std::vector<TM::TMBrickPoint> points) {
+            auto n = points.size();
+            std::sort(points.begin(), points.end());
+            std::vector<size_t> p(n);
+            for(size_t i(0); i< n; i++){
+                p[i] = i;
+            }
+            for (size_t i(2); i < n; i++) {
+                size_t j = i;
+                while (j > 1 and rotate(points[p[0]], points[p[j - 1]], points[p[j]])) {
+                    size_t tmp = p[j];
+                    p[j] = p[j - 1];
+                    p[j - 1] = tmp;
+                    j--;
+                }
+            }
+            m_points.resize(n);
+            for (size_t i(0); i < n; i++) {
+                m_points[i] = points[p[i]];
+            }
         }
 
 

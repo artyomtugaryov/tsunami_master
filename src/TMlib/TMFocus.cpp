@@ -13,16 +13,16 @@ TM::TMFocus::TMFocus(const std::string &path) {
     blocksFile >> terrCnt; //Read count of blocks
     blocksFile >> countAngles; //Read count of blocks
     this->m_blocks.resize(terrCnt);
-
+    std::vector<TM::TMBrickPoint> points;
     for (std::size_t i = 0; i < terrCnt; i++) {
         int countBrickUp;
         for (int j = 0; j < countAngles; j++) {
             double x(0), y(0);
             blocksFile >> x;
             blocksFile >> y;
-            this->m_blocks[i].m_points.emplace_back(x, y);
+            points.emplace_back(x, y);
         }
-        std::sort(m_blocks[i].m_points.begin(), m_blocks[i].m_points.end());
+        m_blocks[i].build_block(points);
         blocksFile >> m_blocks[i].m_beginT ;
         blocksFile >> countBrickUp;
 
