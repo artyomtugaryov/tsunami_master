@@ -114,7 +114,11 @@ void TsunamiManagerInfo::TsunamiPlotProvider::plotBathametry()
                                       m_tsunamiData->endY() - m_tsunamiData->stepY() / 2.)));
 
     m_plot->setWindow(QRect(0, 0, m_tsunamiData->sizeX() + 300, m_tsunamiData->sizeY() + 20));
-    ColorMap colorMap({{0, QColor(0, 255, 0)}, {3000, QColor(0, 70, 0)}});
+    ColorMap colorMap({{0, QColor(0, 91, 65)},
+                       {200, QColor(201, 180, 102)},
+                       {800, QColor(160, 55, 0)},
+                       {1500, QColor(121, 83, 83)},
+                       {6000, QColor(214, 214, 214)}});
     colorFunc2D f = [&colorMap, this](double x, double y)->QColor{
         QColor c;
         double data = m_mapAreaWorker->bathymetry()->getDataByPoint(x, y);

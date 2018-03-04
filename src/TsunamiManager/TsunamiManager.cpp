@@ -131,6 +131,7 @@ void TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::MapArea<double> > eta
 {
     m_eta.reset();
     m_eta = eta;
+    m_plotProvider->setEta(m_eta);
     emit imageUpdate();
 }
 
