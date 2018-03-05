@@ -49,10 +49,10 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
         }
         auto f = TM::Common::coefCoriolis(j);
         auto M = -(G * dt) / (R_EACH); //make more common
-#pragma omp parallel for shared(f, M) private(j)
+//#pragma omp parallel for shared(f, M) private(j)
         for (j = 0; j < maxY; j++) {
             auto tetta = area->getLongitudeByIndex(j);
-#pragma omp parallel for  shared(f, M) private(k)
+//#pragma omp parallel for  shared(f, M) private(k)
             for (k = 0; k < maxX; k++) {
                 auto u_new = 0.;
                 auto v_new = 0.;

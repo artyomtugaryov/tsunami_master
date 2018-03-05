@@ -33,6 +33,7 @@ TM::Focus::Focus::Focus(const std::string &path) {
             blocksFile >> tmpHeightUp;
             m_blocks[i].m_numberUp.emplace_back(tmpBrickUpT, tmpHeightUp);
         }
+        points.clear();
     }
     blocksFile.close();
 }
