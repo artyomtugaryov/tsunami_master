@@ -77,6 +77,9 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
         if (!fmod(t, m_time->sendingTimeStep())) {
             m_signal->emitSignal(newEta);
         }
+        //TODO: Remove after resolve problem with brick
+        newEta->saveMapAreaToTextFile("eta.dat", 1);
+        // END TODO
     }
     clock_t end = clock();
     std::cout << "Time of calculation is: " << double(end - begin) * 1000. / CLOCKS_PER_SEC << " ms." << std::endl;

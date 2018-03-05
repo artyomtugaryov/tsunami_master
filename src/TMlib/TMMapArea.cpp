@@ -135,14 +135,24 @@ void TM::Map::MapArea<DataType>::saveMapAreaToTextFile(std::string path, int set
     //TODO: Will need check rounding for different data types.
     std::fstream file;
     file.open(path.c_str(), std::fstream::out);
-
+    //TODO: Remove after resolve problem with brick
+    bool a = true;
+    //END TODO
     for (std::size_t y = 0; y < m_sizeY; y++) {
         for (std::size_t x = 0; x < m_sizeX; x++) {
             file << std::fixed << std::setprecision(setprecision) << m_data[getIndex(x, y)] << " ";
             file << "\t";
+            //TODO: Remove after resolve problem with brick
+            if(m_data[getIndex(x, y)] > 0.0000001) {
+                a = false;
+            }
+            //END TODO
         }
         file << std::endl;
     }
+    //TODO: Remove after resolve problem with brick
+    std::cout << a << std::endl;
+    //END TODO
 }
 
 template<typename DataType>
