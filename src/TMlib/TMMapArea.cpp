@@ -143,7 +143,7 @@ void TM::Map::MapArea<DataType>::saveMapAreaToTextFile(std::string path, int set
             file << std::fixed << std::setprecision(setprecision) << m_data[getIndex(x, y)] << " ";
             file << "\t";
             //TODO: Remove after resolve problem with brick
-            if(m_data[getIndex(x, y)] > 0.0000001) {
+            if(abs(m_data[getIndex(x, y)]) > 0.0000001) {
                 a = false;
             }
             //END TODO
