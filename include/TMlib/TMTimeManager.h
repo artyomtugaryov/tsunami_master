@@ -9,7 +9,7 @@ namespace TM {
 class TMTimeManager : public QObject {
     Q_OBJECT
 public:
-    explicit TMTimeManager(QObject *parent = 0, double timestep = INT_MAX);
+    explicit TMTimeManager(QObject *parent = 0, double timestep = std::numeric_limits<double>::max());
 
     double sendingTimeStep() const;
 

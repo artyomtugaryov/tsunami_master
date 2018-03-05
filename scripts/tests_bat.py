@@ -7,12 +7,12 @@ if __name__ == '__main__':
     bathymetry = np.ndarray([size, size], dtype=np.float32)
     for i in range(size):
         for j in range(size):
-            if 20 <= i <=980 and 20<=j<=980:
-                bathymetry[i][j] = -100
+            if 20 <= i <= 980 and 20 <= j <= 980:
+                bathymetry[i][j] = -5000
             else:
                 bathymetry[i][j] = 10
 
     with open('my_bat.dat', "w") as file:
         for i in range(size):
             for j in range(size):
-                file.write("{i}\t{j}\t{v}\n".format(i=i*step, j=j*step, v=bathymetry[i][j]))
+                file.write("{i}\t{j}\t{v}\n".format(i=i * step, j=j * step, v=bathymetry[i][j]))

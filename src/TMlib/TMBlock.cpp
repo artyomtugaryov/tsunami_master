@@ -6,7 +6,7 @@ bool TM::TMBlock::has(double lat, double lon) {
 
 double TM::TMBlock::getUpHeihgt(double t) {
     for (auto brickUp = this->m_numberUp.begin(); brickUp != m_numberUp.end(); brickUp++) {
-        if (t < this->m_beginT or t > this->m_beginT + brickUp->m_brickUpT) {
+        if (this->m_beginT > t or t > this->m_beginT + brickUp->m_brickUpT) {
             return 0;
         } else {
             auto speed = static_cast<double>(brickUp->m_brickUpT) / brickUp->m_heightUp;

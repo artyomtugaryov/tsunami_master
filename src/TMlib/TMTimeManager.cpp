@@ -32,4 +32,7 @@ double TM::TMTimeManager::step() const noexcept {
 
 void TM::TMTimeManager::setMaxTimeStep(double maxTimeStep) noexcept {
     this->m_maxTimeStep = maxTimeStep;
+    if (m_timestep == std::numeric_limits<double>::max()){
+        m_timestep = this->m_maxTimeStep;
+    }
 }

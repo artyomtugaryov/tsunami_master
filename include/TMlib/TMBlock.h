@@ -11,6 +11,7 @@ namespace TM {
         double m_y;
 
         TMBrickPoint() = default;
+
         TMBrickPoint(double x, double y) : m_x(x), m_y(y) {}
 
         inline bool operator<(const TMBrickPoint &other) {
@@ -54,12 +55,12 @@ namespace TM {
             auto n = points.size();
             std::sort(points.begin(), points.end());
             std::vector<size_t> p(n);
-            for(size_t i(0); i< n; i++){
+            for (size_t i(0); i < n; i++) {
                 p[i] = i;
             }
             for (size_t i(2); i < n; i++) {
                 size_t j = i;
-                while (j > 1 and rotate(points[p[0]], points[p[j - 1]], points[p[j]])) {
+                while (j > 1 and rotate(points[p[0]], points[p[j - 1]], points[p[j]]) < 0) {
                     size_t tmp = p[j];
                     p[j] = p[j - 1];
                     p[j - 1] = tmp;
