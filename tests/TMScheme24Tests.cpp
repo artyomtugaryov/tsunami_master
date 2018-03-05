@@ -35,7 +35,7 @@ TEST_F(TMScheme24Tests, configure) {
         char *fPath = getenv("FOCUS_PATH");
         if (fPath == nullptr)
             throw std::runtime_error("FILE with focus not found");
-        std::shared_ptr<TM::TMFocus> focus = std::make_shared<TM::TMFocus>(fPath);
+        std::shared_ptr<TM::Focus::Focus> focus = std::make_shared<TM::Focus::Focus>(fPath);
 
         m_scheme->configure(m_area, focus, -5, m_sender, m_signal);
     } catch (TM::details::TMException &ex) {

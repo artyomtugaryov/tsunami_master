@@ -27,13 +27,13 @@ namespace TM {
                                      const double&) = 0;
 
             virtual void configure(const std::shared_ptr<const TM::Map::MapAreaWorker>&,
-                                   const std::shared_ptr<const TM::TMFocus>&,
+                                   const std::shared_ptr<const TM::Focus::Focus>&,
                                    const double&,
                                    const std::shared_ptr<TMTimeManager>&,
                                    const std::shared_ptr<TMSignal> &) = 0;
 
         protected:
-            std::shared_ptr<TM::TMFocus> m_focus;
+            std::shared_ptr<TM::Focus::Focus> m_focus;
             std::shared_ptr<TMTimeManager> m_time;
             std::shared_ptr<TMSignal> m_signal;
         };

@@ -93,16 +93,16 @@ double TM::Scheme::TMScheme24::getTimeStep(const double &dPhi, const double &dTe
 }
 
 void TM::Scheme::TMScheme24::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
-                                       const std::shared_ptr<const TM::TMFocus> &focus,
+                                       const std::shared_ptr<const TM::Focus::Focus> &focus,
                                        const double &izobata,
                                        const std::shared_ptr<TMTimeManager> &sender,
                                        const std::shared_ptr<TMSignal> &signal) {
     this->setTypesOfCells(area, izobata);
     if (focus) {
-        this->m_focus = std::make_shared<TM::TMFocus>(*focus);
+        this->m_focus = std::make_shared<TM::Focus::Focus>(*focus);
     } else {
         std::cout << "[ WARNING ] Focus did not set." << std::endl;
-        this->m_focus = std::make_shared<TM::TMFocus>();
+        this->m_focus = std::make_shared<TM::Focus::Focus>();
     }
     this->setUpBArrays(area->getMaxXIndex(), area->getMaxXIndex());
     this->m_time = sender;

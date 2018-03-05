@@ -4,7 +4,7 @@
 #include "TMlib/TMFocus.h"
 #include "TMlib/TMException.h"
 
-TM::TMFocus::TMFocus(const std::string &path) {
+TM::Focus::Focus::Focus(const std::string &path) {
     std::fstream blocksFile(path, std::ios_base::in);
     if (!blocksFile.good())
         THROW_TM_EXCEPTION << "FILE WITH BRICKS DID NOT OPEN\n";
@@ -13,7 +13,7 @@ TM::TMFocus::TMFocus(const std::string &path) {
     blocksFile >> terrCnt; //Read count of blocks
     blocksFile >> countAngles; //Read count of blocks
     this->m_blocks.resize(terrCnt);
-    std::vector<TM::TMBrickPoint> points;
+    std::vector<TM::Focus::BrickPoint> points;
     for (std::size_t i = 0; i < terrCnt; i++) {
         int countBrickUp;
         for (int j = 0; j < countAngles; j++) {
@@ -37,7 +37,7 @@ TM::TMFocus::TMFocus(const std::string &path) {
     blocksFile.close();
 }
 
-const TM::TMBlock TM::TMFocus::getBlock(std::size_t b) {
+const TM::Focus::Block TM::Focus::Focus::getBlock(std::size_t b) {
     if (b < this->m_blocks.size()) {
         return m_blocks[b];
     } else {
@@ -46,7 +46,7 @@ const TM::TMBlock TM::TMFocus::getBlock(std::size_t b) {
 }
 
 
-double TM::TMFocus::getHeigthByIndex(double lat, double lon, double t) {
+double TM::Focus::Focus::getHeigthByIndex(double lat, double lon, double t) {
     for (auto block = m_blocks.begin(); block != this->m_blocks.end(); block++) {
         if (block->has(lat, lon)) {
             return block->getUpHeihgt(t);

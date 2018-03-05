@@ -14,7 +14,7 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     m_tsunamiData(new TsunamiManagerInfo::TsunamiData(this)),
     m_mapAreaWorker(std::make_shared<TM::Map::MapAreaWorker>()),
     m_scheme(std::make_shared<TM::Scheme::TMScheme24>()),
-    m_focus(std::make_shared<TM::TMFocus>()),
+    m_focus(std::make_shared<TM::Focus::Focus>()),
     m_signal(std::make_shared<TM::TMSignal>()),
     m_timemanager(std::make_shared<TM::TMTimeManager>()),
     m_plotProvider(new TsunamiPlotProvider(m_tsunamiData, m_mapAreaWorker)),
@@ -78,7 +78,7 @@ void TsunamiManager::readBrickDataFromFile(QString path)
     {
         m_focus.reset();
     }
-    m_focus = std::make_shared<TM::TMFocus>(path.toStdString());
+    m_focus = std::make_shared<TM::Focus::Focus>(path.toStdString());
     m_tsunamiWorker->setFocus(m_focus);
 }
 

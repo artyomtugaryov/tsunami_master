@@ -55,7 +55,7 @@ private:
     TsunamiManagerInfo::TsunamiData* m_tsunamiData;
     std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
     std::shared_ptr<TM::Scheme::TMScheme24> m_scheme;
-    std::shared_ptr<TM::TMFocus> m_focus;
+    std::shared_ptr<TM::Focus::Focus> m_focus;
     std::shared_ptr<TM::TMTimeManager> m_timemanager;
     std::shared_ptr<TM::TMSignal> m_signal;
     std::shared_ptr<TM::Map::MapArea<double> > m_eta;

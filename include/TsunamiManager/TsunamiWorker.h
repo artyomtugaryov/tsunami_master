@@ -24,7 +24,7 @@ public:
     };
     explicit TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker,
                            std::shared_ptr<TM::Scheme::TMScheme24> scheme,
-                           std::shared_ptr<TM::TMFocus> focus,
+                           std::shared_ptr<TM::Focus::Focus> focus,
                            std::shared_ptr<TM::TMTimeManager> timemanager,
                            std::shared_ptr<TM::TMSignal> tmsignal,
                            QObject *parent = 0);
@@ -36,9 +36,9 @@ public:
     void setMapAreaWorker(const std::shared_ptr<TM::Map::MapAreaWorker> &mapAreaWorker);
 
     void setScheme(const std::shared_ptr<TM::Scheme::TMScheme24> &scheme);
-    void setFocus(const std::shared_ptr<TM::TMFocus> &focus);
+    void setFocus(const std::shared_ptr<TM::Focus::Focus> &focus);
     std::shared_ptr<TM::Scheme::TMScheme24> scheme() const;
-    std::shared_ptr<TM::TMFocus> focus() const;
+    std::shared_ptr<TM::Focus::Focus> focus() const;
 
 signals:
     void finished();
@@ -52,7 +52,7 @@ private:
     QString m_bathymetryPath;
     std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
     std::shared_ptr<TM::Scheme::TMScheme24> m_scheme;
-    std::shared_ptr<TM::TMFocus> m_focus;
+    std::shared_ptr<TM::Focus::Focus> m_focus;
     std::shared_ptr<TM::TMTimeManager> m_timemanager;
     std::shared_ptr<TM::TMSignal> m_signal;
     bool m_readed;

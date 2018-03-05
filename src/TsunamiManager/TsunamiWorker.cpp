@@ -4,7 +4,7 @@
 
 TsunamiWorker::TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker,
                              std::shared_ptr<TM::Scheme::TMScheme24> scheme,
-                             std::shared_ptr<TM::TMFocus> focus,
+                             std::shared_ptr<TM::Focus::Focus> focus,
                              std::shared_ptr<TM::TMTimeManager> timemanager,
                              std::shared_ptr<TM::TMSignal> tmsignal,
                              QObject *parent) :
@@ -63,12 +63,12 @@ std::shared_ptr<TM::Scheme::TMScheme24> TsunamiWorker::scheme() const
     return m_scheme;
 }
 
-std::shared_ptr<TM::TMFocus> TsunamiWorker::focus() const
+std::shared_ptr<TM::Focus::Focus> TsunamiWorker::focus() const
 {
     return m_focus;
 }
 
-void TsunamiWorker::setFocus(const std::shared_ptr<TM::TMFocus> &focus)
+void TsunamiWorker::setFocus(const std::shared_ptr<TM::Focus::Focus> &focus)
 {
     m_focus.reset();
     m_focus = focus;
