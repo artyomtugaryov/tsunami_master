@@ -47,7 +47,7 @@ const TM::Focus::Block TM::Focus::Focus::getBlock(std::size_t b) {
 }
 
 
-double TM::Focus::Focus::getHeigthByIndex(double lat, double lon, double t) {
+double TM::Focus::Focus::getHeightByIndex(double lat, double lon, double t) {
     for (auto block = m_blocks.begin(); block != this->m_blocks.end(); block++) {
         if (block->has(lat, lon)) {
             return block->getUpHeihgt(t);

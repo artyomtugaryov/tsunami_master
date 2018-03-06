@@ -51,7 +51,6 @@ namespace TM {
                 return ((rotate(a, b, c) * rotate(a, b, d)) <= 0) && ((rotate(c, d, a) * rotate(c, d, b)) < 0);
             }
 
-
             void build_block(std::vector<TM::Focus::BrickPoint> points) {
                 auto n = points.size();
                 std::sort(points.begin(), points.end());
@@ -69,6 +68,9 @@ namespace TM {
                     }
                 }
                 m_points.resize(n);
+                if (points[*p.begin()].m_y > points[*p.end()].m_y){
+                    std::reverse(std::begin(p), std::end(p));
+                }
                 for (size_t i(0); i < n; i++) {
                     m_points[i] = points[p[i]];
                 }
