@@ -69,7 +69,7 @@ namespace TM {
                 }
                 m_points.resize(n);
                 if (points[*p.begin()].m_y > points[*p.end()].m_y){
-                    std::reverse(std::begin(p), std::end(p));
+                    std::reverse(std::begin(p), std::end(p)-1);
                 }
                 for (size_t i(0); i < n; i++) {
                     m_points[i] = points[p[i]];

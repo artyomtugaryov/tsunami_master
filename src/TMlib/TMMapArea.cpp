@@ -133,8 +133,8 @@ void TM::Map::MapArea<DataType>::setDataByPoint(double latitude, double longitud
 template<typename DataType>
 void TM::Map::MapArea<DataType>::saveMapAreaToTextFile(std::string path, int setprecision) const {
     //TODO: Will need check rounding for different data types.
-    std::fstream file;
-    file.open(path.c_str(), std::fstream::out);
+//    std::fstream file;
+//    file.open(path.c_str(), std::fstream::out);
     //TODO: Remove after resolve problem with brick
     double max = *std::max_element(m_data.begin(), m_data.end());
     double min = *std::min_element(m_data.begin(), m_data.end());
@@ -142,7 +142,8 @@ void TM::Map::MapArea<DataType>::saveMapAreaToTextFile(std::string path, int set
 //    for (std::size_t y = 0; y < m_sizeY; y++) {
 //        for (std::size_t x = 0; x < m_sizeX; x++) {
 //            file << std::fixed << std::setprecision(setprecision) << m_data[getIndex(x, y)] << " ";
-//            file << "\t";
+//            file << "\t"
+
 //            //TODO: Remove after resolve problem with brick
 //
 //            //END TODO
