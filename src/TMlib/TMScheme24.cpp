@@ -263,12 +263,12 @@ double TM::Scheme::TMScheme24::directGradientByPhi(const std::shared_ptr<const T
                                                    const double &tetta,
                                                    const double &phi,
                                                    const double &dPhi) {
-    return w->getIndexByPoint(tetta, phi) - w->getIndexByPoint(tetta, phi + dPhi);
+    return w->getIndexByPoint(tetta, phi) - w->getIndexByPoint(tetta, phi - dPhi);
 }
 
 double TM::Scheme::TMScheme24::directGradientByTetta(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
                                                      const double &tetta,
                                                      const double &phi,
                                                      const double &dTetta) {
-    return w->getIndexByPoint(tetta, phi) - w->getIndexByPoint(tetta + dTetta, phi);
+    return w->getIndexByPoint(tetta, phi) - w->getIndexByPoint(tetta - dTetta, phi);
 }

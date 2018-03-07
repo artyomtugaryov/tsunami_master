@@ -86,6 +86,7 @@ namespace TM {
                                        const double &dTetta);
 
 
+
             std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> m_types_cells;
             std::shared_ptr<TM::Map::MapArea<double>> m_B0;
             std::shared_ptr<TM::Map::MapArea<double>> m_B1;

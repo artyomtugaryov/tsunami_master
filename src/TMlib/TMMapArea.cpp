@@ -12,7 +12,7 @@ TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY, DataTy
 
 
 template<typename DataType>
-std::size_t TM::Map::MapArea<DataType>::getIndex(std::size_t x, std::size_t y) const {
+std::size_t TM::Map::MapArea<DataType>::getIndex(const std::size_t &x, const std::size_t &y) const {
     if (x >= m_sizeX || y >= m_sizeY) {
         THROW_TM_EXCEPTION << "Out of range in ("<<x<<","<<y<<") " << __FUNCTION__;
     }
@@ -67,7 +67,7 @@ double TM::Map::MapArea<DataType>::endY() const noexcept {
 }
 
 template<typename DataType>
-DataType TM::Map::MapArea<DataType>::getDataByIndex(std::size_t x, std::size_t y) const {
+DataType TM::Map::MapArea<DataType>::getDataByIndex(const std::size_t &x, const std::size_t &y) const {
     return m_data[getIndex(x, y)];
 }
 
