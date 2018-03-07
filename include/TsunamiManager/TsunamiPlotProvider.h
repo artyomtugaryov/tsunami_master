@@ -28,6 +28,7 @@ public:
     void setMapAreaWorker(const std::shared_ptr<TM::Map::MapAreaWorker> &mapAreaWorker);
     void setEta(const std::shared_ptr<TM::Map::MapArea<double> > &eta);
     void setColorBarMap(const std::shared_ptr<PlotLib::ColorMap> &colorBarMap);
+
 private:
     void plotBathametry();
 

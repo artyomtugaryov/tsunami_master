@@ -16,7 +16,7 @@ class Plot2d : public QObject
     Q_OBJECT
 public:
     Plot2d(QObject *parent = 0, QImage* image = nullptr);
-    virtual ~Plot2d();
+    virtual ~Plot2d() = default;
     void resize();
     void setWindow(QRect window);
     void setRegion(QRectF region);

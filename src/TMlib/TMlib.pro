@@ -32,7 +32,13 @@ HEADERS += $${_PRO_FILE_PWD_}/../../include/TMlib/TMMapArea.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMTimeManager.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMCommon.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMConstants.h \
-    ../../include/TMlib/TMSignal.h
+           ../../include/TMlib/TMSignal.h
+           $${_PRO_FILE_PWD_}/../../include/PlotLib \
+
+#TODO: For test. Remove after all work with calculation part.
+INCLUDEPATH += $${_PRO_FILE_PWD_}/../../include/PlotLib/
+LIBS += -lPlotLib$${LIB_SUFFIX}
+#TODO END
 
 QMAKE_CXXFLAGS += -fopenmp
 LIBS += -fopenmp

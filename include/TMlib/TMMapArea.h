@@ -6,6 +6,10 @@
 #include <vector>
 #include <algorithm>
 
+//TODO: For test. Remove after all work with calculation part.
+#include <QString>
+//TODO END
+
 namespace TM {
     namespace Map {
         template<typename DataType>
@@ -73,6 +77,11 @@ namespace TM {
             DataType max(){
                 return *std::max_element(m_data.begin(), m_data.end());
             }
+
+            //TODO: For test. Remove after all work with calculation part.
+            void savePlotMapArea(std::string savePath,
+                                     const std::shared_ptr<const TM::Map::MapArea<double> > bath);
+            //TODO END.
 
         private:
             std::size_t m_sizeX;

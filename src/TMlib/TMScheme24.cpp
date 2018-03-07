@@ -80,6 +80,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
         }
         //TODO: Remove after resolve problem with brick
         newEta->saveMapAreaToTextFile("eta.dat", 1);
+        newEta->savePlotMapArea(std::to_string(t) + std::string(".png"), area->bathymetry());
         // END TODO
     }
     clock_t end = clock();
