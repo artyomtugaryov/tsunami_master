@@ -22,6 +22,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
             auto tetta2 = area->getLongitudeByIndex(j + 1. / 2.);
             auto tetta_2 = area->getLongitudeByIndex(j - 1. / 2.);
             auto M = dt / (2 * R_EACH * sin(tetta));
+            std::cout<<" "<<sin(tetta)<<std::endl;
 //#pragma omp parallel for  shared(dPhi, dTetta, dt, tetta, tetta2, tetta_2) private(k)
             for (k = 1; k < maxX; k++) {
                 auto phi = area->getLatitudeByIndex(k);
@@ -184,10 +185,10 @@ double TM::Scheme::TMScheme24::calcMainValueEta(const std::shared_ptr<TM::Map::M
     auto Hk_1j0 = area->bathymetry()->getDataByIndex(k - 1, j);
 
     //Getting height of the upping
-    auto oldBk0j0 = m_B1->getDataByIndex(k, j);
-    auto oldBk0j_1 = m_B1->getDataByIndex(k, j - 1);
-    auto oldBk_1j0 = m_B1->getDataByIndex(k - 1, j);
-    auto newBk0j0 = m_B0->getDataByIndex(k, j);
+    auto oldBk0j0 = m_B0->getDataByIndex(k, j);
+    auto oldBk0j_1 = m_B0->getDataByIndex(k, j - 1);
+    auto oldBk_1j0 = m_B0->getDataByIndex(k - 1, j);
+    auto newBk0j0 = m_B1->getDataByIndex(k, j);
 
     auto eta0 = area->eta()->getDataByIndex(k, j);
 
