@@ -4,6 +4,7 @@
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMMapArea.h>
 #include <TMlib/TMScheme.h>
+//#include <QtGui/qopengles2ext.h>
 
 namespace TM {
     namespace Scheme {
@@ -41,6 +42,8 @@ namespace TM {
             double calcUVelocity(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
                                  const std::size_t &k,
                                  const std::size_t &j,
+                                 const double &Tetta,
+                                 const double &Phi,
                                  const double &dTetta,
                                  const double &M,
                                  const double &f,
@@ -51,8 +54,9 @@ namespace TM {
             double calcVVelocity(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
                                  const std::size_t &k,
                                  const std::size_t &j,
-                                 const double &dPhi,
                                  const double &Tetta,
+                                 const double &Phi,
+                                 const double &dPhi,
                                  const double &M,
                                  const double &f,
                                  const double &v,
@@ -70,6 +74,16 @@ namespace TM {
                                              const std::size_t &j,
                                              const double &dPhi,
                                              const double &dTetta);
+
+            double directGradientByPhi(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
+                                       const double &tetta,
+                                       const double &phi,
+                                       const double &dPhi);
+
+            double directGradientByTetta(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
+                                       const double &tetta,
+                                       const double &phi,
+                                       const double &dTetta);
 
 
             std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> m_types_cells;
