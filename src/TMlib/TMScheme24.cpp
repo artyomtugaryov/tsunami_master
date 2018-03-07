@@ -16,13 +16,13 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
         auto dt = this->m_time->step();
         std::shared_ptr<TM::Map::MapArea<double>> newEta =
                 std::make_shared<TM::Map::MapArea<double>>(area->getMaxXIndex(), area->getMaxYIndex(), 0);
-//#pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
+#pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
         for (j = 1; j < maxY; j++) {
-            auto tetta = area->getLongitudeByIndex(j);
-            auto tetta2 = area->getLongitudeByIndex(j + 1. / 2.);
-            auto tetta_2 = area->getLongitudeByIndex(j - 1. / 2.);
+            auto tetta = area->getLatitudeByIndex(j);
+            auto tetta2 = area->getLatitudeByIndex(j + 1. / 2.);
+            auto tetta_2 = area->getLatitudeByIndex(j - 1. / 2.);
             auto M = dt / (2 * R_EACH * sin(tetta));
-//#pragma omp parallel for  shared(dPhi, dTetta, dt, tetta, tetta2, tetta_2) private(k)
+#pragma omp parallel for  shared(dPhi, dTetta, dt, tetta, tetta2, tetta_2) private(k)
             for (k = 1; k < maxX; k++) {
                 auto phi = area->getLatitudeByIndex(k);
                 switch (this->m_types_cells->getDataByIndex(k, j)) {
