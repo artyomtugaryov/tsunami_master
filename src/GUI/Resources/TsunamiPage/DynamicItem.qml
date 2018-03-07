@@ -32,6 +32,15 @@ Item {
         }
     }
 
+    onMinWidthChanged: {
+        if (maxWidth > 0) {
+            if (root.width > maxWidth) root.width = maxWidth
+        }
+        if (minWidth > 0) {
+            if (root.width < minWidth) root.width = minWidth
+        }
+    }
+
     Rectangle {
         id: selComp
         anchors.fill: parent

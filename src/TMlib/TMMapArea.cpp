@@ -20,9 +20,9 @@ std::size_t TM::Map::MapArea<DataType>::getIndex(std::size_t x, std::size_t y) c
 }
 
 template<typename DataType>
-std::size_t TM::Map::MapArea<DataType>::getIndexByPoint(double lat, double lon) const {
-    std::size_t x = static_cast<std::size_t>(((lat - m_startX) / m_stepX) + 0.5);
-    std::size_t y = m_sizeY - 1 - static_cast<std::size_t>(((lon - m_startY) / m_stepY) + 0.5);
+std::size_t TM::Map::MapArea<DataType>::getIndexByPoint(double lon, double lat) const {
+    std::size_t x = static_cast<std::size_t>(std::round((lon - m_startX) / m_stepX));
+    std::size_t y = m_sizeY - 1 - static_cast<std::size_t>(std::round((lat - m_startY) / m_stepY));
     return getIndex(x, y);
 }
 
@@ -72,8 +72,8 @@ DataType TM::Map::MapArea<DataType>::getDataByIndex(std::size_t x, std::size_t y
 }
 
 template<typename DataType>
-DataType TM::Map::MapArea<DataType>::getDataByPoint(double latitude, double longitude) const {
-    return m_data[getIndexByPoint(latitude, longitude)];
+DataType TM::Map::MapArea<DataType>::getDataByPoint(double longitude, double latitude) const {
+    return m_data[getIndexByPoint(longitude, latitude)];
 }
 
 template<typename DataType>
@@ -126,23 +126,33 @@ void TM::Map::MapArea<DataType>::setDataByIndex(std::size_t& x, std::size_t& y, 
 }
 
 template<typename DataType>
-void TM::Map::MapArea<DataType>::setDataByPoint(double latitude, double longitude, DataType value) {
-    m_data[getIndexByPoint(latitude, longitude)] = value;
+void TM::Map::MapArea<DataType>::setDataByPoint(double longitude, double latitude, DataType value) {
+    m_data[getIndexByPoint(longitude, latitude)] = value;
 }
 
 template<typename DataType>
 void TM::Map::MapArea<DataType>::saveMapAreaToTextFile(std::string path, int setprecision) const {
     //TODO: Will need check rounding for different data types.
-    std::fstream file;
-    file.open(path.c_str(), std::fstream::out);
+//    std::fstream file;
+//    file.open(path.c_str(), std::fstream::out);
+    //TODO: Remove after resolve problem with brick
+    double max = *std::max_element(m_data.begin(), m_data.end());
+    double min = *std::min_element(m_data.begin(), m_data.end());
+    //END TODO
+//    for (std::size_t y = 0; y < m_sizeY; y++) {
+//        for (std::size_t x = 0; x < m_sizeX; x++) {
+//            file << std::fixed << std::setprecision(setprecision) << m_data[getIndex(x, y)] << " ";
+//            file << "\t"
 
-    for (std::size_t y = 0; y < m_sizeY; y++) {
-        for (std::size_t x = 0; x < m_sizeX; x++) {
-            file << std::fixed << std::setprecision(setprecision) << m_data[getIndex(x, y)] << " ";
-            file << "\t";
-        }
-        file << std::endl;
-    }
+//            //TODO: Remove after resolve problem with brick
+//
+//            //END TODO
+//        }
+//        file << std::endl;
+//    }
+    //TODO: Remove after resolve problem with brick
+    std::cout <<  max <<"\t"<<min<< std::endl;
+    //END TODO
 }
 
 template<typename DataType>

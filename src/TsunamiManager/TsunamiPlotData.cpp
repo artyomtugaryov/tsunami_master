@@ -17,16 +17,16 @@ TsunamiPlotData::TsunamiPlotData(QObject *parent) :
     m_stepX(0),
     m_stepY(0),
     m_stepColorBar(0),
-    m_isColorBarIntervalsAreCorrect(true),
-    m_colorBarMap({{-3, QColor(38, 0, 255)},
-{-0.1, QColor(222, 255, 248)},
-{0, QColor(222, 255, 248)},
-{1, QColor(128, 0, 128)},
-{3, QColor(255, 0, 0)},
-{5, QColor(255, 128, 0)},
-{8, QColor(255, 255, 0)},
-{11, QColor(0, 255, 0 )}})
+    m_colorBarMap(new PlotLib::ColorMap({{-3, QColor(38, 0, 255)},
+                    {-0.1, QColor(222, 255, 248)},
+                    {0, QColor(222, 255, 248)},
+                    {1, QColor(128, 0, 128)},
+                    {3, QColor(255, 0, 0)},
+                    {5, QColor(255, 128, 0)},
+                    {8, QColor(255, 255, 0)},
+                    {11, QColor(0, 255, 0 )}}))
 {
+
     m_colorBarIntervals << -3 << 0 << 1 << 3 << 5 << 8 << 11;
 
     m_colors << QColor(38, 0, 255).name()
@@ -92,11 +92,6 @@ uint TsunamiPlotData::stepY() const
 uint TsunamiPlotData::stepColorBar() const
 {
     return m_stepColorBar;
-}
-
-bool TsunamiPlotData::isColorBarIntervalsAreCorrect() const
-{
-    return m_isColorBarIntervalsAreCorrect;
 }
 
 QList<double> TsunamiPlotData::colorBarIntervals() const
@@ -208,20 +203,10 @@ void TsunamiPlotData::setStepColorBar(uint stepColorBar)
     emit stepColorBarChanged(stepColorBar);
 }
 
-void TsunamiPlotData::setIsColorBarIntervalsAreCorrect(bool isColorBarIntervalsAreCorrect)
+void TsunamiPlotData::setColorIntervalByIndex(QString color, double interval, uint index)
 {
-    if (m_isColorBarIntervalsAreCorrect == isColorBarIntervalsAreCorrect)
-        return;
-
-    m_isColorBarIntervalsAreCorrect = isColorBarIntervalsAreCorrect;
-    emit isColorBarIntervalsAreCorrectChanged(isColorBarIntervalsAreCorrect);
-}
-
-void TsunamiPlotData::setColorIntervalByIndex(QColor color, double interval, uint index)
-{
-    Q_UNUSED(color)
-    Q_UNUSED(interval)
-    Q_UNUSED(index)
+    m_colors[index] = color;
+    m_colorBarIntervals[index] = interval;
 }
 
 void TsunamiPlotData::setColorBarMap()
@@ -234,7 +219,7 @@ void TsunamiPlotData::setColorBarMap()
         colorBar << a;
     }
 
-    m_colorBarMap.resetColorMap({{m_colorBarIntervals[0], colorBar[0]},
+    m_colorBarMap->resetColorMap({{m_colorBarIntervals[0], colorBar[0]},
                               {-0.01, colorBar[1]},
                               {m_colorBarIntervals[1], colorBar[1]},
                               {m_colorBarIntervals[2], colorBar[2]},
@@ -242,12 +227,8 @@ void TsunamiPlotData::setColorBarMap()
                               {m_colorBarIntervals[4], colorBar[4]},
                               {m_colorBarIntervals[5], colorBar[5]},
                               {m_colorBarIntervals[6], colorBar[6]}});
+    emit colorBarChanged(m_colorBarMap);
 }
-
-//PlotLib::ColorMap TsunamiPlotData::colorBarMap() const
-//{
-//    return m_colorBarMap;
-//}
 
 TsunamiPlotData::~TsunamiPlotData() {}
 

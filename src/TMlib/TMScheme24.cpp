@@ -11,23 +11,24 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
     size_t j(0), k(0);
     auto dPhi = area->getStepPhi();
     auto dTetta = area->getStepTetta();
-    auto Hm = area->bathymetry()->getMinValue();
     clock_t begin = clock();
     for (double t = 0; t <= timeEnd; t += m_time->step()) {
         auto dt = this->m_time->step();
         std::shared_ptr<TM::Map::MapArea<double>> newEta =
                 std::make_shared<TM::Map::MapArea<double>>(area->getMaxXIndex(), area->getMaxYIndex(), 0);
-#pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
+//#pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
         for (j = 1; j < maxY; j++) {
             auto tetta = area->getLongitudeByIndex(j);
             auto tetta2 = area->getLongitudeByIndex(j + 1. / 2.);
             auto tetta_2 = area->getLongitudeByIndex(j - 1. / 2.);
             auto M = dt / (2 * R_EACH * sin(tetta));
-#pragma omp parallel for  shared(dPhi, dTetta, dt, tetta, tetta2, tetta_2) private(k)
+            std::cout<<" "<<sin(tetta)<<std::endl;
+//#pragma omp parallel for  shared(dPhi, dTetta, dt, tetta, tetta2, tetta_2) private(k)
             for (k = 1; k < maxX; k++) {
+                auto phi = area->getLatitudeByIndex(k);
                 switch (this->m_types_cells->getDataByIndex(k, j)) {
                     case WATER: {
-                        auto Up = this->m_focus->getHeigthByIndex(k, j, t);
+                        auto Up = this->m_focus->getHeightByIndex(phi, tetta, t);
                         m_B0->setDataByIndex(k, j, m_B1->getDataByIndex(k, j));
                         m_B1->setDataByIndex(k, j, m_B1->getDataByIndex(k, j) + Up);
                         newEta->setDataByIndex(k, j, this->calcMainValueEta(area, k, j, dt, dPhi, dTetta, tetta, tetta2,
@@ -77,33 +78,39 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
         if (!fmod(t, m_time->sendingTimeStep())) {
             m_signal->emitSignal(newEta);
         }
+        //TODO: Remove after resolve problem with brick
+        newEta->saveMapAreaToTextFile("eta.dat", 1);
+        // END TODO
     }
     clock_t end = clock();
     std::cout << "Time of calculation is: " << double(end - begin) * 1000. / CLOCKS_PER_SEC << " ms." << std::endl;
 }
 
 double TM::Scheme::TMScheme24::getTimeStep(const double &dPhi, const double &dTetta, const double Hm) const {
+
     auto M = sqrt(1.0 + sqrt(TM::Common::coefCoriolis(0) + 1) / 2.0);
     auto dt = (M * R_EACH * dPhi * dTetta) / sqrt(G * fabs(Hm) * (dPhi * dPhi + dTetta * dTetta));
     return dt;
 }
 
 void TM::Scheme::TMScheme24::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
-                                       const std::shared_ptr<const TM::TMFocus> &focus,
+                                       const std::shared_ptr<const TM::Focus::Focus> &focus,
                                        const double &izobata,
-                                       const std::shared_ptr<TMTimeManager> &sender) {
+                                       const std::shared_ptr<TMTimeManager> &sender,
+                                       const std::shared_ptr<TMSignal> &signal) {
     this->setTypesOfCells(area, izobata);
     if (focus) {
-        this->m_focus = std::make_shared<TM::TMFocus>(*focus);
+        this->m_focus = std::make_shared<TM::Focus::Focus>(*focus);
     } else {
         std::cout << "[ WARNING ] Focus did not set." << std::endl;
-        this->m_focus = std::make_shared<TM::TMFocus>();
+        this->m_focus = std::make_shared<TM::Focus::Focus>();
     }
     this->setUpBArrays(area->getMaxXIndex(), area->getMaxXIndex());
     this->m_time = sender;
+    this->m_signal = signal;
     auto dPhi = area->getStepPhi();
     auto dTetta = area->getStepTetta();
-    auto Hm = area->bathymetry()->getMinValue();
+    auto Hm = area->getMaxDepth();
     this->m_time->setMaxTimeStep(getTimeStep(dPhi, dTetta, Hm));
 }
 
@@ -178,10 +185,10 @@ double TM::Scheme::TMScheme24::calcMainValueEta(const std::shared_ptr<TM::Map::M
     auto Hk_1j0 = area->bathymetry()->getDataByIndex(k - 1, j);
 
     //Getting height of the upping
-    auto oldBk0j0 = m_B1->getDataByIndex(k, j);
-    auto oldBk0j_1 = m_B1->getDataByIndex(k, j - 1);
-    auto oldBk_1j0 = m_B1->getDataByIndex(k - 1, j);
-    auto newBk0j0 = m_B0->getDataByIndex(k, j);
+    auto oldBk0j0 = m_B0->getDataByIndex(k, j);
+    auto oldBk0j_1 = m_B0->getDataByIndex(k, j - 1);
+    auto oldBk_1j0 = m_B0->getDataByIndex(k - 1, j);
+    auto newBk0j0 = m_B1->getDataByIndex(k, j);
 
     auto eta0 = area->eta()->getDataByIndex(k, j);
 

@@ -20,6 +20,7 @@ HEADERS += $${_PRO_FILE_PWD_}/../../include/TsunamiManager/TsunamiManager.h \
            $${_PRO_FILE_PWD_}/../../include/TsunamiManager/TsunamiWorker.h \
            $${_PRO_FILE_PWD_}/../../include/TsunamiManager/TsunamiPlotProvider.h \
            $${_PRO_FILE_PWD_}/../../include/PlotLib \
+           $${_PRO_FILE_PWD_}/../../include/TMlib/TMSignal.h \
 
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../../include/TMlib/
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../../include/PlotLib/

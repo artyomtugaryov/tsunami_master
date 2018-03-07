@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <algorithm>
 
 namespace TM {
     namespace Map {
@@ -37,7 +38,7 @@ namespace TM {
 
             DataType getDataByIndex(std::size_t x, std::size_t y) const;
 
-            DataType getDataByPoint(double latitude, double longitude) const;
+            DataType getDataByPoint(double longitude, double latitude) const;
 
             void setSizeX(std::size_t sizeX);
 
@@ -57,13 +58,21 @@ namespace TM {
 
             void setDataByIndex(std::size_t& x, std::size_t& y, DataType value);
 
-            void setDataByPoint(double latitude, double longitude, DataType value);
+            void setDataByPoint(double longitude, double latitude, DataType value);
 
             void saveMapAreaToTextFile(std::string path, int setprecision) const;
 
             void saveMapAreaToBinFile(std::string path);
 
             const DataType getMinValue() const;
+
+            DataType min(){
+                return *std::min_element(m_data.begin(), m_data.end());
+            }
+
+            DataType max(){
+                return *std::max_element(m_data.begin(), m_data.end());
+            }
 
         private:
             std::size_t m_sizeX;

@@ -35,9 +35,9 @@ namespace TM {
 
             const std::shared_ptr<TM::Map::MapArea<double>> vVelocity() noexcept;
 
-            double getLatitudeByIndex(double i) const noexcept;
+            double getLatitudeByIndex(const double i) const noexcept;
 
-            double getLongitudeByIndex(double i) const noexcept;
+            double getLongitudeByIndex(const double i) const noexcept;
 
             double getStepX() const noexcept;
 
@@ -47,7 +47,7 @@ namespace TM {
 
             double getStepTetta() const noexcept;
 
-            double getMaxDepth() const noexcept ;
+            double getMaxDepth() const noexcept;
 
         private:
             std::shared_ptr<MapArea<double>> m_eta;

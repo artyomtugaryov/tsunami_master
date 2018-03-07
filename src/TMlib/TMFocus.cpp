@@ -1,9 +1,10 @@
-#include "TMlib/TMFocus.h"
-#include "TMlib/TMException.h"
 #include <fstream>
 #include <iostream>
 
-TM::TMFocus::TMFocus(const std::string &path) {
+#include "TMlib/TMFocus.h"
+#include "TMlib/TMException.h"
+
+TM::Focus::Focus::Focus(const std::string &path) {
     std::fstream blocksFile(path, std::ios_base::in);
     if (!blocksFile.good())
         THROW_TM_EXCEPTION << "FILE WITH BRICKS DID NOT OPEN\n";
@@ -12,18 +13,17 @@ TM::TMFocus::TMFocus(const std::string &path) {
     blocksFile >> terrCnt; //Read count of blocks
     blocksFile >> countAngles; //Read count of blocks
     this->m_blocks.resize(terrCnt);
-
-
+    std::vector<TM::Focus::BrickPoint> points;
     for (std::size_t i = 0; i < terrCnt; i++) {
         int countBrickUp;
         for (int j = 0; j < countAngles; j++) {
             double x(0), y(0);
             blocksFile >> x;
             blocksFile >> y;
-            this->m_blocks[i].m_points.emplace_back(x, y);
+            points.emplace_back(x, y);
         }
-
-        blocksFile >> m_blocks[i].m_beginT;
+        m_blocks[i].build_block(points);
+        blocksFile >> m_blocks[i].m_beginT ;
         blocksFile >> countBrickUp;
 
         for (int j = 0; j < countBrickUp; j++) {
@@ -33,12 +33,12 @@ TM::TMFocus::TMFocus(const std::string &path) {
             blocksFile >> tmpHeightUp;
             m_blocks[i].m_numberUp.emplace_back(tmpBrickUpT, tmpHeightUp);
         }
+        points.clear();
     }
-
     blocksFile.close();
 }
 
-const TM::TMBlock TM::TMFocus::getBlock(std::size_t b) {
+const TM::Focus::Block TM::Focus::Focus::getBlock(std::size_t b) {
     if (b < this->m_blocks.size()) {
         return m_blocks[b];
     } else {
@@ -47,7 +47,7 @@ const TM::TMBlock TM::TMFocus::getBlock(std::size_t b) {
 }
 
 
-double TM::TMFocus::getHeigthByIndex(double lat, double lon, double t) {
+double TM::Focus::Focus::getHeightByIndex(double lat, double lon, double t) {
     for (auto block = m_blocks.begin(); block != this->m_blocks.end(); block++) {
         if (block->has(lat, lon)) {
             return block->getUpHeihgt(t);

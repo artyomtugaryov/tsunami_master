@@ -17,9 +17,10 @@ namespace TM {
                              const double &timeEnd) override;
 
             void configure(const std::shared_ptr<const Map::MapAreaWorker> &area,
-                           const std::shared_ptr<const TMFocus> &focus,
+                           const std::shared_ptr<const Focus::Focus> &focus,
                            const double &izobata,
-                           const std::shared_ptr<TMTimeManager> &sender);
+                           const std::shared_ptr<TMTimeManager> &sender,
+                           const std::shared_ptr<TMSignal> &signal);
 
             double getTimeStep(const double &dPhi, const double &dTetta, const double Hm) const;
 

@@ -6,16 +6,23 @@
 #include <string>
 
 namespace TM {
-    class TMFocus {
-    public:
-        TMFocus() = default;
-        TMFocus(const std::string&);
-        std::size_t getBlockCount(){ return this->m_blocks.size();}
-        const TM::TMBlock getBlock(std::size_t b);
-        double getHeigthByIndex(double i, double j, double t);
-    private:
-        std::vector<TM::TMBlock> m_blocks;
-    };
+    namespace Focus {
+        class Focus {
+        public:
+            Focus() = default;
+
+            Focus(const std::string &);
+
+            std::size_t getBlockCount() { return this->m_blocks.size(); }
+
+            const TM::Focus::Block getBlock(std::size_t b);
+
+            double getHeightByIndex(double i, double j, double t);
+
+        private:
+            std::vector<TM::Focus::Block> m_blocks;
+        };
+    }
 }
 
 #endif //TSUNAMIMANAGER_TMFOCUS_H

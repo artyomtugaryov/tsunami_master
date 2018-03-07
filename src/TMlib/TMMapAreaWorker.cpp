@@ -18,8 +18,8 @@ TM::Map::MapAreaWorker::MapAreaWorker(const std::string &path) {
 }
 
 void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
-    std::vector<double> longitude; // y
-    std::vector<double> latitude;  // x
+    std::vector<double> longitude; // x
+    std::vector<double> latitude;  // y
     std::vector<double> depth;
     std::fstream infile(m_bathymetryPath.c_str(), std::ios_base::in);
     if (!infile.is_open()) {
@@ -30,13 +30,13 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
     double maxX(0);
     double minY(0);
     double maxY(0);
-    double datX(0); // latitude
-    double datY(0); // longitude
+    double datX(0); // longitude
+    double datY(0); // latitude
     double datZ(0); // depth
     while (!infile.eof()) {
         infile >> datX >> datY >> datZ;
-        latitude.push_back(datX);
-        longitude.push_back(datY);
+        longitude.push_back(datX);
+        latitude.push_back(datY);
         depth.push_back(datZ);
     }
 
@@ -46,16 +46,16 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
         THROW_TM_EXCEPTION << "Error of reading bathymetry file\n";
     }
 
-    std::vector<double> lat_uniq(latitude), long_uniq(longitude);
+    std::vector<double> long_uniq(longitude), lat_uniq(latitude);
     std::sort(lat_uniq.begin(), lat_uniq.end());
     std::sort(long_uniq.begin(), long_uniq.end());
     std::size_t sizeX = static_cast<std::size_t>(std::unique(lat_uniq.begin(), lat_uniq.end()) - lat_uniq.begin());
     std::size_t sizeY = static_cast<std::size_t>(std::unique(long_uniq.begin(), long_uniq.end()) - long_uniq.begin());
 
-    maxX = *std::max_element(latitude.begin(), latitude.end());
-    maxY = *std::max_element(longitude.begin(), longitude.end());
-    minX = *std::min_element(latitude.begin(), latitude.end());
-    minY = *std::min_element(longitude.begin(), longitude.end());
+    maxX = *std::max_element(longitude.begin(), longitude.end());
+    maxY = *std::max_element(latitude.begin(), latitude.end());
+    minX = *std::min_element(longitude.begin(), longitude.end());
+    minY = *std::min_element(latitude.begin(), latitude.end());
 
     m_bathymetry = std::make_shared<TM::Map::MapArea<double>>(sizeX, sizeY);
 
@@ -63,17 +63,13 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
     m_bathymetry->setStepY((maxY - minY) / (sizeY - 1));
     m_bathymetry->setEndX(maxX);
     m_bathymetry->setEndY(maxY);
-//    m_bathymetry->setEndX(maxX + m_bathymetry->stepX() / 2.);
-//    m_bathymetry->setEndY(maxY + m_bathymetry->stepY() / 2.);
     m_bathymetry->setSizeX(sizeX);
     m_bathymetry->setSizeY(sizeY);
     m_bathymetry->setStartX(minX);
     m_bathymetry->setStartY(minY);
-//    m_bathymetry->setStartX(minX - m_bathymetry->stepX() / 2.);
-//    m_bathymetry->setStartY(minY - m_bathymetry->stepY() / 2.);
 
     for (std::size_t k = 0; k < static_cast<std::size_t >(depth.size()); k++) {
-        m_bathymetry->setDataByPoint(latitude[k], longitude[k], depth[k]);
+        m_bathymetry->setDataByPoint(longitude[k], latitude[k], depth[k]);
     }
     this->m_uVelocity = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
     this->m_vVelocity = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
@@ -142,12 +138,12 @@ size_t TM::Map::MapAreaWorker::getMaxYIndex() const {
     return m_bathymetry->sizeY();
 }
 
-double TM::Map::MapAreaWorker::getLatitudeByIndex(double i) const noexcept {
-    return m_bathymetry->startY() + m_bathymetry->stepY() * i;
+double TM::Map::MapAreaWorker::getLongitudeByIndex(const double i) const noexcept {
+    return m_bathymetry->startX() + m_bathymetry->stepX() * i;
 }
 
-double TM::Map::MapAreaWorker::getLongitudeByIndex(double i) const noexcept {
-    return m_bathymetry->startX() + m_bathymetry->stepX() * i;
+double TM::Map::MapAreaWorker::getLatitudeByIndex(const double i) const noexcept {
+    return m_bathymetry->startY() + m_bathymetry->stepY() * i;
 }
 
 double TM::Map::MapAreaWorker::getStepX() const noexcept {
@@ -159,9 +155,13 @@ double TM::Map::MapAreaWorker::getStepY() const noexcept {
 }
 
 double TM::Map::MapAreaWorker::getStepPhi() const noexcept {
-    return getStepX();
+    return getStepY();
 }
 
 double TM::Map::MapAreaWorker::getStepTetta() const noexcept {
-    return getStepY();
+    return getStepX();
+}
+
+double TM::Map::MapAreaWorker::getMaxDepth() const noexcept {
+    return m_bathymetry->getMinValue();
 }
