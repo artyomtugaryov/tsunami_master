@@ -20,9 +20,9 @@ std::size_t TM::Map::MapArea<DataType>::getIndex(std::size_t x, std::size_t y) c
 }
 
 template<typename DataType>
-std::size_t TM::Map::MapArea<DataType>::getIndexByPoint(double lat, double lon) const {
-    std::size_t x = static_cast<std::size_t>(((lat - m_startX) / m_stepX) + 0.5);
-    std::size_t y = m_sizeY - 1 - static_cast<std::size_t>(((lon - m_startY) / m_stepY) + 0.5);
+std::size_t TM::Map::MapArea<DataType>::getIndexByPoint(double lon, double lat) const {
+    std::size_t x = static_cast<std::size_t>(std::round((lon - m_startX) / m_stepX));
+    std::size_t y = m_sizeY - 1 - static_cast<std::size_t>(std::round((lat - m_startY) / m_stepY));
     return getIndex(x, y);
 }
 
@@ -72,8 +72,8 @@ DataType TM::Map::MapArea<DataType>::getDataByIndex(std::size_t x, std::size_t y
 }
 
 template<typename DataType>
-DataType TM::Map::MapArea<DataType>::getDataByPoint(double latitude, double longitude) const {
-    return m_data[getIndexByPoint(latitude, longitude)];
+DataType TM::Map::MapArea<DataType>::getDataByPoint(double longitude, double latitude) const {
+    return m_data[getIndexByPoint(longitude, latitude)];
 }
 
 template<typename DataType>
@@ -126,8 +126,8 @@ void TM::Map::MapArea<DataType>::setDataByIndex(std::size_t& x, std::size_t& y, 
 }
 
 template<typename DataType>
-void TM::Map::MapArea<DataType>::setDataByPoint(double latitude, double longitude, DataType value) {
-    m_data[getIndexByPoint(latitude, longitude)] = value;
+void TM::Map::MapArea<DataType>::setDataByPoint(double longitude, double latitude, DataType value) {
+    m_data[getIndexByPoint(longitude, latitude)] = value;
 }
 
 template<typename DataType>
