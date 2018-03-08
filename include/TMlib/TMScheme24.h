@@ -33,10 +33,15 @@ namespace TM {
             void setUpBArrays(std::size_t &&x, std::size_t &&y);
 
             double calcMainValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
-                                    const std::size_t &k, const std::size_t &j,
-                                    const double &dt, const double &dPhi,
-                                    const double &dTetta, const double &tetta,
-                                    const double &tetta2, const double &tetta_2,
+                                    const std::size_t &j,
+                                    const std::size_t &k,
+                                    const double &dt,
+                                    const double &dPhi,
+                                    const double &dTetta,
+                                    const double &tetta,
+                                    const double &phi,
+                                    const double &tetta2,
+                                    const double &tetta_2,
                                     const double &M);
 
             double calcUVelocity(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
@@ -75,17 +80,15 @@ namespace TM {
                                              const double &dPhi,
                                              const double &dTetta);
 
-            double directGradientByPhi(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
-                                       const double &tetta,
-                                       const double &phi,
-                                       const double &dPhi);
+            double gradientByPhi(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
+                                         const double &tetta,
+                                         const double &phi,
+                                         const double &dPhi);
 
-            double directGradientByTetta(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
-                                       const double &tetta,
-                                       const double &phi,
-                                       const double &dTetta);
-
-
+            double gradientByTetta(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
+                                           const double &tetta,
+                                           const double &phi,
+                                           const double &dTetta);
 
             std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> m_types_cells;
             std::shared_ptr<TM::Map::MapArea<double>> m_B0;
