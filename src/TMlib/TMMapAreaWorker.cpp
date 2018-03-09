@@ -49,8 +49,8 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
     std::vector<double> long_uniq(longitude), lat_uniq(latitude);
     std::sort(lat_uniq.begin(), lat_uniq.end());
     std::sort(long_uniq.begin(), long_uniq.end());
-    std::size_t sizeX = static_cast<std::size_t>(std::unique(lat_uniq.begin(), lat_uniq.end()) - lat_uniq.begin());
-    std::size_t sizeY = static_cast<std::size_t>(std::unique(long_uniq.begin(), long_uniq.end()) - long_uniq.begin());
+    std::size_t sizeX = static_cast<std::size_t>(std::unique(long_uniq.begin(), long_uniq.end()) - long_uniq.begin());
+    std::size_t sizeY = static_cast<std::size_t>(std::unique(lat_uniq.begin(), lat_uniq.end()) - lat_uniq.begin());
 
     maxX = *std::max_element(longitude.begin(), longitude.end());
     maxY = *std::max_element(latitude.begin(), latitude.end());

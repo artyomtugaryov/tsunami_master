@@ -47,6 +47,11 @@ public slots:
     void colorBarProvide(const std::shared_ptr<ColorMap> &colorBarMap);
 private slots:
     void isUpdateTime(std::shared_ptr<TM::Map::MapArea<double>> eta);
+    void timeChanged();
+    void isobathChanged(double isobath);
+    void updateTimeChanged(int time);
+    void calculationTumeChanged(int time);
+
 signals:
     void pathChanged();
     void currentCalculationTimeChanged();

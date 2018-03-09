@@ -5,10 +5,12 @@ Item {
 
     property string text: ""
     property var value
+    property  string textValue: ""
     property bool bold: true
     property int fontSize: 11
     onValueChanged: itemValue.text = value
-
+    property bool change: false
+    property bool pressed: false
     QtObject {
         id: internal
 
@@ -42,7 +44,8 @@ Item {
         id: ancorsHelp
 
         anchors.left: itemText.right
-        anchors.right: parent.right
+        anchors.right: change ? apply.left : parent.right
+        anchors.rightMargin: change ? 5 : 0
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         clip: true
@@ -63,8 +66,46 @@ Item {
             verticalAlignment: Text.AlignVCenter
 
             onFocusChanged: focus ? selectAll() : 0
-            onTextChanged: text = root.value
+            onTextChanged: {
+                if(!change) {
+                    text = root.value
+                }
+                else {
+                    textValue = text
+                }
+            }
             clip: true
+        }
+    }
+
+    Rectangle {
+        id: apply
+
+        visible: change
+        width: 23
+        height: 23
+        border.color: "black"
+        border.width: 1
+        color: applyArea.pressed ? "blue" : "transparent";
+        anchors.right: parent.right
+        anchors.rightMargin: 5
+        anchors.verticalCenter: parent.verticalCenter
+
+        MouseArea {
+            id: applyArea
+
+            anchors.fill: parent
+
+            onClicked: {
+                root.pressed = !root.pressed
+            }
+        }
+        Image {
+            id: applyColorBar
+
+            opacity: 0.8
+            anchors.centerIn: parent
+            source: "Assets/check.png"
         }
     }
 }

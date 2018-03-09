@@ -22,6 +22,10 @@ TsunamiData::TsunamiData(QObject *parent) :
     m_imageSavePath(PathNone),
     m_maxDistributionSavePath(PathNone),
     m_readed(false),
+    m_isobath(-5.),
+    m_timeUpdate(25),
+    m_mareographsTimeUpdate(25),
+    m_calculationTime(25000),
     m_plotData(new TsunamiPlotData())
 {
 }
@@ -166,6 +170,42 @@ void TsunamiData::setMaxDistributionSavePath(QString maxDistributionSavePath)
     emit maxDistributionSavePathChanged();
 }
 
+void TsunamiData::setIsobath(double isobath)
+{
+    if (m_isobath == isobath)
+        return;
+
+    m_isobath = isobath;
+    emit isobathChanged(isobath);
+}
+
+void TsunamiData::setTimeUpdate(int timeUpdate)
+{
+    if (m_timeUpdate == timeUpdate)
+        return;
+
+    m_timeUpdate = timeUpdate;
+    emit timeUpdateChanged(timeUpdate);
+}
+
+void TsunamiData::setMareographsTimeUpdate(int mareographsTimeUpdate)
+{
+    if (m_mareographsTimeUpdate == mareographsTimeUpdate)
+        return;
+
+    m_mareographsTimeUpdate = mareographsTimeUpdate;
+    emit mareographsTimeUpdateChanged(mareographsTimeUpdate);
+}
+
+void TsunamiData::setCalculationTime(int calculationTime)
+{
+    if (m_calculationTime == calculationTime)
+        return;
+
+    m_calculationTime = calculationTime;
+    emit calculationTimeChanged(calculationTime);
+}
+
 void TsunamiData::setReaded(bool readed)
 {
     if (m_readed == readed)
@@ -179,6 +219,26 @@ void TsunamiData::setReaded(bool readed)
 TsunamiPlotData *TsunamiData::plotData() const
 {
     return m_plotData;
+}
+
+double TsunamiData::isobath() const
+{
+    return m_isobath;
+}
+
+int TsunamiData::timeUpdate() const
+{
+    return m_timeUpdate;
+}
+
+int TsunamiData::mareographsTimeUpdate() const
+{
+    return m_mareographsTimeUpdate;
+}
+
+int TsunamiData::calculationTime() const
+{
+    return m_calculationTime;
 }
 
 void TsunamiData::setBrickPath(const QString &brickPath)

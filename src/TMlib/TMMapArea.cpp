@@ -212,9 +212,9 @@ void TM::Map::MapArea<DataType>::savePlotMapArea(std::__cxx11::string savePath,
 
     colorFunc2D f = [&colorMap, &bath, &etaColorBarMap, this](double x, double y)->QColor {
         QColor c;
-        double data = bath->getDataByPoint(x, y);
-        if (data > 0.0) {
-            c = colorMap.getColor(data);
+        double data = getDataByPoint(x, y);
+        if ((data < 0.000000001 || data > -0.000000001) && bath->getDataByPoint(x, y) > 0) {
+            c = QColor(255, 255, 255);//colorMap.getColor(bath->getDataByPoint(x, y));
         }
         else
         {
@@ -222,29 +222,21 @@ void TM::Map::MapArea<DataType>::savePlotMapArea(std::__cxx11::string savePath,
         }
         return c;
     };
-    std::cout << "Point 1\n";
     plot.plotColorFunction(f);
-    std::cout << "Point 2\n";
     plot.setAxisX(true);
     plot.setAxisY(true);
     plot.setAxisLabelY("N");
     plot.setAxisLabelX("E");
     plot.drawAxis(28);
     plot.drawGrid(false, 28, 1, 0, 2, 0);
-    std::cout << "Point 3\n";
     std::vector<double> ticks;
     for(int i = etaColorBarMap.min(); i < etaColorBarMap.max(); i++) {
         ticks.push_back(i);
     }
-    std::cout << "Point 4\n";
     plot.drawColorbar(etaColorBarMap, ticks, 22);
-    std::cout << "Point 5\n";
     plotImage->save(QString::fromStdString(savePath), "PNG");
-    std::cout << "Point 6\n";
     delete plotImage;
-    std::cout << "Point 7\n";
     return;
-    std::cout << "Point 8\n";
 }
 //TODO END
 
