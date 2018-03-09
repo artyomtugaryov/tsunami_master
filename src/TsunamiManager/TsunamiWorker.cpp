@@ -16,7 +16,9 @@ TsunamiWorker::TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWork
     m_signal(tmsignal),
     m_readed(false),
     m_command(ThreadCommand::None),
-    m_updateTime(1)
+    m_updateTime(1),
+    m_calculationTime(25000),
+    m_isobath(-5)
 {
 
 }
@@ -56,6 +58,16 @@ void TsunamiWorker::readBathymetryFromFile()
     m_command = ThreadCommand::None;
     emit readedFinished();
     emit finished();
+}
+
+void TsunamiWorker::setIsobath(double isobath)
+{
+    m_isobath = isobath;
+}
+
+void TsunamiWorker::setCalculationTime(int calculationTime)
+{
+    m_calculationTime = calculationTime;
 }
 
 std::shared_ptr<TM::Scheme::TMScheme24> TsunamiWorker::scheme() const
@@ -103,8 +115,8 @@ void TsunamiWorker::runCalculation()
     if (!m_scheme) {
         m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
     }
-    m_scheme->configure(m_mapAreaWorker, m_focus, -5, m_timemanager, m_signal);
-    m_scheme->calculation(m_mapAreaWorker, 10000000);
+    m_scheme->configure(m_mapAreaWorker, m_focus, m_isobath, m_timemanager, m_signal);
+    m_scheme->calculation(m_mapAreaWorker, m_calculationTime);
 }
 //TODO: remove before implement calculation part
 bool TsunamiWorker::readed() const

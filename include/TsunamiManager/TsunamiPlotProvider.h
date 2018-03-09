@@ -29,6 +29,8 @@ public:
     void setEta(const std::shared_ptr<TM::Map::MapArea<double> > &eta);
     void setColorBarMap(const std::shared_ptr<PlotLib::ColorMap> &colorBarMap);
 
+    bool plotting() const;
+
 private:
     void plotBathametry();
 
@@ -40,6 +42,7 @@ private:
     std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
     std::shared_ptr<TM::Map::MapArea<double> > m_eta;
     std::shared_ptr<PlotLib::ColorMap> m_colorBarMap;
+    bool m_plotting;
 };
 }
 #endif // TSUNAMIPLOTPROVIDER_H

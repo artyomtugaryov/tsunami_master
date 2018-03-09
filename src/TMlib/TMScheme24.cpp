@@ -163,7 +163,6 @@ void TM::Scheme::TMScheme24::setTypesOfCells(const std::shared_ptr<const Map::Ma
     std::cout << "Time of setTypesOfCells is: " << static_cast<double>(end - begin) * 1000.0 / double(CLOCKS_PER_SEC)
               << " ms."
               << std::endl;
-    types_of_cells->savePlotMapArea("bun.png", area->bathymetry());
 }
 
 void TM::Scheme::TMScheme24::setUpBArrays(std::size_t &&x, std::size_t &&y) {
