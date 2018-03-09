@@ -14,11 +14,6 @@ Plot2d::Plot2d(QObject *parent, QImage* image) :
 
 }
 
-Plot2d::~Plot2d()
-{
-    delete m_image;
-}
-
 void Plot2d::setWindow(QRect window) {
 
     if(m_window != window) {

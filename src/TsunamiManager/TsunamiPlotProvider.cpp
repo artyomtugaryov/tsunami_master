@@ -8,7 +8,9 @@ const int Height = 20;
 const int scaleValue = 630;
 }
 
-TsunamiManagerInfo::TsunamiPlotProvider::TsunamiPlotProvider(TsunamiManagerInfo::TsunamiData *data,
+using namespace TsunamiManagerInfo;
+
+TsunamiPlotProvider::TsunamiPlotProvider(TsunamiManagerInfo::TsunamiData *data,
                                                              std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker) :
     QQuickImageProvider(QQuickImageProvider::Image),
     m_plot(QSharedPointer<PlotLib::Plot2d>(new Plot2d())),
@@ -26,9 +28,9 @@ TsunamiManagerInfo::TsunamiPlotProvider::TsunamiPlotProvider(TsunamiManagerInfo:
     m_plotImage = nullptr;
 }
 
-QImage TsunamiManagerInfo::TsunamiPlotProvider::requestImage(const QString &id,
-                                                             QSize *size,
-                                                             const QSize &requestedSize)
+QImage TsunamiPlotProvider::requestImage(const QString &id,
+                                         QSize *size,
+                                         const QSize &requestedSize)
 {
     Q_UNUSED(id);
     Q_UNUSED(size);
@@ -68,17 +70,17 @@ QImage TsunamiManagerInfo::TsunamiPlotProvider::requestImage(const QString &id,
     return *m_plotImage;
 }
 
-TsunamiManagerInfo::TsunamiData *TsunamiManagerInfo::TsunamiPlotProvider::TsunamiData() const
+TsunamiData *TsunamiManagerInfo::TsunamiPlotProvider::TsunamiData() const
 {
     return m_tsunamiData;
 }
 
-void TsunamiManagerInfo::TsunamiPlotProvider::setTsunamiData(TsunamiManagerInfo::TsunamiData *TsunamiData)
+void TsunamiPlotProvider::setTsunamiData(TsunamiManagerInfo::TsunamiData *TsunamiData)
 {
     m_tsunamiData = TsunamiData;
 }
 
-void TsunamiManagerInfo::TsunamiPlotProvider::setPlotImageSize(int width, int height)
+void TsunamiPlotProvider::setPlotImageSize(int width, int height)
 {
     if (m_plotImage != nullptr) {
         delete m_plotImage;
@@ -87,25 +89,25 @@ void TsunamiManagerInfo::TsunamiPlotProvider::setPlotImageSize(int width, int he
     m_plot->setImage(m_plotImage);
 }
 
-void TsunamiManagerInfo::TsunamiPlotProvider::setMapAreaWorker(const std::shared_ptr<TM::Map::MapAreaWorker> &mapAreaWorker)
+void TsunamiPlotProvider::setMapAreaWorker(const std::shared_ptr<TM::Map::MapAreaWorker> &mapAreaWorker)
 {
     m_mapAreaWorker.reset();
     m_mapAreaWorker = mapAreaWorker;
 }
 
-void TsunamiManagerInfo::TsunamiPlotProvider::setEta(const std::shared_ptr<TM::Map::MapArea<double> > &eta)
+void TsunamiPlotProvider::setEta(const std::shared_ptr<TM::Map::MapArea<double> > &eta)
 {
     m_eta.reset();
     m_eta = eta;
 }
 
-void TsunamiManagerInfo::TsunamiPlotProvider::setColorBarMap(const std::shared_ptr<PlotLib::ColorMap> &colorBarMap)
+void TsunamiPlotProvider::setColorBarMap(const std::shared_ptr<PlotLib::ColorMap> &colorBarMap)
 {
     m_colorBarMap.reset();
     m_colorBarMap = colorBarMap;
 }
 
-void TsunamiManagerInfo::TsunamiPlotProvider::plotBathametry()
+void TsunamiPlotProvider::plotBathametry()
 {
     m_plot->setColorbar(true);
     m_plot->setRegion(QRectF( QPointF(m_tsunamiData->startX() + m_tsunamiData->stepX() / 2.,
@@ -119,14 +121,10 @@ void TsunamiManagerInfo::TsunamiPlotProvider::plotBathametry()
                        {800, QColor(160, 55, 0)},
                        {1500, QColor(121, 83, 83)},
                        {6000, QColor(214, 214, 214)}});
-    colorFunc2D f = [&colorMap, this](double x, double y)->QColor{
+    colorFunc2D f = [&colorMap, this](double x, double y)->QColor {
         QColor c;
         double data = m_mapAreaWorker->bathymetry()->getDataByPoint(x, y);
 
-        if (m_eta != NULL)
-        {
-            m_eta->getDataByPoint(x, y);
-        }
         if (data > 0.0) {
             c = colorMap.getColor(data);
         }

@@ -5,6 +5,16 @@
 #include <fstream>
 #include <iomanip>
 
+//TODO: For test. Remove after all work with calculation part.
+#include <QImage>
+#include <PlotLib/Plot2d.h>
+#include <PlotLib/ColorMap.h>
+namespace {
+const int Width = 300;
+const int Height = 20;
+}
+//TODO END
+
 template<typename DataType>
 TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue) :
         m_sizeX(sizeX), m_sizeY(sizeY), m_data(m_sizeX * m_sizeY, defaultValue) {
@@ -169,6 +179,74 @@ template<typename DataType>
 const DataType TM::Map::MapArea<DataType>::getMinValue() const {
     return *std::min_element(this->m_data.begin(), this->m_data.end());
 }
+
+//TODO: For test. Remove after all work with calculation part.
+template<typename DataType>
+void TM::Map::MapArea<DataType>::savePlotMapArea(std::__cxx11::string savePath,
+                                           const std::shared_ptr<const TM::Map::MapArea<double> > bath)
+{
+
+    QImage* plotImage = new QImage(bath->sizeX() + Width, bath->sizeY() + Height, QImage::Format_RGB32);
+    PlotLib::Plot2d plot;
+    plot.setImage(plotImage);
+    plot.setRegion(QRectF( QPointF(bath->startX() + bath->stepX() / 2.,
+                          bath->startY() + stepY() / 2.),
+                  QPointF(bath->endX() - bath->stepX() / 2.,
+                          bath->endY() - bath->stepY() / 2.)));
+    plot.setWindow(QRect(0, 0, bath->sizeX() + 300, bath->sizeY() + 20));
+
+    PlotLib::ColorMap colorMap({{0, QColor(0, 91, 65)},
+                       {200, QColor(201, 180, 102)},
+                       {800, QColor(160, 55, 0)},
+                       {1500, QColor(121, 83, 83)},
+                       {6000, QColor(214, 214, 214)}});
+
+    PlotLib::ColorMap etaColorBarMap({{-3, QColor(38, 0, 255)},
+                                      {-0.1, QColor(222, 255, 248)},
+                                      {0, QColor(222, 255, 248)},
+                                      {1, QColor(128, 0, 128)},
+                                      {3, QColor(255, 0, 0)},
+                                      {5, QColor(255, 128, 0)},
+                                      {8, QColor(255, 255, 0)},
+                                      {11, QColor(0, 255, 0 )}});
+
+    colorFunc2D f = [&colorMap, &bath, &etaColorBarMap, this](double x, double y)->QColor {
+        QColor c;
+        double data = bath->getDataByPoint(x, y);
+        if (data > 0.0) {
+            c = colorMap.getColor(data);
+        }
+        else
+        {
+            c = etaColorBarMap.getColor(getDataByPoint(x, y));
+        }
+        return c;
+    };
+    std::cout << "Point 1\n";
+    plot.plotColorFunction(f);
+    std::cout << "Point 2\n";
+    plot.setAxisX(true);
+    plot.setAxisY(true);
+    plot.setAxisLabelY("N");
+    plot.setAxisLabelX("E");
+    plot.drawAxis(28);
+    plot.drawGrid(false, 28, 1, 0, 2, 0);
+    std::cout << "Point 3\n";
+    std::vector<double> ticks;
+    for(int i = etaColorBarMap.min(); i < etaColorBarMap.max(); i++) {
+        ticks.push_back(i);
+    }
+    std::cout << "Point 4\n";
+    plot.drawColorbar(etaColorBarMap, ticks, 22);
+    std::cout << "Point 5\n";
+    plotImage->save(QString::fromStdString(savePath), "PNG");
+    std::cout << "Point 6\n";
+    delete plotImage;
+    std::cout << "Point 7\n";
+    return;
+    std::cout << "Point 8\n";
+}
+//TODO END
 
 template
 class TM::Map::MapArea<double>;
