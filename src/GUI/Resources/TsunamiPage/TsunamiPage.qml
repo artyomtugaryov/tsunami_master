@@ -8,13 +8,20 @@ Item {
     property int currentCalculationTime: 0
 
     function imageUpdate() {
-        internal.postfix += 1;
+        if (!internal.plotSwap) {
+            internal.postfix1 = internal.postfix2 + 1
+        }
+        else {
+            internal.postfix2 = internal.postfix1 + 1
+        }
+        internal.plotSwap = !internal.plotSwap
     }
-
     QtObject {
         id: internal
 
-        property int postfix: 1
+        property int postfix1: 0
+        property int postfix2: 0
+        property bool plotSwap: true
     }
 
     Image {

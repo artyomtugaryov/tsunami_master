@@ -39,6 +39,9 @@ class TsunamiData : public QObject
     Q_PROPERTY(int calculationTime READ calculationTime
                WRITE setCalculationTime NOTIFY calculationTimeChanged)
 
+    Q_PROPERTY(bool plotReady READ plotReady
+               WRITE setPlotReady NOTIFY plotReadyChanged)
+
     Q_PROPERTY(bool readed READ readed NOTIFY readedChanged)
 
     Q_PROPERTY(TsunamiPlotData *plotData READ plotData CONSTANT)
@@ -93,6 +96,8 @@ public:
 
     int calculationTime() const;
 
+    bool plotReady() const;
+
 public slots:
     void setImageSavePath(QString imageSavePath);
     void setMaxDistributionSavePath(QString maxDistributionSavePath);
@@ -104,6 +109,8 @@ public slots:
     void setMareographsTimeUpdate(int mareographsTimeUpdate);
 
     void setCalculationTime(int calculationTime);
+
+    void setPlotReady(bool plotReady);
 
 signals:
     void sizeXChanged(uint sizeX);
@@ -132,6 +139,7 @@ signals:
     void mareographsTimeUpdateChanged(int mareographsTimeUpdate);
 
     void calculationTimeChanged(int calculationTime);
+    void plotReadyChanged(bool plotReady);
 
 private:
 
@@ -157,6 +165,7 @@ private:
     int m_timeUpdate;
     int m_mareographsTimeUpdate;
     int m_calculationTime;
+    bool m_plotReady;
     TsunamiPlotData *m_plotData;
 };
 }

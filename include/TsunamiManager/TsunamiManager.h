@@ -50,14 +50,12 @@ private slots:
     void isobathChanged(double isobath);
     void updateTimeChanged(int time);
     void calculationTimeChanged(int time);
-
+    void plotFromQueue(bool ready);
 signals:
     void pathChanged();
     void currentCalculationTimeChanged();
     void imageUpdate();
 private:
-
-    void plotFromQueue();
 
     TsunamiManagerInfo::TsunamiData* m_tsunamiData;
     std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;

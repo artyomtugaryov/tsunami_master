@@ -37,10 +37,12 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     connect(m_tsunamiData, &TsunamiData::calculationTimeChanged, this, TsunamiManager::calculationTimeChanged);
     connect(m_tsunamiData, &TsunamiData::isobathChanged, this, TsunamiManager::isobathChanged);
     connect(m_tsunamiData, &TsunamiData::timeUpdateChanged, this, TsunamiManager::updateTimeChanged);
+    //connect(m_tsunamiData, &TsunamiData::plotReadyChanged, this, TsunamiManager::plotFromQueue);
     //connect(m_tsunamiWorker, SIGNAL(updateTime(int)), this, SLOT(isUpdateTime(int)));
     m_timemanager->setSendingTimeStep(10);
     qRegisterMetaType<std::shared_ptr<TM::Map::MapArea<double>>>("std::shared_ptr<TM::Map::MapArea<double>>");
     connect(m_signal.get(), &TM::TMSignal::signalUpdate, this, &TsunamiManagerInfo::TsunamiManager::isUpdateTime);
+
     loadInitDataFromJson();
 }
 
@@ -128,6 +130,7 @@ void TsunamiManager::tsunamiWorkerThreadReaded()
         m_plot->setImage(m_bathymetryImage);
         m_plotProvider->requestImage(QString("1"), NULL, QSize(0,0));
         emit imageUpdate();
+        emit imageUpdate();
     }
 }
 
@@ -136,11 +139,9 @@ void TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::MapArea<double> > eta
     m_eta.reset();
 
     m_etaQueue.push(eta);
-    qDebug() << "Point 1";
     if (!m_plotting)
     {
-        qDebug() << "Point 2";
-        plotFromQueue();
+        plotFromQueue(true);
     }
 }
 
@@ -159,16 +160,14 @@ void TsunamiManager::calculationTimeChanged(int time)
     m_tsunamiWorker->setCalculationTime(time);
 }
 
-void TsunamiManager::plotFromQueue()
+void TsunamiManager::plotFromQueue(bool ready)
 {
     m_plotting = true;
-    while (!m_etaQueue.empty())
-    {
-        if (!m_plotProvider->plotting()) {
-            m_plotProvider->setEta(m_etaQueue.back());
-            m_etaQueue.pop();
-            emit imageUpdate();
-        }
+    Q_UNUSED(ready)
+    if (m_tsunamiData->plotReady()  && !m_etaQueue.empty()) {
+        m_plotProvider->setEta(m_etaQueue.back());
+        m_etaQueue.pop();
+        emit imageUpdate();
     }
     m_plotting = false;
 }

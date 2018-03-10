@@ -12,7 +12,7 @@ using namespace TsunamiManagerInfo;
 
 TsunamiPlotProvider::TsunamiPlotProvider(TsunamiManagerInfo::TsunamiData *data,
                                                              std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker) :
-    QQuickImageProvider(QQuickImageProvider::Image),
+    QQuickImageProvider(QQuickImageProvider::Image, QQmlImageProviderBase::ForceAsynchronousImageLoading),
     m_plot(QSharedPointer<PlotLib::Plot2d>(new Plot2d())),
     m_tsunamiData(data),
     m_mapAreaWorker(std::shared_ptr<TM::Map::MapAreaWorker>(mapAreaWorker)),
@@ -125,13 +125,10 @@ void TsunamiPlotProvider::plotBathametry()
                        {800, QColor(160, 55, 0)},
                        {1500, QColor(121, 83, 83)},
                        {6000, QColor(214, 214, 214)}});
-    if(m_eta)
-    {
-        m_eta->saveMapAreaToTextFile("a", 1);
-    }
 
     colorFunc2D f = [&colorMap, this](double x, double y)->QColor {
         QColor c;
+
         double data = m_mapAreaWorker->bathymetry()->getDataByPoint(x, y);
 
         if (data > 0.0) {
