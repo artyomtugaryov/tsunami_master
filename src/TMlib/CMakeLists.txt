@@ -9,7 +9,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_PREFIX_PATH $ENV{QT_ROOT})
 
-find_package(Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui REQUIRED)
 
 file(GLOB TMLIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 file(GLOB TMLIB_HEADERS ${COMMON_INCLUDE_DIR}/TMlib/*.h)
@@ -24,4 +24,4 @@ endif()
 
 add_library(${PROJECT_NAME} SHARED ${TMLIB_SRC} ${TMLIB_HEADERS})
 
-target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui PlotLib)

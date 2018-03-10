@@ -45,8 +45,8 @@ namespace TM {
                                     const double &M);
 
             double calcUVelocity(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
-                                 const std::size_t &k,
                                  const std::size_t &j,
+                                 const std::size_t &k,
                                  const double &Tetta,
                                  const double &Phi,
                                  const double &dTetta,
@@ -57,8 +57,8 @@ namespace TM {
                                  const double &dt);
 
             double calcVVelocity(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
-                                 const std::size_t &k,
                                  const std::size_t &j,
+                                 const std::size_t &k,
                                  const double &Tetta,
                                  const double &Phi,
                                  const double &dPhi,
@@ -69,14 +69,14 @@ namespace TM {
                                  const double &dt);
 
             double calcBoundaryType1ValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
-                                             const std::size_t &k,
                                              const std::size_t &j,
+                                             const std::size_t &k,
                                              const double &dPhi,
                                              const double &dTetta);
 
             double calcBoundaryType2ValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
-                                             const std::size_t &k,
                                              const std::size_t &j,
+                                             const std::size_t &k,
                                              const double &dPhi,
                                              const double &dTetta);
 
