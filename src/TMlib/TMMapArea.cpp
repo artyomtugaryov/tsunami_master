@@ -211,8 +211,16 @@ void TM::Map::MapArea<DataType>::savePlotMapArea(std::__cxx11::string savePath,
                                       {11, QColor(0, 255, 0 )}});
 
     colorFunc2D f = [&etaColorBarMap, this](double x, double y)->QColor {
-        double data = static_cast<double>(getDataByPoint(x, y));
-        return etaColorBarMap.getColor(data);
+        QColor c;
+        double data = getDataByPoint(x, y);
+        if ((data < 0.000000001 || data > -0.000000001) && bath->getDataByPoint(x, y) > 0) {
+            c = QColor(255, 255, 255);//colorMap.getColor(bath->getDataByPoint(x, y));
+        }
+        else
+        {
+            c = etaColorBarMap.getColor(getDataByPoint(x, y));
+        }
+        return c;
     };
     plot.plotColorFunction(f);
     plotImage->save(QString::fromStdString(savePath), "PNG");
