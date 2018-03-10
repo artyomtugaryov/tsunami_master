@@ -5,6 +5,16 @@
 #include <fstream>
 #include <iomanip>
 
+//TODO: For test. Remove after all work with calculation part.
+#include <QImage>
+#include <PlotLib/Plot2d.h>
+#include <PlotLib/ColorMap.h>
+namespace {
+const int Width = 300;
+const int Height = 20;
+}
+//TODO END
+
 template<typename DataType>
 TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue) :
         m_sizeX(sizeX), m_sizeY(sizeY), m_data(m_sizeX * m_sizeY, defaultValue) {
@@ -12,9 +22,9 @@ TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY, DataTy
 
 
 template<typename DataType>
-std::size_t TM::Map::MapArea<DataType>::getIndex(std::size_t x, std::size_t y) const {
+std::size_t TM::Map::MapArea<DataType>::getIndex(const std::size_t &x, const std::size_t &y) const {
     if (x >= m_sizeX || y >= m_sizeY) {
-        THROW_TM_EXCEPTION << "Out of range in ("<<x<<","<<y<<") " << __FUNCTION__;
+        THROW_TM_EXCEPTION << "Out of range in ("<<x<<", "<<y<<") " << __FUNCTION__;
     }
     return (x + y * m_sizeX);
 }
@@ -67,7 +77,7 @@ double TM::Map::MapArea<DataType>::endY() const noexcept {
 }
 
 template<typename DataType>
-DataType TM::Map::MapArea<DataType>::getDataByIndex(std::size_t x, std::size_t y) const {
+DataType TM::Map::MapArea<DataType>::getDataByIndex(const std::size_t &x, const std::size_t &y) const {
     return m_data[getIndex(x, y)];
 }
 
@@ -169,6 +179,55 @@ template<typename DataType>
 const DataType TM::Map::MapArea<DataType>::getMinValue() const {
     return *std::min_element(this->m_data.begin(), this->m_data.end());
 }
+
+//TODO: For test. Remove after all work with calculation part.
+template<typename DataType>
+void TM::Map::MapArea<DataType>::savePlotMapArea(std::__cxx11::string savePath,
+                                           const std::shared_ptr<const TM::Map::MapArea<double> > bath)
+{
+
+    QImage* plotImage = new QImage(bath->sizeX() + Width, bath->sizeY() + Height, QImage::Format_RGB32);
+    PlotLib::Plot2d plot;
+    plot.setImage(plotImage);
+    plot.setRegion(QRectF( QPointF(bath->startX() + bath->stepX() / 2.,
+                          bath->startY() + stepY() / 2.),
+                  QPointF(bath->endX() - bath->stepX() / 2.,
+                          bath->endY() - bath->stepY() / 2.)));
+    plot.setWindow(QRect(0, 0, bath->sizeX() + 300, bath->sizeY() + 20));
+
+    PlotLib::ColorMap colorMap({{0, QColor(0, 91, 65)},
+                       {200, QColor(201, 180, 102)},
+                       {800, QColor(160, 55, 0)},
+                       {1500, QColor(121, 83, 83)},
+                       {6000, QColor(214, 214, 214)}});
+
+    PlotLib::ColorMap etaColorBarMap({{-3, QColor(38, 0, 255)},
+                                      {-0.1, QColor(222, 255, 248)},
+                                      {0, QColor(222, 255, 248)},
+                                      {1, QColor(128, 0, 128)},
+                                      {2, QColor(255, 0, 0)},
+                                      {3, QColor(255, 128, 0)},
+                                      {8, QColor(255, 255, 0)},
+                                      {11, QColor(0, 255, 0 )}});
+
+    colorFunc2D f = [&etaColorBarMap, this](double x, double y)->QColor {
+        QColor c;
+        double data = getDataByPoint(x, y);
+        if ((data < 0.000000001 || data > -0.000000001) && bath->getDataByPoint(x, y) > 0) {
+            c = QColor(255, 255, 255);//colorMap.getColor(bath->getDataByPoint(x, y));
+        }
+        else
+        {
+            c = etaColorBarMap.getColor(getDataByPoint(x, y));
+        }
+        return c;
+    };
+    plot.plotColorFunction(f);
+    plotImage->save(QString::fromStdString(savePath), "PNG");
+    delete plotImage;
+    return;
+}
+//TODO END
 
 template
 class TM::Map::MapArea<double>;

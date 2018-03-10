@@ -6,6 +6,10 @@
 #include <vector>
 #include <algorithm>
 
+//TODO: For test. Remove after all work with calculation part.
+#include <QString>
+//TODO END
+
 namespace TM {
     namespace Map {
         template<typename DataType>
@@ -16,7 +20,7 @@ namespace TM {
 
             MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue=static_cast<DataType>(0));
 
-            std::size_t getIndex(std::size_t x, std::size_t y) const;
+            std::size_t getIndex(const std::size_t &x, const std::size_t &y) const;
 
             std::size_t getIndexByPoint(double lat, double lon) const;
 
@@ -36,7 +40,7 @@ namespace TM {
 
             double endY() const noexcept;
 
-            DataType getDataByIndex(std::size_t x, std::size_t y) const;
+            DataType getDataByIndex(const std::size_t &x, const std::size_t &y) const;
 
             DataType getDataByPoint(double longitude, double latitude) const;
 
@@ -73,6 +77,11 @@ namespace TM {
             DataType max(){
                 return *std::max_element(m_data.begin(), m_data.end());
             }
+
+            //TODO: For test. Remove after all work with calculation part.
+            void savePlotMapArea(std::string savePath,
+                                     const std::shared_ptr<const TM::Map::MapArea<double> > bath);
+            //TODO END.
 
         private:
             std::size_t m_sizeX;

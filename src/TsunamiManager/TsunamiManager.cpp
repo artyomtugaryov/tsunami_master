@@ -135,6 +135,26 @@ void TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::MapArea<double> > eta
     emit imageUpdate();
 }
 
+void TsunamiManager::timeChanged()
+{
+
+}
+
+void TsunamiManager::isobathChanged(double isobath)
+{
+
+}
+
+void TsunamiManager::updateTimeChanged(int time)
+{
+
+}
+
+void TsunamiManager::calculationTumeChanged(int time)
+{
+
+}
+
 std::shared_ptr<TM::Map::MapArea<double> > TsunamiManager::eta() const
 {
     return m_eta;
@@ -182,6 +202,13 @@ void TsunamiManager::saveInitDataToJson()
     mapData["stepX"] = m_tsunamiData->stepX();
     mapData["stepY"] = m_tsunamiData->stepY();
     init["mapData"] = mapData;
+
+    QJsonObject calculationData;
+    calculationData["isobath"] = (m_tsunamiData->isobath());
+    calculationData["timeUpdate"] = (m_tsunamiData->timeUpdate());
+    calculationData["mareographsTimeUpdate"] = (m_tsunamiData->mareographsTimeUpdate());
+    calculationData["calculationTime"] = (m_tsunamiData->calculationTime());
+    init["calculationData"] = calculationData;
 
     QJsonDocument saveDoc(init);
     saveFile.write(saveDoc.toJson());
@@ -235,6 +262,12 @@ void TsunamiManager::loadInitDataFromJson()
     m_tsunamiData->setSizeY(mapData["sizeY"].toInt());
     m_tsunamiData->setStepX(mapData["stepX"].toDouble());
     m_tsunamiData->setStepY(mapData["stepY"].toDouble());
+
+    QJsonObject calculationData = init["calculationData"].toObject();
+    m_tsunamiData->setIsobath(calculationData["isobath"].toDouble());
+    m_tsunamiData->setTimeUpdate(calculationData["timeUpdate"].toInt());
+    m_tsunamiData->setMareographsTimeUpdate(calculationData["mareographsTimeUpdate"].toInt());
+    m_tsunamiData->setCalculationTime(calculationData["calculationTime"].toInt());
 }
 
 TsunamiPlotProvider *TsunamiManager::plotProvider() const

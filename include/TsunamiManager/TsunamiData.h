@@ -30,6 +30,15 @@ class TsunamiData : public QObject
     Q_PROPERTY(QString maxDistributionSavePath READ maxDistributionSavePath
                WRITE setMaxDistributionSavePath NOTIFY maxDistributionSavePathChanged)
 
+    Q_PROPERTY(double isobath READ isobath
+               WRITE setIsobath NOTIFY isobathChanged)
+    Q_PROPERTY(int timeUpdate READ timeUpdate
+               WRITE setTimeUpdate NOTIFY timeUpdateChanged)
+    Q_PROPERTY(int mareographsTimeUpdate READ mareographsTimeUpdate
+               WRITE setMareographsTimeUpdate NOTIFY mareographsTimeUpdateChanged)
+    Q_PROPERTY(int calculationTime READ calculationTime
+               WRITE setCalculationTime NOTIFY calculationTimeChanged)
+
     Q_PROPERTY(bool readed READ readed NOTIFY readedChanged)
 
     Q_PROPERTY(TsunamiPlotData *plotData READ plotData CONSTANT)
@@ -76,9 +85,25 @@ public:
 
     TsunamiPlotData * plotData() const;
 
+    double isobath() const;
+
+    int timeUpdate() const;
+
+    int mareographsTimeUpdate() const;
+
+    int calculationTime() const;
+
 public slots:
     void setImageSavePath(QString imageSavePath);
     void setMaxDistributionSavePath(QString maxDistributionSavePath);
+
+    void setIsobath(double isobath);
+
+    void setTimeUpdate(int timeUpdate);
+
+    void setMareographsTimeUpdate(int mareographsTimeUpdate);
+
+    void setCalculationTime(int calculationTime);
 
 signals:
     void sizeXChanged(uint sizeX);
@@ -100,6 +125,14 @@ signals:
 
     void readedChanged();
 
+    void isobathChanged(double isobath);
+
+    void timeUpdateChanged(int timeUpdate);
+
+    void mareographsTimeUpdateChanged(int mareographsTimeUpdate);
+
+    void calculationTimeChanged(int calculationTime);
+
 private:
 
     uint m_sizeX;
@@ -120,6 +153,10 @@ private:
     QString m_maxDistributionSavePath;
 
     bool m_readed;
+    double m_isobath;
+    int m_timeUpdate;
+    int m_mareographsTimeUpdate;
+    int m_calculationTime;
     TsunamiPlotData *m_plotData;
 };
 }

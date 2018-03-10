@@ -6,6 +6,7 @@ Item {
 
     property bool showData: false
     property bool showPaths: false
+    property bool showEditData: false
 
     function itemPressed(pressed, item) {
         if(pressed) {
@@ -91,6 +92,24 @@ Item {
                 }
             }
         }
+
+        ItemColumn {
+            id: editDataItem
+
+            sourceIconLeft: "Assets/edit.png"
+            textAction: "Edit"
+            textDescription: "map data"
+            pressed: mouseAreaEditData.pressed
+            MouseArea {
+                id: mouseAreaEditData
+                anchors.fill: parent
+                onClicked: {
+                    editDataItem.checked = !editDataItem.checked;
+                    showEditData = !showEditData
+                }
+            }
+        }
+
         ItemColumn {
             id: quickStart
             textAction: "Quick"

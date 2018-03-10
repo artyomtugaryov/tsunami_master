@@ -33,6 +33,11 @@ Item {
             pathsAnimation.start()
         }
 
+        onShowEditDataChanged: {
+            editDataAnimation.stop()
+            editDataAnimation.start()
+        }
+
     }
 
     Grid {
@@ -43,11 +48,11 @@ Item {
         rows: 3
         columns: 3
         spacing: 5
-
+        property int itemWidth: (root.width - instrumentPanel.width) / 3 - 15
         MapData {
             id: mapData
 
-            width: (root.width - instrumentPanel.width) / 3
+            width: topRow.itemWidth
             height: 210
             opacity: 0
             visible: instrumentPanel.showData || mapDataAnimation.running
@@ -72,7 +77,7 @@ Item {
         PathsWindow {
             id: paths
 
-            width: (root.width - instrumentPanel.width) / 3
+            width: topRow.itemWidth
             height: 210
             opacity: 0
             visible: instrumentPanel.showPaths || pathsAnimation.running
@@ -92,6 +97,28 @@ Item {
                 to: instrumentPanel.showPaths ? 0 : 1
                 duration: 500
             }
+        }
+
+        EditData {
+            id: editData
+
+            isobath: _sourceGUI.tsunamiManager.tsunamiData.isobath
+            updateImage: _sourceGUI.tsunamiManager.tsunamiData.timeUpdate
+            updateMareographs: _sourceGUI.tsunamiManager.tsunamiData.mareographsTimeUpdate
+            calculationTime: _sourceGUI.tsunamiManager.tsunamiData.calculationTime
+            width: topRow.itemWidth
+            height: 210
+            opacity: 0
+            visible: instrumentPanel.showEditData || editDataAnimation.running
+
+            OpacityAnimator {
+                id: editDataAnimation
+                target: editData
+                from: instrumentPanel.showEditData ? 1 : 0
+                to: instrumentPanel.showEditData ? 0 : 1
+                duration: 500
+            }
+
         }
         move: Transition {
                 NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutBounce }
