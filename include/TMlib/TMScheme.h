@@ -11,10 +11,10 @@
 namespace TM {
     namespace Scheme {
         enum types_cells {
-            LAND,
-            WATER,
-            BOUNDARY1,  //near land
-            BOUNDARY2   //end of grid
+            LAND = 0,
+            WATER = 1,
+            BOUNDARY1 = 2,  //near land
+            BOUNDARY2 = 3   //end of grid
         };
 
         class TMScheme {
@@ -23,13 +23,13 @@ namespace TM {
 
             virtual ~TMScheme() = default;
 
-            virtual void calculation(const std::shared_ptr<TM::Map::MapAreaWorker>&,
-                                     const double&) = 0;
+            virtual void calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &,
+                                     const double &) = 0;
 
-            virtual void configure(const std::shared_ptr<const TM::Map::MapAreaWorker>&,
-                                   const std::shared_ptr<const TM::Focus::Focus>&,
-                                   const double&,
-                                   const std::shared_ptr<TMTimeManager>&,
+            virtual void configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &,
+                                   const std::shared_ptr<const TM::Focus::Focus> &,
+                                   const double &,
+                                   const std::shared_ptr<TMTimeManager> &,
                                    const std::shared_ptr<TMSignal> &) = 0;
 
         protected:

@@ -51,6 +51,7 @@ private slots:
     void updateTimeChanged(int time);
     void calculationTimeChanged(int time);
     void plotFromQueue(bool ready);
+
 signals:
     void pathChanged();
     void currentCalculationTimeChanged();

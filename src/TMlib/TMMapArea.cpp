@@ -22,9 +22,9 @@ TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY, DataTy
 
 
 template<typename DataType>
-std::size_t TM::Map::MapArea<DataType>::getIndex(std::size_t x, std::size_t y) const {
+std::size_t TM::Map::MapArea<DataType>::getIndex(const std::size_t &x, const std::size_t &y) const {
     if (x >= m_sizeX || y >= m_sizeY) {
-        THROW_TM_EXCEPTION << "Out of range in ("<<x<<","<<y<<") " << __FUNCTION__;
+        THROW_TM_EXCEPTION << "Out of range in ("<<x<<", "<<y<<") " << __FUNCTION__;
     }
     return (x + y * m_sizeX);
 }
@@ -77,7 +77,7 @@ double TM::Map::MapArea<DataType>::endY() const noexcept {
 }
 
 template<typename DataType>
-DataType TM::Map::MapArea<DataType>::getDataByIndex(std::size_t x, std::size_t y) const {
+DataType TM::Map::MapArea<DataType>::getDataByIndex(const std::size_t &x, const std::size_t &y) const {
     return m_data[getIndex(x, y)];
 }
 
@@ -205,12 +205,12 @@ void TM::Map::MapArea<DataType>::savePlotMapArea(std::__cxx11::string savePath,
                                       {-0.1, QColor(222, 255, 248)},
                                       {0, QColor(222, 255, 248)},
                                       {1, QColor(128, 0, 128)},
-                                      {3, QColor(255, 0, 0)},
-                                      {5, QColor(255, 128, 0)},
+                                      {2, QColor(255, 0, 0)},
+                                      {3, QColor(255, 128, 0)},
                                       {8, QColor(255, 255, 0)},
                                       {11, QColor(0, 255, 0 )}});
 
-    colorFunc2D f = [&colorMap, &bath, &etaColorBarMap, this](double x, double y)->QColor {
+    colorFunc2D f = [&etaColorBarMap, this](double x, double y)->QColor {
         QColor c;
         double data = getDataByPoint(x, y);
         if ((data < 0.000000001 || data > -0.000000001) && bath->getDataByPoint(x, y) > 0) {
@@ -223,17 +223,6 @@ void TM::Map::MapArea<DataType>::savePlotMapArea(std::__cxx11::string savePath,
         return c;
     };
     plot.plotColorFunction(f);
-    plot.setAxisX(true);
-    plot.setAxisY(true);
-    plot.setAxisLabelY("N");
-    plot.setAxisLabelX("E");
-    plot.drawAxis(28);
-    plot.drawGrid(false, 28, 1, 0, 2, 0);
-    std::vector<double> ticks;
-    for(int i = etaColorBarMap.min(); i < etaColorBarMap.max(); i++) {
-        ticks.push_back(i);
-    }
-    plot.drawColorbar(etaColorBarMap, ticks, 22);
     plotImage->save(QString::fromStdString(savePath), "PNG");
     delete plotImage;
     return;

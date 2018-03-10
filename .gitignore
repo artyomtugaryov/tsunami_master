@@ -46,4 +46,4 @@ build/*
 *.xml
 .idea/
 bin/
-build/
+build*/
