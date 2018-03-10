@@ -32,7 +32,7 @@ DynamicItem {
                 anchors.fill: parent
                 source: "image://plot/" + (internal.postfix1).toString()
                 visible: !internal.plotSwap
-                onVisibleChanged: console.log(visible, source)
+                //onVisibleChanged: console.log(visible, source)
                 onStatusChanged: {
                     if(Image.Ready ) {
                         //console.log("1 Ready")
@@ -50,7 +50,7 @@ DynamicItem {
                 anchors.fill: parent
                 source: "image://plot/" + (internal.postfix2).toString()
                 visible: internal.plotSwap
-                onVisibleChanged: console.log(visible)
+                //onVisibleChanged: console.log(visible)
                 onStatusChanged: {
                     if(Image.Ready ) {
                         //console.log("2 Ready")

@@ -172,26 +172,6 @@ void TsunamiManager::plotFromQueue(bool ready)
     m_plotting = false;
 }
 
-void TsunamiManager::timeChanged()
-{
-
-}
-
-void TsunamiManager::isobathChanged(double isobath)
-{
-
-}
-
-void TsunamiManager::updateTimeChanged(int time)
-{
-
-}
-
-void TsunamiManager::calculationTumeChanged(int time)
-{
-
-}
-
 std::shared_ptr<TM::Map::MapArea<double> > TsunamiManager::eta() const
 {
     return m_eta;
