@@ -46,7 +46,7 @@ TEST_F(TMScheme24Tests, configure) {
 TEST_F(TMScheme24Tests, calculation) {
     try {
         m_sender->updateSendingTimeStep(5.);
-//        m_scheme->calculation(m_area, 10000);
+        m_scheme->calculation(m_area, 10000);
     } catch (TM::details::TMException &ex) {
         std::cout << ex.what() << std::endl;
     }

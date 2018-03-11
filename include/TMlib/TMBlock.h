@@ -23,7 +23,7 @@ namespace TM {
 
         struct BrickUp {
         public:
-            int m_brickUpT; // Time Up the block
+            double m_brickUpT; // Time Up the block
             double m_heightUp; // Height Up the  block
 
             BrickUp(int b, double h) : m_brickUpT(b), m_heightUp(h) {}

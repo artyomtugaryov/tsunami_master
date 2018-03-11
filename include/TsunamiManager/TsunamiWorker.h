@@ -40,6 +40,10 @@ public:
     std::shared_ptr<TM::Scheme::TMScheme24> scheme() const;
     std::shared_ptr<TM::Focus::Focus> focus() const;
 
+    void setCalculationTime(int calculationTime);
+
+    void setIsobath(double isobath);
+
 signals:
     void finished();
     void readedFinished();
@@ -58,6 +62,8 @@ private:
     bool m_readed;
     ThreadCommand m_command;
     int m_updateTime;
+    int m_calculationTime;
+    double m_isobath;
 };
 
 #endif // TSUNAMIWORKER_H

@@ -15,13 +15,14 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     m_mapAreaWorker(std::make_shared<TM::Map::MapAreaWorker>()),
     m_scheme(std::make_shared<TM::Scheme::TMScheme24>()),
     m_focus(std::make_shared<TM::Focus::Focus>()),
-    m_signal(std::make_shared<TM::TMSignal>()),
     m_timemanager(std::make_shared<TM::TMTimeManager>()),
+    m_signal(std::make_shared<TM::TMSignal>()),
     m_plotProvider(new TsunamiPlotProvider(m_tsunamiData, m_mapAreaWorker)),
     m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker, m_scheme, m_focus, m_timemanager, m_signal)),
     m_tsunamiWorkerThread(new QThread),
     m_plot(new Plot2d()),
-    m_currentCalculationTime(0)
+    m_currentCalculationTime(0),
+    m_plotting(false)
 {
 
     m_bathymetryImage = nullptr;
@@ -33,10 +34,15 @@ TsunamiManager::TsunamiManager(QObject *parent) :
             m_tsunamiWorker, SLOT(execute()));
     connect(m_tsunamiWorker, SIGNAL(finished()), m_tsunamiWorkerThread, SLOT(terminate()));
     connect(m_tsunamiWorker, SIGNAL(readedFinished()), this, SLOT(tsunamiWorkerThreadReaded()));
+    connect(m_tsunamiData, &TsunamiData::calculationTimeChanged, this, TsunamiManager::calculationTimeChanged);
+    connect(m_tsunamiData, &TsunamiData::isobathChanged, this, TsunamiManager::isobathChanged);
+    connect(m_tsunamiData, &TsunamiData::timeUpdateChanged, this, TsunamiManager::updateTimeChanged);
+    //connect(m_tsunamiData, &TsunamiData::plotReadyChanged, this, TsunamiManager::plotFromQueue);
     //connect(m_tsunamiWorker, SIGNAL(updateTime(int)), this, SLOT(isUpdateTime(int)));
     m_timemanager->setSendingTimeStep(10);
     qRegisterMetaType<std::shared_ptr<TM::Map::MapArea<double>>>("std::shared_ptr<TM::Map::MapArea<double>>");
     connect(m_signal.get(), &TM::TMSignal::signalUpdate, this, &TsunamiManagerInfo::TsunamiManager::isUpdateTime);
+
     loadInitDataFromJson();
 }
 
@@ -124,35 +130,46 @@ void TsunamiManager::tsunamiWorkerThreadReaded()
         m_plot->setImage(m_bathymetryImage);
         m_plotProvider->requestImage(QString("1"), NULL, QSize(0,0));
         emit imageUpdate();
+        emit imageUpdate();
     }
 }
 
 void TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::MapArea<double> > eta)
 {
     m_eta.reset();
-    m_eta = eta;
-    m_plotProvider->setEta(m_eta);
-    emit imageUpdate();
-}
 
-void TsunamiManager::timeChanged()
-{
-
+    m_etaQueue.push(eta);
+    if (!m_plotting)
+    {
+        plotFromQueue(true);
+    }
 }
 
 void TsunamiManager::isobathChanged(double isobath)
 {
-
+    m_tsunamiWorker->setIsobath(isobath);
 }
 
 void TsunamiManager::updateTimeChanged(int time)
 {
-
+    m_timemanager->setSendingTimeStep(time);
 }
 
-void TsunamiManager::calculationTumeChanged(int time)
+void TsunamiManager::calculationTimeChanged(int time)
 {
+    m_tsunamiWorker->setCalculationTime(time);
+}
 
+void TsunamiManager::plotFromQueue(bool ready)
+{
+    m_plotting = true;
+    Q_UNUSED(ready)
+    if (m_tsunamiData->plotReady()  && !m_etaQueue.empty()) {
+        m_plotProvider->setEta(m_etaQueue.back());
+        m_etaQueue.pop();
+        emit imageUpdate();
+    }
+    m_plotting = false;
 }
 
 std::shared_ptr<TM::Map::MapArea<double> > TsunamiManager::eta() const

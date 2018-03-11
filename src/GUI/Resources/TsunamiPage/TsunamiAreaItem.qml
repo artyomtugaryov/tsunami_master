@@ -21,16 +21,48 @@ DynamicItem {
         anchors.fill: parent
         anchors.margins: 5
 
-        Image {
-            id: plotImage
-
+        Item{
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: calculationWindow.width - arrows.width
                    - (calculationWindow.colorBarPresent ? colorBar.width : 0) - 10
-            source: "image://plot/" + (internal.postfix).toString()
-        }
+            Image {
+                id: plotImage
 
+                anchors.fill: parent
+                source: "image://plot/" + (internal.postfix1).toString()
+                visible: !internal.plotSwap
+                //onVisibleChanged: console.log(visible, source)
+                onStatusChanged: {
+                    if(Image.Ready ) {
+                        //console.log("1 Ready")
+                        _sourceGUI.tsunamiManager.tsunamiData.setPlotReady(true)
+                    }
+                    if(status == Image.Loading) {
+                        //console.log("1 Loading")
+                        _sourceGUI.tsunamiManager.tsunamiData.setPlotReady(false)
+                    }
+                }
+            }
+            Image {
+                id: plotImage2
+
+                anchors.fill: parent
+                source: "image://plot/" + (internal.postfix2).toString()
+                visible: internal.plotSwap
+                //onVisibleChanged: console.log(visible)
+                onStatusChanged: {
+                    if(Image.Ready ) {
+                        //console.log("2 Ready")
+                         _sourceGUI.tsunamiManager.tsunamiData.setPlotReady(true)
+                    }
+                    if(status == Image.Loading) {
+                        //console.log("2 Loading")
+                        _sourceGUI.tsunamiManager.tsunamiData.setPlotReady(false)
+                    }
+                }
+            }
+        }
         ColorBar {
             id: colorBar
 

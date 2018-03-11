@@ -210,7 +210,7 @@ void TM::Map::MapArea<DataType>::savePlotMapArea(std::__cxx11::string savePath,
                                       {8, QColor(255, 255, 0)},
                                       {11, QColor(0, 255, 0 )}});
 
-    colorFunc2D f = [&etaColorBarMap, this](double x, double y)->QColor {
+    colorFunc2D f = [&etaColorBarMap, this, &bath](double x, double y)->QColor {
         QColor c;
         double data = getDataByPoint(x, y);
         if ((data < 0.000000001 || data > -0.000000001) && bath->getDataByPoint(x, y) > 0) {

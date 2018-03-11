@@ -19,7 +19,7 @@
 #include <QThread>
 #include <QImage>
 #include <memory>
-
+#include <queue>
 using namespace PlotLib;
 
 namespace TsunamiManagerInfo {
@@ -47,16 +47,17 @@ public slots:
     void colorBarProvide(const std::shared_ptr<ColorMap> &colorBarMap);
 private slots:
     void isUpdateTime(std::shared_ptr<TM::Map::MapArea<double>> eta);
-    void timeChanged();
     void isobathChanged(double isobath);
     void updateTimeChanged(int time);
-    void calculationTumeChanged(int time);
+    void calculationTimeChanged(int time);
+    void plotFromQueue(bool ready);
 
 signals:
     void pathChanged();
     void currentCalculationTimeChanged();
     void imageUpdate();
 private:
+
     TsunamiManagerInfo::TsunamiData* m_tsunamiData;
     std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
     std::shared_ptr<TM::Scheme::TMScheme24> m_scheme;
@@ -70,6 +71,8 @@ private:
     QImage* m_bathymetryImage;
     Plot2d* m_plot;
     int m_currentCalculationTime;
+    std::queue <std::shared_ptr<TM::Map::MapArea<double>>> m_etaQueue;
+    bool m_plotting;
 };
 }
 #endif //TSUNAMIMANAGER_H
