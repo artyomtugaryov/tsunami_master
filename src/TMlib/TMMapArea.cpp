@@ -183,20 +183,23 @@ const DataType TM::Map::MapArea<DataType>::getMinValue() const {
 //TODO: For test. Remove after all work with calculation part.
 template<typename DataType>
 void TM::Map::MapArea<DataType>::savePlotMapArea(std::__cxx11::string savePath,
-                                           const std::shared_ptr<const TM::Map::MapArea<double> > bath)
+                                                 const std::shared_ptr<const TM::Map::MapArea<double> > bath,
+                                                 bool drawBath)
 {
-
+    setStartX(bath->startX());
+    setStartY(bath->startY());
+    setSizeX(bath->sizeX());
+    setSizeY(bath->sizeY());
+    setStepX(bath->stepX());
+    setStepY(bath->stepY());
     QImage* plotImage = new QImage(bath->sizeX() + Width, bath->sizeY() + Height, QImage::Format_RGB32);
     PlotLib::Plot2d plot;
     plot.setImage(plotImage);
-//    plot.setRegion(QRectF( QPointF(bath->startX() + bath->stepX() / 2.,
-//                          bath->startY() + stepY() / 2.),
-//                  QPointF(bath->endX() - bath->stepX() / 2.,
-//                          bath->endY() - bath->stepY() / 2.)));
-    plot.setRegion(QRectF( QPointF(0,
-                          0),
-                  QPointF(bath->sizeX()-1,
-                          bath->sizeY()-1)));
+    plot.setRegion(QRectF( QPointF(bath->startX(),
+                          bath->startY()),
+                  QPointF(bath->endX(),
+                          bath->endY())));
+
     plot.setWindow(QRect(0, 0, bath->sizeX() + 300, bath->sizeY() + 20));
 
     PlotLib::ColorMap colorMap({{0, QColor(0, 91, 65)},
@@ -216,53 +219,21 @@ void TM::Map::MapArea<DataType>::savePlotMapArea(std::__cxx11::string savePath,
 
 
 
-    colorFunc2D f = [&etaColorBarMap, this, &bath](double x, double y)->QColor {
+    colorFunc2D f = [&etaColorBarMap, &colorMap, this, &bath, &drawBath](double x, double y)->QColor {
         QColor c;
         double data = getDataByIndex(x, y);
-//        if(data!= 0) {
-//                        std::cout << data << "  ||" << std::endl;
-//        }
-        if ((data < 0.000000001 || data > -0.000000001) && bath->getDataByIndex(x, y) > 0) {
-            c = QColor(255, 255, 255);//colorMap.getColor(bath->getDataByPoint(x, y));
+
+        if ((data < 0.000000001 || data > -0.000000001) && bath->getDataByPoint(x, y) > 0) {
+            c = drawBath ? colorMap.getColor(bath->getDataByPoint(x, y)) : QColor(255, 255, 255);
         }
         else
         {
-            c = etaColorBarMap.getColor(getDataByIndex(x, y));
+            c = etaColorBarMap.getColor(getDataByPoint(x, y));
         }
-        c = etaColorBarMap.getColor((getDataByIndex(x, y)));
         return c;
     };
     plot.plotColorFunction(f);
     plotImage->save(QString::fromStdString(savePath), "PNG");
-
-//    QImage im(static_cast<int>(bath->sizeX()), static_cast<int>(bath->sizeY()), QImage::Format_RGB32);
-//    for (int y = 0; y < m_sizeY; y++) {
-//        for (int x = 0; x < m_sizeX; x++) {
-//            //file << std::fixed << std::setprecision(setprecision) << m_data[getIndex(x, y)] << " ";
-//            //file << "\t";
-
-//            if(m_data[getIndex(static_cast<size_t>(x), static_cast<size_t>(y))] == 0) {
-//                          im.setPixelColor(x, y, QColor(255, 255, 255));
-
-//            }
-//            else if(m_data[getIndex(static_cast<size_t>(x), static_cast<size_t>(y))] > 0 && m_data[getIndex(static_cast<size_t>(x), static_cast<size_t>(y))] <= 1) {
-//                im.setPixelColor(x, y, QColor(255, 0, 0));
-//            }
-//            else if(m_data[getIndex(static_cast<size_t>(x), static_cast<size_t>(y))] > 1 && m_data[getIndex(static_cast<size_t>(x), static_cast<size_t>(y))] <= 2) {
-//                im.setPixelColor(x, y, QColor(0, 255, 0));
-//            }
-//            else if(m_data[getIndex(static_cast<size_t>(x), static_cast<size_t>(y))] > 2 && m_data[getIndex(static_cast<size_t>(x), static_cast<size_t>(y))] <= 3) {
-//                im.setPixelColor(x, y, QColor(0, 0, 255));
-//            }
-
-//            //TODO: Remove after resolve problem with brick
-
-//            //END TODO
-//        }
-//        //file << std::endl;
-//    }
-//    im.save("types2.png", "PNG");
-    //TODO: Remove after resolve problem with brick
 
     delete plotImage;
     return;

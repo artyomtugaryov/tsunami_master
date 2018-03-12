@@ -79,7 +79,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
         }
         //TODO: Remove after resolve problem with brick
         newEta->saveMapAreaToTextFile("eta.dat", 1);
-        newEta->savePlotMapArea(std::to_string(t) + std::string(".png"), area->bathymetry());
+        //newEta->savePlotMapArea(std::to_string(t) + std::string(".png"), area->bathymetry());
         // END TODO
     }
     clock_t end = clock();
@@ -158,6 +158,7 @@ void TM::Scheme::TMScheme24::setTypesOfCells(const std::shared_ptr<const Map::Ma
             }
         }
     }
+    m_types_cells->savePlotMapArea(std::string("types.png"), area->bathymetry());
     clock_t end = clock();
     std::cout << "Time of setTypesOfCells is: " << static_cast<double>(end - begin) * 1000.0 / double(CLOCKS_PER_SEC)
               << " ms."

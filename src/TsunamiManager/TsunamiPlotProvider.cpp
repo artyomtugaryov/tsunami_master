@@ -114,10 +114,10 @@ void TsunamiPlotProvider::setColorBarMap(const std::shared_ptr<PlotLib::ColorMap
 void TsunamiPlotProvider::plotBathametry()
 {
     m_plot->setColorbar(true);
-    m_plot->setRegion(QRectF( QPointF(m_tsunamiData->startX() + m_tsunamiData->stepX() / 2.,
-                                      m_tsunamiData->startY() + m_tsunamiData->stepY() / 2.),
-                              QPointF(m_tsunamiData->endX() - m_tsunamiData->stepX() / 2.,
-                                      m_tsunamiData->endY() - m_tsunamiData->stepY() / 2.)));
+    m_plot->setRegion(QRectF( QPointF(m_tsunamiData->startX(),
+                                      m_tsunamiData->startY()),
+                              QPointF(m_tsunamiData->endX(),
+                                      m_tsunamiData->endY())));
 
     m_plot->setWindow(QRect(0, 0, m_tsunamiData->sizeX() + 300, m_tsunamiData->sizeY() + 20));
     ColorMap colorMap({{0, QColor(0, 91, 65)},
@@ -125,7 +125,15 @@ void TsunamiPlotProvider::plotBathametry()
                        {800, QColor(160, 55, 0)},
                        {1500, QColor(121, 83, 83)},
                        {6000, QColor(214, 214, 214)}});
-
+    if(m_eta)
+    {
+        m_eta->setStartX(m_mapAreaWorker->bathymetry()->startX());
+        m_eta->setStartY(m_mapAreaWorker->bathymetry()->startY());
+        m_eta->setSizeX(m_mapAreaWorker->bathymetry()->sizeX());
+        m_eta->setSizeY(m_mapAreaWorker->bathymetry()->sizeY());
+        m_eta->setStepX(m_mapAreaWorker->bathymetry()->stepX());
+        m_eta->setStepY(m_mapAreaWorker->bathymetry()->stepY());
+    }
     colorFunc2D f = [&colorMap, this](double x, double y)->QColor {
         QColor c;
 
