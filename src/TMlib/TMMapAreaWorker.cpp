@@ -144,7 +144,7 @@ double TM::Map::MapAreaWorker::getLongitudeByIndex(const double i) const noexcep
 }
 
 double TM::Map::MapAreaWorker::getLatitudeByIndex(const double i) const noexcept {
-    return m_bathymetry->startY() + m_bathymetry->stepY() * i;
+    return m_bathymetry->endY() - m_bathymetry->stepY() * i;
 }
 
 double TM::Map::MapAreaWorker::getStepX() const noexcept {
