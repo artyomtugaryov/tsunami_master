@@ -80,7 +80,8 @@ namespace TM {
 
             //TODO: For test. Remove after all work with calculation part.
             void savePlotMapArea(std::string savePath,
-                                     const std::shared_ptr<const TM::Map::MapArea<double> > bath);
+                                 const std::shared_ptr<const TM::Map::MapArea<double> > bath,
+                                 bool drawBath = true);
             //TODO END.
 
         private:

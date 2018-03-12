@@ -82,16 +82,6 @@ Item {
                         if(Number(text) > 99) {
                             text = internal.intervals[i]
                         }
-                        else if(i > 0
-                                && Number(text)
-                                <= internal.intervals[i - 1]) {
-                            text = internal.intervals[i]
-                        }
-                        else if(i < internal.intervals.length - 1
-                                && Number(text)
-                                >= internal.intervals[i + 1]) {
-                            text = internal.intervals[i]
-                        }
                     }
                 }
 
@@ -132,11 +122,21 @@ Item {
                 anchors.fill: parent
 
                 onClicked: {
-                    for(var i = 0; i < internal.colors.length; i++) {
+                    var correct = true
+                    for(var i = 1; i < internal.colors.length; i++) {
                         var item = repeaterColors.itemAt(i)
-                        _sourceGUI.tsunamiManager.tsunamiData.plotData.setColorIntervalByIndex(item.color, Number(item.getText()), i)
+                        var item2 = repeaterColors.itemAt(i - 1)
+                        if(Number(item.getText()) < Number(item2.getText())) {
+                            correct = false
+                        }
                     }
-                    _sourceGUI.tsunamiManager.tsunamiData.plotData.setColorBarMap();
+                    if(correct) {
+                        for(i = 0; i < internal.colors.length; i++) {
+                            item = repeaterColors.itemAt(i)
+                            _sourceGUI.tsunamiManager.tsunamiData.plotData.setColorIntervalByIndex(item.color, Number(item.getText()), i)
+                        }
+                        _sourceGUI.tsunamiManager.tsunamiData.plotData.setColorBarMap();
+                    }
                 }
             }
             Image {

@@ -26,6 +26,7 @@ TsunamiData::TsunamiData(QObject *parent) :
     m_timeUpdate(25),
     m_mareographsTimeUpdate(25),
     m_calculationTime(25000),
+    m_plotReady(true),
     m_plotData(new TsunamiPlotData())
 {
 }
@@ -206,6 +207,15 @@ void TsunamiData::setCalculationTime(int calculationTime)
     emit calculationTimeChanged(calculationTime);
 }
 
+void TsunamiData::setPlotReady(bool plotReady)
+{
+    if (m_plotReady == plotReady)
+        return;
+
+    m_plotReady = plotReady;
+    emit plotReadyChanged(plotReady);
+}
+
 void TsunamiData::setReaded(bool readed)
 {
     if (m_readed == readed)
@@ -239,6 +249,11 @@ int TsunamiData::mareographsTimeUpdate() const
 int TsunamiData::calculationTime() const
 {
     return m_calculationTime;
+}
+
+bool TsunamiData::plotReady() const
+{
+    return m_plotReady;
 }
 
 void TsunamiData::setBrickPath(const QString &brickPath)

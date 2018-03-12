@@ -83,12 +83,14 @@ namespace TM {
             double gradientByPhi(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
                                          const double &tetta,
                                          const double &phi,
-                                         const double &dPhi);
+                                         const double &dPhi,
+                                         const int &to = 1 );
 
             double gradientByTetta(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
                                            const double &tetta,
                                            const double &phi,
-                                           const double &dTetta);
+                                           const double &dTetta,
+                                           const int &to = 1 );
 
             std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> m_types_cells;
             std::shared_ptr<TM::Map::MapArea<double>> m_B0;
