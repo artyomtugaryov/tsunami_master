@@ -9,7 +9,7 @@ double TM::Focus::Block::getUpHeihgt(double t) {
         if (this->m_beginT > t or t > this->m_beginT + brickUp->m_brickUpT) {
             return 0;
         } else {
-            auto speed = static_cast<double>(brickUp->m_brickUpT) / brickUp->m_heightUp;
+            auto speed = (brickUp->m_heightUp) / static_cast<double>(brickUp->m_brickUpT);
             return speed * t;
         }
     }

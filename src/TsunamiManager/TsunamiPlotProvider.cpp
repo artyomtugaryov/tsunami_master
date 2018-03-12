@@ -99,7 +99,7 @@ void TsunamiPlotProvider::setMapAreaWorker(const std::shared_ptr<TM::Map::MapAre
     m_mapAreaWorker = mapAreaWorker;
 }
 
-void TsunamiPlotProvider::setEta(const std::shared_ptr<TM::Map::MapArea<double> > &eta)
+void TsunamiPlotProvider::setEta(const std::shared_ptr<TM::Map::MapArea<double>> &eta)
 {
     m_eta.reset();
     m_eta = eta;
