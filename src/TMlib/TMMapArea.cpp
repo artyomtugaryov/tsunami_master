@@ -136,8 +136,8 @@ void TM::Map::MapArea<DataType>::saveAsTextFile(std::string path, int setprecisi
     std::fstream file;
     file.open(path.c_str(), std::fstream::out);
     //TODO: Remove after resolve problem with brick
-    double max = *std::max_element(m_data.begin(), m_data.end());
-    double min = *std::min_element(m_data.begin(), m_data.end());
+//    double max = *std::max_element(m_data.begin(), m_data.end());
+//    double min = *std::min_element(m_data.begin(), m_data.end());
     //END TODO
     for (std::size_t y = 0; y < m_sizeY; y++) {
         for (std::size_t x = 0; x < m_sizeX; x++) {

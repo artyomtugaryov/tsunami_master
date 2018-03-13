@@ -8,8 +8,7 @@
 template <typename DataType>
 void saveMapAreaAsImage(const std::shared_ptr<TM::Map::MapArea<DataType>> &area,
                         const std::string &savePath,
-                        const std::shared_ptr<const TM::Map::MapArea<double>> &bath=nullptr,
-                        const bool &drawBat=false);
+                        const std::shared_ptr<const TM::Map::MapArea<double>> &bath=nullptr);
 
 
 #endif //TSUNAMIMANAGER_HELPERS_H

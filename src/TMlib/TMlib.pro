@@ -16,7 +16,8 @@ SOURCES += TMMapArea.cpp \
            TMBlock.cpp \
            TMException.cpp \
            TMTimeManager.cpp \
-    TMSignal.cpp
+           TMSignal.cpp \
+           TMHelpers.cpp
 
 INCLUDEPATH += $${_PRO_FILE_PWD_}/../../include/TMlib/
 
@@ -32,7 +33,8 @@ HEADERS += $${_PRO_FILE_PWD_}/../../include/TMlib/TMMapArea.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMTimeManager.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMCommon.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMConstants.h \
-           ../../include/TMlib/TMSignal.h
+           $${_PRO_FILE_PWD_}/../../include/TMlib/TMSignal.h \
+           $${_PRO_FILE_PWD_}/../../include/TMlib/TMHelpers.h \
            $${_PRO_FILE_PWD_}/../../include/PlotLib \
 
 #TODO: For test. Remove after all work with calculation part.

@@ -10,8 +10,7 @@ namespace {
 template <typename DataType>
 void saveMapAreaAsImage(const std::shared_ptr<TM::Map::MapArea<DataType>> &area,
                         const std::string &savePath,
-                        const std::shared_ptr<const TM::Map::MapArea<double>> &bath,
-                        const bool &drawBath) {
+                        const std::shared_ptr<const TM::Map::MapArea<double>> &bath) {
     area->setStartX(bath->startX());
     area->setStartY(bath->startY());
     area->setSizeX(bath->sizeX());
@@ -67,5 +66,4 @@ void saveMapAreaAsImage(const std::shared_ptr<TM::Map::MapArea<DataType>> &area,
 template
 void saveMapAreaAsImage(const std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> &,
                         const std::string &,
-                        const std::shared_ptr<const TM::Map::MapArea<double>> &,
-                        const bool &);
+                        const std::shared_ptr<const TM::Map::MapArea<double>> &);

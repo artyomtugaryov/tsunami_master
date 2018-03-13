@@ -15,3 +15,4 @@ PlotLib.subdir = src/PlotLib
 GUI.depends = TMlib TsunamiManager PlotLib
 #tests.depends = TMlib
 TsunamiManager.depends = TMlib PlotLib
+TMlib.depends = PlotLib

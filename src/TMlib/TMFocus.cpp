@@ -16,7 +16,7 @@ TM::Focus::Focus::Focus(const std::string &path) {
     std::vector<TM::Focus::BrickPoint> points;
     for (std::size_t i = 0; i < terrCnt; i++) {
         int countBrickUp;
-        for (int j = 0; j < countAngles; j++) {
+        for (std::size_t j = 0; j < countAngles; j++) {
             double x(0), y(0);
             blocksFile >> x;
             blocksFile >> y;
