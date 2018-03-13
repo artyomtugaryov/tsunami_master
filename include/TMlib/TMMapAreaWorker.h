@@ -11,9 +11,7 @@ namespace TM {
         public:
             MapAreaWorker() = default;
 
-            MapAreaWorker(size_t x, size_t y); //TODO: Is it really needs?
-
-            MapAreaWorker(const std::string &);
+            explicit MapAreaWorker(const std::string &);
 
             size_t getMaxXIndex() const;
 

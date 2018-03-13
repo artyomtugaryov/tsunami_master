@@ -22,6 +22,6 @@ if (OPENMP_FOUND)
     set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
 
-add_library(${PROJECT_NAME} SHARED ${TMLIB_SRC} ${TMLIB_HEADERS} helpers.cpp ../../include/TMlib/helpers.h)
+add_library(${PROJECT_NAME} SHARED ${TMLIB_SRC} ${TMLIB_HEADERS} TMHelpers.cpp ../../include/TMlib/TMHelpers.h)
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui PlotLib)

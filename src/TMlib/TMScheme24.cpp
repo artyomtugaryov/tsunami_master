@@ -1,7 +1,7 @@
 #include <TMlib/TMScheme24.h>
 #include <TMlib/TMCommon.h>
 #include <TMlib/TMException.h>
-#include <TMlib/helpers.h>
+#include <TMlib/TMHelpers.h>
 #include <cmath>
 #include <ctime>
 
@@ -16,7 +16,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
     for (double t = 0; t <= timeEnd; t += m_time->step()) {
         auto dt = this->m_time->step();
         std::shared_ptr<TM::Map::MapArea<double>> newEta =
-                std::make_shared<TM::Map::MapArea<double>>(area->getMaxXIndex(), area->getMaxYIndex(), 0);
+                std::make_shared<TM::Map::MapArea<double>>(*area->bathymetry());
 #pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
         for (j = 1; j < maxX; j++) {
             auto tetta = area->getLongitudeByIndex(j);

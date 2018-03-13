@@ -54,7 +54,7 @@ TsunamiData *TsunamiManager::tsunamiData() const
 void TsunamiManager::readBathymetryFromFile(QString path)
 {
     m_tsunamiData->setReaded(false);
-    if (m_mapAreaWorker.get() != NULL)
+    if (m_mapAreaWorker)
     {
         m_mapAreaWorker.reset();
         m_mapAreaWorker = std::make_shared<TM::Map::MapAreaWorker>();

@@ -1,4 +1,4 @@
-#include <TMlib/helpers.h>
+#include <TMlib/TMHelpers.h>
 #include <QtGui/QImage>
 #include <PlotLib/Plot2d.h>
 
