@@ -34,9 +34,9 @@ TsunamiManager::TsunamiManager(QObject *parent) :
             m_tsunamiWorker, SLOT(execute()));
     connect(m_tsunamiWorker, SIGNAL(finished()), m_tsunamiWorkerThread, SLOT(terminate()));
     connect(m_tsunamiWorker, SIGNAL(readedFinished()), this, SLOT(tsunamiWorkerThreadReaded()));
-    connect(m_tsunamiData, &TsunamiData::calculationTimeChanged, this, TsunamiManager::calculationTimeChanged);
-    connect(m_tsunamiData, &TsunamiData::isobathChanged, this, TsunamiManager::isobathChanged);
-    connect(m_tsunamiData, &TsunamiData::timeUpdateChanged, this, TsunamiManager::updateTimeChanged);
+    connect(m_tsunamiData, &TsunamiData::calculationTimeChanged, this, &TsunamiManager::calculationTimeChanged);
+    connect(m_tsunamiData, &TsunamiData::isobathChanged, this, &TsunamiManager::isobathChanged);
+    connect(m_tsunamiData, &TsunamiData::timeUpdateChanged, this, &TsunamiManager::updateTimeChanged);
     //connect(m_tsunamiData, &TsunamiData::plotReadyChanged, this, TsunamiManager::plotFromQueue);
     //connect(m_tsunamiWorker, SIGNAL(updateTime(int)), this, SLOT(isUpdateTime(int)));
     m_timemanager->setSendingTimeStep(10);

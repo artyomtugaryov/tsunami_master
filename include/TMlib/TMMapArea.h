@@ -64,7 +64,7 @@ namespace TM {
 
             void setDataByPoint(double longitude, double latitude, DataType value);
 
-            void saveMapAreaToTextFile(std::string path, int setprecision) const;
+            void saveAsTextFile(std::string path, int setprecision) const;
 
             void saveMapAreaToBinFile(std::string path);
 
@@ -78,11 +78,6 @@ namespace TM {
                 return *std::max_element(m_data.begin(), m_data.end());
             }
 
-            //TODO: For test. Remove after all work with calculation part.
-            void savePlotMapArea(std::string savePath,
-                                 const std::shared_ptr<const TM::Map::MapArea<double> > bath,
-                                 bool drawBath = true);
-            //TODO END.
 
         private:
             std::size_t m_sizeX;

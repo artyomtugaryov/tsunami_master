@@ -5,16 +5,6 @@
 #include <fstream>
 #include <iomanip>
 
-//TODO: For test. Remove after all work with calculation part.
-#include <QImage>
-#include <PlotLib/Plot2d.h>
-#include <PlotLib/ColorMap.h>
-namespace {
-const int Width = 300;
-const int Height = 20;
-}
-//TODO END
-
 template<typename DataType>
 TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue) :
         m_sizeX(sizeX), m_sizeY(sizeY), m_data(m_sizeX * m_sizeY, defaultValue) {
@@ -141,27 +131,27 @@ void TM::Map::MapArea<DataType>::setDataByPoint(double longitude, double latitud
 }
 
 template<typename DataType>
-void TM::Map::MapArea<DataType>::saveMapAreaToTextFile(std::string path, int setprecision) const {
+void TM::Map::MapArea<DataType>::saveAsTextFile(std::string path, int setprecision) const {
     //TODO: Will need check rounding for different data types.
-//    std::fstream file;
-//    file.open(path.c_str(), std::fstream::out);
+    std::fstream file;
+    file.open(path.c_str(), std::fstream::out);
     //TODO: Remove after resolve problem with brick
     double max = *std::max_element(m_data.begin(), m_data.end());
     double min = *std::min_element(m_data.begin(), m_data.end());
     //END TODO
-//    for (std::size_t y = 0; y < m_sizeY; y++) {
-//        for (std::size_t x = 0; x < m_sizeX; x++) {
-//            file << std::fixed << std::setprecision(setprecision) << m_data[getIndex(x, y)] << " ";
-//            file << "\t"
-
-//            //TODO: Remove after resolve problem with brick
+    for (std::size_t y = 0; y < m_sizeY; y++) {
+        for (std::size_t x = 0; x < m_sizeX; x++) {
+            file << std::fixed << std::setprecision(setprecision) << m_data[getIndex(x, y)] << " ";
+            file << "\t";
 //
-//            //END TODO
-//        }
-//        file << std::endl;
-//    }
+            //TODO: Remove after resolve problem with brick
+
+            //END TODO
+        }
+        file << std::endl;
+    }
     //TODO: Remove after resolve problem with brick
-    std::cout <<  max <<"\t"<<min<< std::endl;
+//    std::cout <<  max <<"\t"<<min<< std::endl;
     //END TODO
 }
 
@@ -179,66 +169,6 @@ template<typename DataType>
 const DataType TM::Map::MapArea<DataType>::getMinValue() const {
     return *std::min_element(this->m_data.begin(), this->m_data.end());
 }
-
-//TODO: For test. Remove after all work with calculation part.
-template<typename DataType>
-void TM::Map::MapArea<DataType>::savePlotMapArea(std::__cxx11::string savePath,
-                                                 const std::shared_ptr<const TM::Map::MapArea<double> > bath,
-                                                 bool drawBath)
-{
-    setStartX(bath->startX());
-    setStartY(bath->startY());
-    setSizeX(bath->sizeX());
-    setSizeY(bath->sizeY());
-    setStepX(bath->stepX());
-    setStepY(bath->stepY());
-    QImage* plotImage = new QImage(bath->sizeX() + Width, bath->sizeY() + Height, QImage::Format_RGB32);
-    PlotLib::Plot2d plot;
-    plot.setImage(plotImage);
-    plot.setRegion(QRectF( QPointF(bath->startX(),
-                          bath->startY()),
-                  QPointF(bath->endX(),
-                          bath->endY())));
-
-    plot.setWindow(QRect(0, 0, bath->sizeX() + 300, bath->sizeY() + 20));
-
-    PlotLib::ColorMap colorMap({{0, QColor(0, 91, 65)},
-                       {200, QColor(201, 180, 102)},
-                       {800, QColor(160, 55, 0)},
-                       {1500, QColor(121, 83, 83)},
-                       {6000, QColor(214, 214, 214)}});
-    saveMapAreaToTextFile("a.dat", 1);
-    PlotLib::ColorMap etaColorBarMap({{-3, QColor(38, 0, 255)},
-                                      {-0.1, QColor(222, 255, 248)},
-                                      {0, QColor(222, 255, 248)},
-                                      {1, QColor(128, 0, 128)},
-                                      {2, QColor(255, 0, 0)},
-                                      {3, QColor(255, 128, 0)},
-                                      {8, QColor(255, 255, 0)},
-                                      {11, QColor(0, 255, 0 )}});
-
-
-
-    colorFunc2D f = [&etaColorBarMap, &colorMap, this, &bath, &drawBath](double x, double y)->QColor {
-        QColor c;
-        double data = getDataByIndex(x, y);
-
-        if ((data < 0.000000001 || data > -0.000000001) && bath->getDataByPoint(x, y) > 0) {
-            c = drawBath ? colorMap.getColor(bath->getDataByPoint(x, y)) : QColor(255, 255, 255);
-        }
-        else
-        {
-            c = etaColorBarMap.getColor(getDataByPoint(x, y));
-        }
-        return c;
-    };
-    plot.plotColorFunction(f);
-    plotImage->save(QString::fromStdString(savePath), "PNG");
-
-    delete plotImage;
-    return;
-}
-//TODO END
 
 template
 class TM::Map::MapArea<double>;

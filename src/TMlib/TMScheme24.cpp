@@ -1,6 +1,7 @@
 #include <TMlib/TMScheme24.h>
 #include <TMlib/TMCommon.h>
 #include <TMlib/TMException.h>
+#include <TMlib/helpers.h>
 #include <cmath>
 #include <ctime>
 
@@ -80,7 +81,6 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
         }
         //TODO: It's no good. How we can do this better?
         if (!fmod(t, m_time->sendingTimeStep())) {
-            std::cout<<newEta->min() << "\t" <<newEta->max()<<std::endl;
             m_signal->emitSignal(newEta);
         }
         //TODO: Remove after resolve problem with brick
@@ -164,9 +164,10 @@ void TM::Scheme::TMScheme24::setTypesOfCells(const std::shared_ptr<const Map::Ma
             }
         }
     }
-    m_types_cells->savePlotMapArea(std::string("types.png"), area->bathymetry());
+    saveMapAreaAsImage(types_of_cells, "boundaries.png", bathymetry, true);
     clock_t end = clock();
-    std::cout << "Time of setTypesOfCells is: " << static_cast<double>(end - begin) * 1000.0 / double(CLOCKS_PER_SEC)
+    std::cout << "Time of setTypesOfCells is: "
+              << static_cast<double>(end - begin) * 1000.0 / double(CLOCKS_PER_SEC)
               << " ms."
               << std::endl;
 }
