@@ -20,6 +20,8 @@ namespace TM {
 
             MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue=static_cast<DataType>(0));
 
+            MapArea(const std::shared_ptr<const MapArea<DataType>> &other);
+
             std::size_t getIndex(const std::size_t &x, const std::size_t &y) const;
 
             std::size_t getIndexByPoint(double lat, double lon) const;

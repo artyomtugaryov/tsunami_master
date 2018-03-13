@@ -10,6 +10,19 @@ TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY, DataTy
         m_sizeX(sizeX), m_sizeY(sizeY), m_data(m_sizeX * m_sizeY, defaultValue) {
 }
 
+template<typename DataType>
+TM::Map::MapArea<DataType>::MapArea(const std::shared_ptr<const MapArea<DataType>> &other) :
+        m_sizeX(other->sizeX()),
+        m_sizeY(other->sizeY()),
+        m_data(m_sizeX * m_sizeY, static_cast<DataType>(0)),
+        m_startX(other->startX()),
+        m_startY(other->startY()),
+        m_endX(other->endX()),
+        m_endY(other->endY())  {
+    setStepX((m_endX - m_startX) / (m_sizeX - 1));
+    setStepY((m_endY - m_startY) / (m_sizeY - 1));
+}
+
 
 template<typename DataType>
 std::size_t TM::Map::MapArea<DataType>::getIndex(const std::size_t &x, const std::size_t &y) const {
