@@ -50,7 +50,7 @@ namespace TM {
                 (*m_exceptionStream)
 #ifdef __linux__
                         << print_stacktrace()
-                        #endif//__linux__
+#endif//__linux__
                         << std::endl << arg;
                 return *this;
             }

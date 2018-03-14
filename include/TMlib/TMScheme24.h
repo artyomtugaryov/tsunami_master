@@ -47,8 +47,6 @@ namespace TM {
             double calcUVelocity(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
                                  const std::size_t &j,
                                  const std::size_t &k,
-                                 const double &Tetta,
-                                 const double &Phi,
                                  const double &dTetta,
                                  const double &M,
                                  const double &f,
@@ -60,7 +58,6 @@ namespace TM {
                                  const std::size_t &j,
                                  const std::size_t &k,
                                  const double &Tetta,
-                                 const double &Phi,
                                  const double &dPhi,
                                  const double &M,
                                  const double &f,
@@ -80,24 +77,18 @@ namespace TM {
                                              const double &dPhi,
                                              const double &dTetta);
 
-            double gradientByPhi(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
-                                         const double &tetta,
-                                         const double &phi,
-                                         const double &dPhi,
-                                         const int &to = 1 );
+            static double gradient(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
+                            const std::size_t &j,
+                            const std::size_t &k,
+                            const std::array<int, 2> &d,
+                            const int &to = 1);
 
-            double gradientByTetta(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
-                                           const double &tetta,
-                                           const double &phi,
-                                           const double &dTetta,
-                                           const int &to = 1 );
-
-            std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> m_types_cells;
-            std::shared_ptr<TM::Map::MapArea<double>> m_B0;
-            std::shared_ptr<TM::Map::MapArea<double>> m_B1;
-        };
+                std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> m_types_cells;
+                std::shared_ptr<TM::Map::MapArea<double>> m_B0;
+                std::shared_ptr<TM::Map::MapArea<double>> m_B1;
+            };
+        }
     }
-}
 
 #endif //TSUNAMIMANAGER_TMSHEME24_H
 

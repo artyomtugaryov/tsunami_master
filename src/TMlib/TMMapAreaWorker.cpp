@@ -113,7 +113,7 @@ const std::shared_ptr<TM::Map::MapArea<double>> TM::Map::MapAreaWorker::eta() no
     return m_eta;
 }
 
-void TM::Map::MapAreaWorker::setEta(std::shared_ptr<TM::Map::MapArea<double>> newEta) noexcept {
+void TM::Map::MapAreaWorker::setEta(std::shared_ptr<TM::Map::MapArea<double>> &newEta) noexcept {
     m_eta = newEta;
 }
 

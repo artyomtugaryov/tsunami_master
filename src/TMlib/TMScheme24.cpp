@@ -22,11 +22,9 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
                 if (this->m_types_cells->getDataByIndex(j, k) == WATER) {
                     auto phi = area->getLatitudeByIndex(k);
                     auto Up = this->m_focus->getHeightByIndex(tetta, phi, t);
-                    if (Up != 0){
-                        std::cout<<j<<"\t"<<k<<std::endl;
-                    }
-                    m_B0->setDataByIndex(j, k, m_B1->getDataByIndex(j, k));
-                    m_B1->setDataByIndex(j, k, m_B1->getDataByIndex(j, k) + Up);
+                    auto B = m_B1->getDataByIndex(j, k);
+                    m_B0->setDataByIndex(j, k, B);
+                    m_B1->setDataByIndex(j, k, B + Up);
                 }
             }
         }
@@ -39,7 +37,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
             auto tetta2 = area->getLongitudeByIndex(j + 1. / 2.);
             auto tetta_2 = area->getLongitudeByIndex(j - 1. / 2.);
             auto M = dt / (2 * R_EACH * sin(tetta));
-#pragma omp parallel for shared(dPhi, dTetta, dt, tetta2, tetta_2) private(k)
+#pragma omp parallel for shared(dPhi, dTetta, dt, tetta, tetta2, tetta_2) private(k)
             for (k = 1; k < maxY; k++) {
                 auto phi = area->getLatitudeByIndex(k);
                 switch (this->m_types_cells->getDataByIndex(j, k)) {
@@ -54,35 +52,39 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
                         break;
                     }
                     case BOUNDARY1: {
-                        newEta->setDataByIndex(j, k, this->calcBoundaryType1ValueEta(area, j, k, dPhi, dTetta));
+                        newEta->setDataByIndex(j, k, this->calcBoundaryType1ValueEta(area,
+                                                                                     j, k,
+                                                                                     dPhi, dTetta));
                         break;
                     }
                     case BOUNDARY2: {
-                        newEta->setDataByIndex(j, k, this->calcBoundaryType2ValueEta(area, j, k, dPhi, dTetta));
+                        newEta->setDataByIndex(j, k, this->calcBoundaryType2ValueEta(area,
+                                                                                     j, k,
+                                                                                     dPhi, dTetta));
                         break;
                     }
+                    case LAND:
                     default:
                         break;
                 }
             }
         }
         area->setEta(newEta);
-        auto f = TM::Common::coefCoriolis(j);
-        auto M = -(G * dt) / (R_EACH); //make more common
-#pragma omp parallel for shared(f, M) private(j)
+        auto M = G * dt / R_EACH; //make more common
+#pragma omp parallel for shared(M) private(j)
         for (j = 0; j < maxX; j++) {
             auto tetta = area->getLongitudeByIndex(j);
+            auto f = TM::Common::coefCoriolis(tetta);
 #pragma omp parallel for  shared(f, M) private(k)
             for (k = 0; k < maxY; k++) {
-                auto phi = area->getLatitudeByIndex(k);
                 auto u_new = 0.;
                 auto v_new = 0.;
                 switch (this->m_types_cells->getDataByIndex(j, k)) {
                     case WATER: { ;
-                        auto v = area->vVelocity()->getDataByIndex(j, k);
                         auto u = area->uVelocity()->getDataByIndex(j, k);
-                        u_new = calcUVelocity(area, j, k, tetta, phi, dTetta, M, f, v, u, dt);
-                        v_new = calcVVelocity(area, j, k, tetta, phi, dPhi, M, f, v, u, dt);
+                        auto v = area->vVelocity()->getDataByIndex(j, k);
+                        u_new = calcUVelocity(area, j, k, dTetta, M, f, v, u, dt);
+                        v_new = calcVVelocity(area, j, k, tetta, dPhi, M, f, v, u, dt);
                         break;
                     }
                     default:
@@ -97,7 +99,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
             m_signal->emitSignal(newEta);
         }
         //TODO: Remove after resolve problem with brick
-        saveMapAreaAsImage(newEta, std::to_string(t) + ".png", area->bathymetry());
+//        saveMapAreaAsImage(newEta, std::string("img/") + std::to_string(t) + std::string(".png"), area->bathymetry());
         // END TODO
     }
     clock_t end = clock();
@@ -200,13 +202,13 @@ double TM::Scheme::TMScheme24::calcMainValueEta(const std::shared_ptr<TM::Map::M
                                                 const double &tetta2,
                                                 const double &tetta_2,
                                                 const double &M) {
-    auto Hj0k0 = gradientByTetta(area->bathymetry(), tetta, phi, dTetta);
-    auto Hj_1k0 = gradientByTetta(area->bathymetry(), tetta - dTetta, phi, dTetta);
-    auto Hj0k_1 = gradientByPhi(area->bathymetry(), tetta, phi - dPhi, dPhi);
+    auto Hj0k0 = gradient(area->bathymetry(), j, k, std::array<int, 2>({1, 0}));
+    auto Hj_1k0 = gradient(area->bathymetry(), j - 1, k, std::array<int, 2>({1, 0}));
+    auto Hj0k_1 = gradient(area->bathymetry(), j, k - 1, std::array<int, 2>({0, 1}));
 
-    auto Bj0k0 = gradientByTetta(m_B0, tetta, phi, dTetta);
-    auto Bj_1k0 = gradientByTetta(m_B0, tetta - dTetta, phi, dTetta);
-    auto Bj0k_1 = gradientByPhi(m_B0, tetta, phi - dPhi, dPhi);
+    auto Bj0k0 = gradient(m_B0, j, k, std::array<int, 2>({1, 0}));
+    auto Bj_1k0 = gradient(m_B0, j - 1, k, std::array<int, 2>({1, 0}));
+    auto Bj0k_1 = gradient(m_B0, j, k - 1, std::array<int, 2>({0, 1}));
 
     auto oldBj0k0 = m_B0->getDataByIndex(j, k);
     auto newBj0k0 = m_B1->getDataByIndex(j, k);
@@ -219,10 +221,10 @@ double TM::Scheme::TMScheme24::calcMainValueEta(const std::shared_ptr<TM::Map::M
     auto Vj0k0 = area->vVelocity()->getDataByIndex(j, k);
     auto Vj0k1 = area->vVelocity()->getDataByIndex(j, k + 1);
 
-    auto u_multiplier = (Uj1k0 * (Hj0k0 - Bj0k0) * sin(tetta2) - Uj0k0 * (Hj_1k0 - Bj_1k0) * sin(tetta_2));
-    auto v_multiplier = (Vj0k1 * (Hj0k0 - Bj0k0) - Vj0k0 * (Hj0k_1 - Bj0k_1));
+    auto u_multiplier = Uj1k0 * ((Hj0k0 - Bj0k0) / 2.) * sin(tetta2) - Uj0k0 * (Hj_1k0 - Bj_1k0) / 2. * sin(tetta_2);
+    auto v_multiplier = Vj0k1 * (Hj0k0 - Bj0k0) / 2. - Vj0k0 * (Hj0k_1 - Bj0k_1) / 2.;
 
-    auto eta = eta0 + ((oldBj0k0 - newBj0k0) - M * (u_multiplier / dTetta - v_multiplier / dPhi)) * dt;
+    auto eta = eta0 + ((newBj0k0 - oldBj0k0) - M * (u_multiplier / dTetta - v_multiplier / dPhi)) * dt;
     return eta;
 }
 
@@ -252,48 +254,34 @@ double TM::Scheme::TMScheme24::calcBoundaryType2ValueEta(const std::shared_ptr<T
 double TM::Scheme::TMScheme24::calcUVelocity(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
                                              const std::size_t &j,
                                              const std::size_t &k,
-                                             const double &Tetta,
-                                             const double &Phi,
                                              const double &dTetta,
                                              const double &M,
                                              const double &f,
                                              const double &v,
                                              const double &u,
                                              const double &dt) {
-    auto etaj1k0 = area->eta()->getDataByIndex(j + 1, k);
-    auto dEtaByTetta = gradientByTetta(area->eta(), Tetta, Phi, -dTetta, -1);
-    return u - M * etaj1k0 * dEtaByTetta / dTetta + f * v * dt;
+    auto dEtaByTetta = gradient(area->eta(), j+1, k, std::array<int, 2>({-1, 0}) , -1);// Tetta
+    return u - M * dEtaByTetta / dTetta + f * v * dt;
 }
 
 double TM::Scheme::TMScheme24::calcVVelocity(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
                                              const std::size_t &j,
                                              const std::size_t &k,
                                              const double &Tetta,
-                                             const double &Phi,
                                              const double &dPhi,
                                              const double &M,
                                              const double &f,
                                              const double &v,
                                              const double &u,
                                              const double &dt) {
-    auto etak0j0 = area->eta()->getDataByIndex(j, k);
-    auto dEtaByPhi = gradientByPhi(area->eta(), Tetta, Phi, -dPhi, -1);
-    return v - M * etak0j0 * dEtaByPhi / (sin(Tetta) * dPhi) - f * u * dt;
+    auto dEtaByPhi = gradient(area->eta(), j, k, std::array<int, 2>({0, -1}), -1);
+    return v - M * dEtaByPhi / (sin(Tetta) * dPhi) - f * u * dt;
 }
 
-double TM::Scheme::TMScheme24::gradientByPhi(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
-                                             const double &tetta,
-                                             const double &phi,
-                                             const double &dPhi,
-                                             const int &to) {
-    return w->getDataByPoint(tetta, phi) + to * w->getDataByPoint(tetta, phi + dPhi);
+double TM::Scheme::TMScheme24::gradient(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
+                                        const std::size_t &j,
+                                        const std::size_t &k,
+                                        const std::array<int, 2> &d,
+                                        const int &to) {
+    return w->getDataByIndex(j, k) + to * w->getDataByIndex(j + d[0], k + d[0]);
 }
-
-double TM::Scheme::TMScheme24::gradientByTetta(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
-                                               const double &tetta,
-                                               const double &phi,
-                                               const double &dTetta,
-                                               const int &to) {
-    return w->getDataByPoint(tetta, phi) + to * w->getDataByPoint(tetta + dTetta, phi);
-}
-
