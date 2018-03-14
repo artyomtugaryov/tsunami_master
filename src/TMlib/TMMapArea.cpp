@@ -18,7 +18,7 @@ TM::Map::MapArea<DataType>::MapArea(const std::shared_ptr<const MapArea<DataType
         m_startX(other->startX()),
         m_startY(other->startY()),
         m_endX(other->endX()),
-        m_endY(other->endY())  {
+        m_endY(other->endY()) {
     setStepX((m_endX - m_startX) / (m_sizeX - 1));
     setStepY((m_endY - m_startY) / (m_sizeY - 1));
 }
@@ -27,7 +27,7 @@ TM::Map::MapArea<DataType>::MapArea(const std::shared_ptr<const MapArea<DataType
 template<typename DataType>
 std::size_t TM::Map::MapArea<DataType>::getIndex(const std::size_t &x, const std::size_t &y) const {
     if (x >= m_sizeX || y >= m_sizeY) {
-        THROW_TM_EXCEPTION << "Out of range in ("<<x<<", "<<y<<") " << __FUNCTION__;
+        THROW_TM_EXCEPTION << "Out of range in (" << x << ", " << y << ") " << __FUNCTION__;
     }
     return (x + y * m_sizeX);
 }
@@ -134,7 +134,7 @@ void TM::Map::MapArea<DataType>::setEndY(double endY) {
 }
 
 template<typename DataType>
-void TM::Map::MapArea<DataType>::setDataByIndex(std::size_t& x, std::size_t& y, DataType value) {
+void TM::Map::MapArea<DataType>::setDataByIndex(std::size_t &x, std::size_t &y, DataType value) {
     m_data[getIndex(x, y)] = value;
 }
 

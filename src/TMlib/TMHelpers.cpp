@@ -67,3 +67,8 @@ template
 void saveMapAreaAsImage(const std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> &,
                         const std::string &,
                         const std::shared_ptr<const TM::Map::MapArea<double>> &);
+
+template
+void saveMapAreaAsImage(const std::shared_ptr<TM::Map::MapArea<double>> &,
+                        const std::string &,
+                        const std::shared_ptr<const TM::Map::MapArea<double>> &);

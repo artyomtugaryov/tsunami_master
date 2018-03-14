@@ -14,23 +14,36 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
     auto dTetta = area->getStepTetta();
     clock_t begin = clock();
     for (double t = 0; t <= timeEnd; t += m_time->step()) {
+#pragma omp parallel for private(j)
+        for (j = 1; j < maxX; j++) {
+            auto tetta = area->getLongitudeByIndex(j);
+#pragma omp parallel for private(k)
+            for (k = 1; k < maxY; k++) {
+                if (this->m_types_cells->getDataByIndex(j, k) == WATER) {
+                    auto phi = area->getLatitudeByIndex(k);
+                    auto Up = this->m_focus->getHeightByIndex(tetta, phi, t);
+                    if (Up != 0){
+                        std::cout<<j<<"\t"<<k<<std::endl;
+                    }
+                    m_B0->setDataByIndex(j, k, m_B1->getDataByIndex(j, k));
+                    m_B1->setDataByIndex(j, k, m_B1->getDataByIndex(j, k) + Up);
+                }
+            }
+        }
         auto dt = this->m_time->step();
         std::shared_ptr<TM::Map::MapArea<double>> newEta =
-                std::make_shared<TM::Map::MapArea<double>>(area->eta());
+                std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
 #pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
         for (j = 1; j < maxX; j++) {
             auto tetta = area->getLongitudeByIndex(j);
             auto tetta2 = area->getLongitudeByIndex(j + 1. / 2.);
             auto tetta_2 = area->getLongitudeByIndex(j - 1. / 2.);
             auto M = dt / (2 * R_EACH * sin(tetta));
-#pragma omp parallel for  shared(dPhi, dTetta, dt, tetta, tetta2, tetta_2) private(k)
+#pragma omp parallel for shared(dPhi, dTetta, dt, tetta2, tetta_2) private(k)
             for (k = 1; k < maxY; k++) {
                 auto phi = area->getLatitudeByIndex(k);
                 switch (this->m_types_cells->getDataByIndex(j, k)) {
                     case WATER: {
-                        auto Up = this->m_focus->getHeightByIndex(tetta, phi, t);
-                        m_B0->setDataByIndex(j, k, m_B1->getDataByIndex(j, k));
-                        m_B1->setDataByIndex(j, k, m_B1->getDataByIndex(j, k) + Up);
                         newEta->setDataByIndex(j, k, this->calcMainValueEta(area,
                                                                             j, k,
                                                                             dt,
@@ -84,8 +97,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
             m_signal->emitSignal(newEta);
         }
         //TODO: Remove after resolve problem with brick
-//        newEta->saveMapAreaToTextFile("eta.dat", 1);
-//        newEta->savePlotMapArea(std::to_string(t) + std::string(".png"), area->bathymetry());
+        saveMapAreaAsImage(newEta, std::to_string(t) + ".png", area->bathymetry());
         // END TODO
     }
     clock_t end = clock();
