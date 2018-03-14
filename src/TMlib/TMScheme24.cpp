@@ -4,6 +4,7 @@
 #include <TMlib/TMHelpers.h>
 #include <cmath>
 #include <ctime>
+#include <queue>
 
 void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
                                          const double &timeEnd) {
@@ -138,6 +139,8 @@ void TM::Scheme::TMScheme24::setTypesOfCells(const std::shared_ptr<const Map::Ma
                                              const double &izobata) {
     this->m_types_cells = std::make_shared<TM::Map::MapArea<TM::Scheme::types_cells>>(area->getMaxXIndex(),
                                                                                       area->getMaxYIndex());
+    std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> boundaries =
+            std::make_shared<TM::Map::MapArea<TM::Scheme::types_cells>>(area->getMaxXIndex(), area->getMaxYIndex());
     size_t maxX = this->m_types_cells->sizeX();
     size_t maxY = this->m_types_cells->sizeY();
     auto bathymetry = area->bathymetry();
@@ -149,32 +152,25 @@ void TM::Scheme::TMScheme24::setTypesOfCells(const std::shared_ptr<const Map::Ma
 #pragma omp parallel for shared(bathymetry, types_of_cells) private(j)
         for (j = 0; j < maxY; j++) {
             auto v = bathymetry->getDataByIndex(i, j);
-            if (v >= izobata)
+            if (v >= izobata){
                 types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::LAND);
-            else
+            }
+            else {
                 types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::WATER);
-            switch (types_of_cells->getDataByIndex(i, j)) {
-                case TM::Scheme::types_cells::WATER:
-                    try {
-                        if (bathymetry->getDataByIndex(i - 1, j - 1) >= izobata ||
-                            bathymetry->getDataByIndex(i - 1, j) >= izobata ||
-                            bathymetry->getDataByIndex(i - 1, j + 1) >= izobata ||
-                            bathymetry->getDataByIndex(i + 1, j - 1) >= izobata ||
-                            bathymetry->getDataByIndex(i + 1, j) >= izobata ||
-                            bathymetry->getDataByIndex(i + 1, j + 1) >= izobata ||
-                            bathymetry->getDataByIndex(i, j - 1) >= izobata ||
-                            bathymetry->getDataByIndex(i, j + 1) >= izobata
-                                ) {
-                            types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::BOUNDARY1);
+                for (int k(-1); k < 2; k++) {
+                    for (int t(-1); t < 2; t++) {
+                        if (k != 0 && t != 0) {
+                            try {
+                                if (bathymetry->getDataByIndex(i + k, j + t) >= izobata) {
+                                    types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::BOUNDARY1);
+                                }
+                            } catch (TM::details::TMException &ex) {
+                                types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::BOUNDARY2);
+                                break;
+                            }
                         }
-                    } catch (TM::details::TMException &ex) { //IF index is out of range
-                        types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::BOUNDARY2);
                     }
-                    break;
-                case TM::Scheme::types_cells::LAND:
-                    break;
-                default:
-                    THROW_TM_EXCEPTION << "Can not set type of the cell: (" << i << "," << j << ") val is " << v;
+                }
             }
         }
     }
@@ -260,7 +256,7 @@ double TM::Scheme::TMScheme24::calcUVelocity(const std::shared_ptr<TM::Map::MapA
                                              const double &v,
                                              const double &u,
                                              const double &dt) {
-    auto dEtaByTetta = gradient(area->eta(), j+1, k, std::array<int, 2>({-1, 0}) , -1);// Tetta
+    auto dEtaByTetta = gradient(area->eta(), j + 1, k, std::array<int, 2>({-1, 0}), -1);// Tetta
     return u - M * dEtaByTetta / dTetta + f * v * dt;
 }
 
@@ -285,3 +281,24 @@ double TM::Scheme::TMScheme24::gradient(const std::shared_ptr<const TM::Map::Map
                                         const int &to) {
     return w->getDataByIndex(j, k) + to * w->getDataByIndex(j + d[0], k + d[0]);
 }
+
+std::array<std::size_t, 4> create_n_array(const std::shared_ptr<const TM::Map::MapArea<double>> &bath,
+                                          const std::size_t &j,
+                                          const std::size_t &k,
+                                          const int &izobata) {
+    std::queue<std::pair<std::size_t, std::size_t>> points;
+    for (int i(-1); i < 2; i++) {
+        for (int t(-1); t < 2; t++) {
+            try {
+                if (bath->getDataByIndex(j + i, k + t) < izobata &&
+                    bath->getDataByIndex(j + i - 2, k + t - 2) > izobata) {
+                    points.emplace(j + i, k + t);
+                }
+            } catch (TM::details::TMException &ex) {
+
+            }
+        }
+    }
+
+
+};
