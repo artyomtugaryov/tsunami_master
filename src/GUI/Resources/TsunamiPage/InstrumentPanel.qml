@@ -107,6 +107,23 @@ Item {
             }
         }
         ItemColumn {
+            id: setMareographsPath
+            textAction: "Set"
+            textDescription: " mareographs path"
+            sourceIconLeft: "Assets/saveMareographs.png"
+            pressed: mouseAreaSetMareographsPath.pressed
+            checked: _sourceGUI.tsunamiManager.tsunamiData.maxDistributionSavePath
+                     !== "None"
+
+            MouseArea {
+                id: mouseAreaSetMareographsPath
+                anchors.fill: parent
+                onClicked: {
+                    setMareographsFolderPath.open()
+                }
+            }
+        }
+        ItemColumn {
             id: openBrickFile
             textAction: "Open"
             textDescription: "brick file"
@@ -120,6 +137,23 @@ Item {
                     openBrickFile.checked = !openBrickFile.checked;
                     openBrickFile.textAction = openBrickFile.checked ? "Reopen" : "Open"
                     openBrick.open()
+                }
+            }
+        }
+        ItemColumn {
+            id: openMareographsFile
+            textAction: "Open"
+            textDescription: "mareographs file"
+            sourceIconLeft: "Assets/openMareographs.png"
+            pressed: mouseAreaOpenMareographs.pressed
+
+            MouseArea {
+                id: mouseAreaOpenMareographs
+                anchors.fill: parent
+                onClicked: {
+                    openMareographsFile.checked = !openMareographsFile.checked;
+                    openMareographsFile.textAction = openMareographsFile.checked ? "Reopen" : "Open"
+                    openMareographs.open()
                 }
             }
         }
@@ -154,6 +188,20 @@ Item {
         }
     }
     FileDialog {
+        id: setMareographsFolderPath
+
+        modality: Qt.WindowModal
+        title: "Please choose the distribution path save"
+        selectExisting: true
+        selectMultiple: false
+        selectFolder: true
+        sidebarVisible: true
+        onAccepted: {
+            console.log("Accepted: " + fileUrls)
+            _sourceGUI.tsunamiManager.tsunamiData.setMareographsFolderSavePath(fileUrls)
+        }
+    }
+    FileDialog {
         id: openBrick
 
         modality: Qt.WindowModal
@@ -167,6 +215,22 @@ Item {
         onAccepted: {
             console.log("Accepted: " + fileUrls)
             _sourceGUI.tsunamiManager.readBrickDataFromFile(fileUrls)
+        }
+    }
+    FileDialog {
+        id: openMareographs
+
+        modality: Qt.WindowModal
+        title: "Please choose a data file"
+        selectExisting: true
+        selectMultiple: false
+        selectFolder: false
+        nameFilters: [ "Text files (*.txt)", "Mareographs files (*.mrg)" ]
+        selectedNameFilter: "Mareographs files (*.mrg)"
+        sidebarVisible: true
+        onAccepted: {
+            console.log("Accepted: " + fileUrls)
+            _sourceGUI.tsunamiManager.readMareographsFromFile(fileUrls)
         }
     }
 }

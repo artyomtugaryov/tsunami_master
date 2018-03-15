@@ -24,6 +24,9 @@ namespace TM {
 
             std::size_t getIndexByPoint(double lat, double lon) const;
 
+            std::size_t getIndexXByPoint(double lon) const;
+            std::size_t getIndexYByPoint(double lat) const;
+
             std::size_t sizeX() const noexcept;
 
             std::size_t sizeY() const noexcept;

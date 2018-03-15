@@ -37,6 +37,18 @@ std::size_t TM::Map::MapArea<DataType>::getIndexByPoint(double lon, double lat) 
 }
 
 template<typename DataType>
+std::size_t TM::Map::MapArea<DataType>::getIndexXByPoint(double lon) const
+{
+    return static_cast<std::size_t>(std::round((lon - m_startX) / m_stepX));
+}
+
+template<typename DataType>
+std::size_t TM::Map::MapArea<DataType>::getIndexYByPoint(double lat) const
+{
+    return m_sizeY - 1 - static_cast<std::size_t>(std::round((lat - m_startY) / m_stepY));
+}
+
+template<typename DataType>
 std::size_t TM::Map::MapArea<DataType>::sizeX() const noexcept {
     return m_sizeX;
 }

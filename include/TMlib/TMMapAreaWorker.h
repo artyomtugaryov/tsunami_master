@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include "TMMapArea.h"
+#include "TMMareograph.h"
 
 namespace TM {
     namespace Map {
@@ -49,6 +50,16 @@ namespace TM {
 
             double getMaxDepth() const noexcept;
 
+            std::shared_ptr<std::vector<Mareograph> > getMareoghraphs() const;
+            void setMareoghraphs(const std::shared_ptr<std::vector<Mareograph> > &mareoghraphs);
+            std::string getMareographsPath() const;
+            void setMareographsPath(const std::string &mareographsPath);
+            int getMareographStepTime() const;
+            void setMareographStepTime(int mareographStepTime);
+            void readMareographsFromFile();
+            void saveMareographs(std::string path);
+            void checkMareographs(const std::shared_ptr<MapArea<double>> eta);
+
         private:
             std::shared_ptr<MapArea<double>> m_eta;
             std::shared_ptr<MapArea<double>> m_uVelocity;
@@ -56,8 +67,12 @@ namespace TM {
             std::shared_ptr<MapArea<double>> m_max;
             std::shared_ptr<MapArea<double>> m_min;
             std::shared_ptr<MapArea<double>> m_bathymetry;
+            std::shared_ptr<std::vector <Mareograph>> m_mareographs;
+
             //TODO: RENDER TO A SEPARATOR FILE
             std::string m_bathymetryPath;
+            std::string m_mareographsPath;
+            int m_mareographStepTime;
 
             void readBathymetryFromFileDat();
         };
