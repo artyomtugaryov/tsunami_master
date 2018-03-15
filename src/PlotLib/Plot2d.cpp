@@ -223,8 +223,8 @@ void Plot2d::plotColorFunction(colorFunc2D &f, QRectF region)
     r.setY(std::min(a.y(), b.y()));
     r.setWidth(std::abs(b.x() - a.x()));
     r.setHeight(std::abs(b.y() - a.y()));
-    for (int x = 0; x < r.width(); x++) {
-        for (int y = 0; y < r.height(); y++) {
+    for (int x = 0; x <= r.width(); x++) {
+        for (int y = 0; y <= r.height(); y++) {
             QPointF pt = getRealPoint(QPoint(x + a.x(), y + b.y()));
             QColor col = f(pt.x(), pt.y());
             m_image->setPixelColor(x + m_window.x(), y, col);
@@ -282,6 +282,7 @@ QPointF Plot2d::getStep()
     r.setHeight(std::abs(b.y() - a.y()));
     QPointF pt = getRealPoint(QPoint(0 + a.x(), 0 + b.y()));
     QPointF pt1 = getRealPoint(QPoint(1 + a.x(), 1 + b.y()));
+
     return QPointF(pt1.x() - pt.x(), pt1.y() - pt.y());
 }
 
