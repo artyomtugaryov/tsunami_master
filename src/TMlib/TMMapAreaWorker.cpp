@@ -139,11 +139,11 @@ size_t TM::Map::MapAreaWorker::getMaxYIndex() const {
     return m_bathymetry->sizeY();
 }
 
-double TM::Map::MapAreaWorker::getLongitudeByIndex(const double i) const noexcept {
+double TM::Map::MapAreaWorker::getLongitudeByIndex(const double &i) const noexcept {
     return m_bathymetry->startX() + m_bathymetry->stepX() * i;
 }
 
-double TM::Map::MapAreaWorker::getLatitudeByIndex(const double i) const noexcept {
+double TM::Map::MapAreaWorker::getLatitudeByIndex(const double &i) const noexcept {
     return m_bathymetry->endY() - m_bathymetry->stepY() * i;
 }
 

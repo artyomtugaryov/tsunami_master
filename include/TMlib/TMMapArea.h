@@ -20,7 +20,7 @@ namespace TM {
 
             MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue=static_cast<DataType>(0));
 
-            MapArea(const std::shared_ptr<const MapArea<DataType>> &other);
+            template <typename T> MapArea(const std::shared_ptr<const MapArea<T>> &other);
 
             std::size_t getIndex(const std::size_t &x, const std::size_t &y) const;
 
@@ -79,7 +79,6 @@ namespace TM {
             DataType max(){
                 return *std::max_element(m_data.begin(), m_data.end());
             }
-
 
         private:
             std::size_t m_sizeX;

@@ -33,9 +33,9 @@ namespace TM {
 
             const std::shared_ptr<TM::Map::MapArea<double>> vVelocity() noexcept;
 
-            double getLatitudeByIndex(const double i) const noexcept;
+            double getLatitudeByIndex(const double &i) const noexcept;
 
-            double getLongitudeByIndex(const double i) const noexcept;
+            double getLongitudeByIndex(const double &i) const noexcept;
 
             double getStepX() const noexcept;
 
