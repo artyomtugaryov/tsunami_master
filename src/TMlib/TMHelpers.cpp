@@ -20,7 +20,9 @@ void saveMapAreaAsImage(const std::shared_ptr<TM::Map::MapArea<DataType>> &area,
     std::shared_ptr<QImage> plotImage =
             std::make_shared<QImage>(bath->sizeX() + Width, bath->sizeY() + Height, QImage::Format_RGB32);
     PlotLib::Plot2d plot;
+
     plot.setImage(plotImage.get());
+    plot.setColorbar(true);
     plot.setRegion(QRectF( QPointF(bath->startX(),
                                    bath->startY()),
                            QPointF(bath->endX(),
@@ -58,6 +60,18 @@ void saveMapAreaAsImage(const std::shared_ptr<TM::Map::MapArea<DataType>> &area,
         return c;
     };
     plot.plotColorFunction(f);
+
+    plot.setAxisX(true);
+    plot.setAxisY(true);
+    plot.drawAxis(28);
+    plot.drawGrid(false, 28, 1, 0, 2, 0);
+
+    std::vector<double> ticks;
+    for(int i = etaColorBarMap.min(); i < etaColorBarMap.max(); i++) {
+        ticks.push_back(i);
+    }
+    plot.drawColorbar(etaColorBarMap, ticks, 22);
+
     plotImage->save(QString::fromStdString(savePath), "PNG");
 }
 
