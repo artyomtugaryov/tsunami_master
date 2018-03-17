@@ -100,7 +100,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
             m_signal->emitSignal(newEta);
         }
         //TODO: Remove after resolve problem with brick
-//        saveMapAreaAsImage(newEta, std::string("img/") + std::to_string(t) + std::string(".png"), area->bathymetry());
+        saveMapAreaAsImage(newEta, std::string("img/") + std::to_string(t) + std::string(".png"), area->bathymetry());
         // END TODO
     }
     clock_t end = clock();
@@ -171,7 +171,7 @@ void TM::Scheme::TMScheme24::setTypesOfCells(const std::shared_ptr<const Map::Ma
             }
         }
     }
-    saveMapAreaAsImage(types_of_cells, "boundaries.png");//, bathymetry);
+    saveMapAreaAsImage(types_of_cells, "boundaries.png", bathymetry);
     clock_t end = clock();
     std::cout << "Time of setTypesOfCells is: "
               << static_cast<double>(end - begin) * 1000.0 / double(CLOCKS_PER_SEC)
