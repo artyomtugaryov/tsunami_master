@@ -156,6 +156,22 @@ Item {
                 }
             }
         }
+        ItemColumn {
+            id: mareographsUpdating
+            textAction: "Mareographs"
+            textDescription: "updating"
+            sourceIconLeft: "Assets/updatingMareographs.png"
+            pressed: mouseMareographsUpdating.pressed
+            checked: _sourceGUI.tsunamiManager.tsunamiData.mareographsUpdating
+
+            MouseArea {
+                id: mouseMareographsUpdating
+                anchors.fill: parent
+                onClicked: {
+                    _sourceGUI.tsunamiManager.setMareographsUpdating(!mareographsUpdating.checked)
+                }
+            }
+        }
     }
 
     FileDialog {

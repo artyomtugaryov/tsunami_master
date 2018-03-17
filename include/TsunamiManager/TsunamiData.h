@@ -45,6 +45,8 @@ class TsunamiData : public QObject
 
     Q_PROPERTY(bool plotReady READ plotReady
                WRITE setPlotReady NOTIFY plotReadyChanged)
+    Q_PROPERTY(bool mareographsUpdating READ mareographsUpdating
+               WRITE setMareographsUpdating NOTIFY mareographsUpdatingChanged)
 
     Q_PROPERTY(bool readed READ readed NOTIFY readedChanged)
 
@@ -106,6 +108,8 @@ public:
 
     QString mareographsPath() const;
 
+    bool mareographsUpdating() const;
+
 public slots:
     void setImageSavePath(QString imageSavePath);
     void setMaxDistributionSavePath(QString maxDistributionSavePath);
@@ -123,6 +127,8 @@ public slots:
     void setMareographsSavePath(QString mareographsSavePath);
 
     void setMareographsPath(QString mareographsPath);
+
+    void setMareographsUpdating(bool mareographsUpdating);
 
 signals:
     void sizeXChanged(uint sizeX);
@@ -157,6 +163,8 @@ signals:
 
     void mareographsPathChanged(QString mareographsPath);
 
+    void mareographsUpdatingChanged(bool mareographsUpdating);
+
 private:
 
     uint m_sizeX;
@@ -185,6 +193,7 @@ private:
     TsunamiPlotData *m_plotData;
     QString m_mareographsSavePath;
     QString m_mareographsPath;
+    bool m_mareographsUpdating;
 };
 }
 #endif // TSUNAMIDATA_H

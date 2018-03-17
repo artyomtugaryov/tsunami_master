@@ -271,15 +271,14 @@ void Plot2d::drawColorbar(ColorMap &colorMap, std::vector<double> ticks, int fon
 
 void Plot2d::drawPointByIndex(double x, double y)
 {
-    qDebug() << m_window.x() << m_window.y() << m_window.width() << m_windowA.width();
     if (!m_painter.isActive()) {
         m_painter.begin(m_image);
     }
     QPoint a = getPoint(QPointF(x, y));
     m_painter.setBrush(Qt::red);
-    m_painter.drawEllipse(a, 20, 20);//QPoint(x + m_windowA.x(), y + m_windowA.y()), 20, 20);
+    m_painter.drawEllipse(a, 10, 10);
     m_painter.setBrush(Qt::blue);
-    m_painter.drawEllipse(a, 10, 10);//QPoint(x + m_windowA.x(), y + m_windowA.y()), 10, 10);
+    m_painter.drawEllipse(a, 5, 5);
     m_painter.end();
 }
 

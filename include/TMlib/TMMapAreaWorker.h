@@ -55,8 +55,10 @@ namespace TM {
             int mareographStepTime() const;
             void setMareographStepTime(int mareographStepTime);
             void readMareographsFromFile(const std::__cxx11::string &mareographsPath);
-            void saveMareographs(std::string path);
+            void saveMareographs(std::string path = "");
             void checkMareographs(const std::shared_ptr<MapArea<double>> eta);
+            bool mareographsUpdating() const;
+            void setMareographsUpdating(bool mareographsUpdating);
 
         private:
             std::shared_ptr<MapArea<double>> m_eta;
@@ -71,6 +73,7 @@ namespace TM {
             std::string m_bathymetryPath;
             std::string m_mareographsPath;
             int m_mareographStepTime;
+            bool m_mareographsUpdating;
 
             void readBathymetryFromFileDat();
         };

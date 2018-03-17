@@ -27,7 +27,8 @@ TsunamiData::TsunamiData(QObject *parent) :
     m_mareographsTimeUpdate(25),
     m_calculationTime(25000),
     m_plotReady(true),
-    m_plotData(new TsunamiPlotData())
+    m_plotData(new TsunamiPlotData(this)),
+    m_mareographsUpdating(false)
 {
 }
 
@@ -234,6 +235,15 @@ void TsunamiData::setMareographsPath(QString mareographsPath)
     emit mareographsPathChanged(mareographsPath);
 }
 
+void TsunamiData::setMareographsUpdating(bool mareographsUpdating)
+{
+    if (m_mareographsUpdating == mareographsUpdating)
+        return;
+
+    m_mareographsUpdating = mareographsUpdating;
+    emit mareographsUpdatingChanged(mareographsUpdating);
+}
+
 void TsunamiData::setReaded(bool readed)
 {
     if (m_readed == readed)
@@ -282,6 +292,11 @@ QString TsunamiData::mareographsSavePath() const
 QString TsunamiData::mareographsPath() const
 {
     return m_mareographsPath;
+}
+
+bool TsunamiData::mareographsUpdating() const
+{
+    return m_mareographsUpdating;
 }
 
 void TsunamiData::setBrickPath(const QString &brickPath)

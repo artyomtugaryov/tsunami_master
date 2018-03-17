@@ -16,7 +16,7 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     m_scheme(std::make_shared<TM::Scheme::TMScheme24>()),
     m_focus(std::make_shared<TM::Focus::Focus>()),
     m_timemanager(std::make_shared<TM::TMTimeManager>()),
-    m_signal(std::make_shared<TM::TMSignal>()),
+    m_signal(std::make_shared<TM::TMSignal>(this)),
     m_plotProvider(new TsunamiPlotProvider(m_tsunamiData, m_mapAreaWorker)),
     m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker, m_scheme, m_focus, m_timemanager, m_signal)),
     m_tsunamiWorkerThread(new QThread),
@@ -194,6 +194,12 @@ void TsunamiManager::setMareographsSavePath(QString path)
 #endif
     m_tsunamiData->setMareographsSavePath(path);
     m_mapAreaWorker->setMareographsPath(path.toStdString());
+}
+
+void TsunamiManager::setMareographsUpdating(bool updating)
+{
+    m_tsunamiData->setMareographsUpdating(updating);
+    m_mapAreaWorker->setMareographsUpdating(updating);
 }
 
 std::shared_ptr<TM::Map::MapArea<double> > TsunamiManager::eta() const

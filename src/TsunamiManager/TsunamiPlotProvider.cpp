@@ -170,8 +170,7 @@ void TsunamiPlotProvider::plotBathametry()
         ticks.push_back(i);
     }
     m_plot->drawColorbar(*m_colorBarMap, ticks, 22);
-   // m_plot->drawPointByIndex(m_tsunamiData->sizeX() / 2, m_tsunamiData->sizeY() / 2);
-    //qDebug() << bool(m_mapAreaWorker->mareoghraphs()->size() != 0) << "Point 9";
+
     if(m_mapAreaWorker->mareoghraphs() && m_mapAreaWorker->mareoghraphs()->size() != 0)
     {
         for(int i = 0; i < m_mapAreaWorker->mareoghraphs()->size(); ++i)

@@ -98,11 +98,14 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
         //TODO: It's no good. How we can do this better?
         if (!fmod(t, m_time->sendingTimeStep())) {
             m_signal->emitSignal(newEta);
+            //TODO: It's no good but this task is low priority
+            area->checkMareographs(newEta);
         }
         //TODO: Remove after resolve problem with brick
         saveMapAreaAsImage(newEta, std::string("img/") + std::to_string(t) + std::string(".png"), area->bathymetry());
         // END TODO
     }
+    area->saveMareographs();
     clock_t end = clock();
     std::cout << "Time of calculation is: " << double(end - begin) * 1000. / CLOCKS_PER_SEC << " ms." << std::endl;
 }
