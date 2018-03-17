@@ -50,13 +50,13 @@ namespace TM {
 
             double getMaxDepth() const noexcept;
 
-            std::shared_ptr<std::vector<Mareograph> > getMareoghraphs() const;
+            std::shared_ptr<std::vector<Mareograph> > mareoghraphs() const;
             void setMareoghraphs(const std::shared_ptr<std::vector<Mareograph> > &mareoghraphs);
-            std::string getMareographsPath() const;
+            std::string mareographsPath() const;
             void setMareographsPath(const std::string &mareographsPath);
-            int getMareographStepTime() const;
+            int mareographStepTime() const;
             void setMareographStepTime(int mareographStepTime);
-            void readMareographsFromFile();
+            void readMareographsFromFile(const std::__cxx11::string &mareographsPath);
             void saveMareographs(std::string path);
             void checkMareographs(const std::shared_ptr<MapArea<double>> eta);
 

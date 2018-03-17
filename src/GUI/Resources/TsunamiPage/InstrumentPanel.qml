@@ -112,7 +112,7 @@ Item {
             textDescription: " mareographs path"
             sourceIconLeft: "Assets/saveMareographs.png"
             pressed: mouseAreaSetMareographsPath.pressed
-            checked: _sourceGUI.tsunamiManager.tsunamiData.maxDistributionSavePath
+            checked: _sourceGUI.tsunamiManager.tsunamiData.MareographsSavePath
                      !== "None"
 
             MouseArea {
@@ -120,23 +120,6 @@ Item {
                 anchors.fill: parent
                 onClicked: {
                     setMareographsFolderPath.open()
-                }
-            }
-        }
-        ItemColumn {
-            id: openBrickFile
-            textAction: "Open"
-            textDescription: "brick file"
-            sourceIconLeft: "Assets/OpenIcon.png"
-            pressed: mouseAreaBrickFile.pressed
-
-            MouseArea {
-                id: mouseAreaBrickFile
-                anchors.fill: parent
-                onClicked: {
-                    openBrickFile.checked = !openBrickFile.checked;
-                    openBrickFile.textAction = openBrickFile.checked ? "Reopen" : "Open"
-                    openBrick.open()
                 }
             }
         }
@@ -151,9 +134,25 @@ Item {
                 id: mouseAreaOpenMareographs
                 anchors.fill: parent
                 onClicked: {
-                    openMareographsFile.checked = !openMareographsFile.checked;
                     openMareographsFile.textAction = openMareographsFile.checked ? "Reopen" : "Open"
                     openMareographs.open()
+                }
+            }
+        }
+        ItemColumn {
+            id: openBrickFile
+            textAction: "Open"
+            textDescription: "brick file"
+            sourceIconLeft: "Assets/openBrick.png"
+            pressed: mouseAreaBrickFile.pressed
+
+            MouseArea {
+                id: mouseAreaBrickFile
+                anchors.fill: parent
+                onClicked: {
+                    openBrickFile.checked = !openBrickFile.checked;
+                    openBrickFile.textAction = openBrickFile.checked ? "Reopen" : "Open"
+                    openBrick.open()
                 }
             }
         }
@@ -198,7 +197,7 @@ Item {
         sidebarVisible: true
         onAccepted: {
             console.log("Accepted: " + fileUrls)
-            _sourceGUI.tsunamiManager.tsunamiData.setMareographsFolderSavePath(fileUrls)
+            _sourceGUI.tsunamiManager.tsunamiData.setMareographsSavePath(fileUrls)
         }
     }
     FileDialog {
@@ -231,6 +230,7 @@ Item {
         onAccepted: {
             console.log("Accepted: " + fileUrls)
             _sourceGUI.tsunamiManager.readMareographsFromFile(fileUrls)
+            openMareographsFile.checked = true
         }
     }
 }

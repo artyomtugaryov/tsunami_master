@@ -41,5 +41,6 @@
         <file>Resources/Common/InstrumentPanel/Assets/distribution.png</file>
         <file>Resources/Common/InstrumentPanel/Assets/saveMareographs.png</file>
         <file>Resources/Common/InstrumentPanel/Assets/openMareographs.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/openBrick.png</file>
     </qresource>
 </RCC>

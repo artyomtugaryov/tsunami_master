@@ -41,6 +41,7 @@ public:
     void plotColorFunction(colorFunc2D & f, QRectF region);
     void plotColorFunction(colorFunc2D & f);
     void drawColorbar(ColorMap &colorMap, std::vector <double> ticks, int fontSize);
+    void drawPointByIndex(double x, double y);
 
     QPointF getStep();
     QPoint getPoint(const QPointF point);

@@ -17,7 +17,6 @@ Map::MapAreaWorker::MapAreaWorker(const std::string &path) {
     this->m_uVelocity = std::make_shared<Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
     this->m_vVelocity = std::make_shared<Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
     this->m_eta = std::make_shared<Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
-    this->m_mareographs = std::make_shared<std::vector <Mareograph>>();
 }
 
 void Map::MapAreaWorker::readBathymetryFromFileDat() {
@@ -170,7 +169,7 @@ double Map::MapAreaWorker::getMaxDepth() const noexcept {
     return m_bathymetry->getMinValue();
 }
 
-std::shared_ptr<std::vector<Mareograph> > Map::MapAreaWorker::getMareoghraphs() const
+std::shared_ptr<std::vector<Mareograph> > Map::MapAreaWorker::mareoghraphs() const
 {
     return m_mareographs;
 }
@@ -180,7 +179,7 @@ void Map::MapAreaWorker::setMareoghraphs(const std::shared_ptr<std::vector<Mareo
     m_mareographs = mareoghraphs;
 }
 
-std::string Map::MapAreaWorker::getMareographsPath() const
+std::string Map::MapAreaWorker::mareographsPath() const
 {
     return m_mareographsPath;
 }
@@ -190,35 +189,43 @@ void Map::MapAreaWorker::setMareographsPath(const std::string &mareographsPath)
     m_mareographsPath = mareographsPath;
 }
 
-void Map::MapAreaWorker::readMareographsFromFile()
+void Map::MapAreaWorker::readMareographsFromFile(const std::string &mareographsPath)
 {
     std::fstream file;
-
-    if(m_mareographsPath.empty())
+    std::cout << "Point 3" << std::endl;
+    if(mareographsPath.empty())
     {
         return;
     }
-
-    const char * path = m_mareographsPath.c_str();
+    m_mareographs =  std::shared_ptr<std::vector <Mareograph>>(new std::vector <Mareograph>());//new std::vector <Mareograph>();
+    const char * path = mareographsPath.c_str();
     file.open(path, std::fstream::in);
-
+    std::cout << "Point 3.1" << std::endl;
     int count;
     file >> count;
+    std::cout << "Point 3.2" << std::endl;
     for (int i = 0; i < count; i++)
     {
         std::string location;
         double x, y;
         file >> location >> x >> y;
-        Mareograph m(y, x, 25, location);
+        TM::Mareograph m(y, x, 25, location);
 
-        if(x >= bathymetry()->startX() && y >= bathymetry()->startY()
-                && x <= bathymetry()->endX() && y <= bathymetry()->endY()){
+        if(x < bathymetry()->startX() || y < bathymetry()->startY()
+                || x > bathymetry()->endX() || y > bathymetry()->endY()){
             continue;
         }
+        std::cout << "Point 3.4 " << x << " " << y << std::endl;
+        //zq`m_bathymetry->getIndexByPoint(x, y, true);
+        std::cout << "Point 3.5 " << m_bathymetry->getIndexXByPoint(x) << " " << m_bathymetry->getIndexYByPoint(y) << std::endl;
         m.setIndexX(m_bathymetry->getIndexXByPoint(x));
-        m.setIndexY(m_bathymetry->getIndexXByPoint(y));
+        m.setIndexY(m_bathymetry->getIndexYByPoint(y));
+        std::cout << "Point 3.6 " << bool(m_mareographs)  << std::endl;
         m_mareographs->push_back(m);
+        std::cout << "Point 3.7" << std::endl;
     }
+    std::cout << "Point 4 " << m_mareographs->size() << std::endl;
+    file.close();
 }
 
 void Map::MapAreaWorker::saveMareographs(std::__cxx11::string path)
@@ -244,7 +251,7 @@ void Map::MapAreaWorker::checkMareographs(const std::shared_ptr<MapArea<double> 
     }
 }
 
-int Map::MapAreaWorker::getMareographStepTime() const
+int Map::MapAreaWorker::mareographStepTime() const
 {
     return m_mareographStepTime;
 }

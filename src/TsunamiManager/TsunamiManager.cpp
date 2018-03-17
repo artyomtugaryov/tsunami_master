@@ -172,6 +172,30 @@ void TsunamiManager::plotFromQueue(bool ready)
     m_plotting = false;
 }
 
+void TsunamiManager::readMareographsFromFile(QString path)
+{
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    path = path.remove("file:///");
+#else
+    path = path.remove("file://");
+#endif
+    m_tsunamiData->setMareographsPath(path);
+    m_mapAreaWorker->readMareographsFromFile(path.toStdString());
+    emit imageUpdate();
+    emit imageUpdate();
+}
+
+void TsunamiManager::setMareographsSavePath(QString path)
+{
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    path = path.remove("file:///");
+#else
+    path = path.remove("file://");
+#endif
+    m_tsunamiData->setMareographsSavePath(path);
+    m_mapAreaWorker->setMareographsPath(path.toStdString());
+}
+
 std::shared_ptr<TM::Map::MapArea<double> > TsunamiManager::eta() const
 {
     return m_eta;

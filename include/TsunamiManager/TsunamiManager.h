@@ -45,6 +45,9 @@ public slots:
     void saveInitDataToJson();
     void quickStart();
     void colorBarProvide(const std::shared_ptr<ColorMap> &colorBarMap);
+    void readMareographsFromFile(QString path);
+    void setMareographsSavePath(QString path);
+
 private slots:
     void isUpdateTime(std::shared_ptr<TM::Map::MapArea<double>> eta);
     void isobathChanged(double isobath);
