@@ -11,28 +11,28 @@ namespace TM {
 class Mareograph
 {
 public:
-	Mareograph();
+	Mareograph() = default;
     Mareograph(double _latitude, double _longitude, int _stepTime, std::string _locationName);
     Mareograph(double _latitude, double _longitude, int _stepTime, std::wstring _locationName);
-    Mareograph(int _stepTime);
-	virtual ~Mareograph();
+    explicit Mareograph(int _stepTime);
+	virtual ~Mareograph() = default;
 	
 	//-----------------//
 	/* getter methods */
 	//----------------//
 	
-    double getLongitude() const;
-    double getLatitude() const;
-    double getMaxHeight() const;
-    double getMinHeight() const;
-    int getIndexX() const;
-    int getIndexY() const;
-    int getStepTime() const;
-    int getStartTime() const;
-    std::string getLocationNameASCII() const;
-    std::wstring getLocationNameUTF8() const;
-    double getHeight(int index) const;
-    unsigned int getSizeHeights() const;
+    double getLongitude() const noexcept;
+    double getLatitude() const noexcept;
+    double getMaxHeight() const noexcept;
+    double getMinHeight() const noexcept;
+	std::size_t  getIndexX() const noexcept;
+	std::size_t  getIndexY() const noexcept;
+    int getStepTime() const noexcept;
+    int getStartTime() const noexcept;
+    std::string getLocationNameASCII() const noexcept;
+    std::wstring getLocationNameUTF8() const noexcept;
+    double getHeight(int index) const noexcept;
+    unsigned int getSizeHeights() const noexcept;
 	
 	//----------------//
 	/* setter methods */
@@ -46,11 +46,11 @@ public:
 
     void setIndexX(double startX, double deltaX);
 
-    void setIndexX(int index);
+    void setIndexX(std::size_t  index);
 	
     void setIndexY(double startY, double deltaY, int sizeY);
 
-    void setIndexY(int index);
+    void setIndexY(std::size_t  index);
 
 	//----------------//
 	/*  push  height  */
@@ -64,18 +64,18 @@ public:
 	//----------------//
 	
     static void writeToFile(std::string path,
-                            const std::shared_ptr<std::vector<Mareograph> > M,
+                            const std::shared_ptr<const std::vector<Mareograph>> &M,
                             bool writeHeights = true);
 
     void writeToFileMareograph(std::string path);
 
     std::string getStartTimeString(int t);
 
-    void writeToParametersMareograph(std::string path,
-                                     const std::shared_ptr<std::vector<Mareograph> > M);
+    void writeToParametersMareograph(const std::string &path,
+                                     const std::shared_ptr<const std::vector<Mareograph>> &M);
 		
     static void writeToFile(std::wstring path,
-                            const std::shared_ptr<std::vector<Mareograph> > M,
+                            const std::shared_ptr<const std::vector<Mareograph>> &M,
                             bool writeHeights = true);
 
     static std::shared_ptr <std::vector<Mareograph>> readFromFile(std::string path,
@@ -90,7 +90,7 @@ public:
 
 private:
 	double longitude, latitude;
-	int indexX, indexY;
+	std::size_t indexX, indexY;
 	int stepTime, startTime;
 	double maxHeight, minHeight;
 	

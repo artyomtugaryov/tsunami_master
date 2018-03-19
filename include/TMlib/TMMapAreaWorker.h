@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <memory>
-#include "TMMapArea.h"
-#include "TMMareograph.h"
+#include "TMlib/TMMapArea.h"
+#include "TMlib/TMMareograph.h"
 
 namespace TM {
     namespace Map {
@@ -54,11 +54,11 @@ namespace TM {
             void setMareographsPath(const std::string &mareographsPath);
             int mareographStepTime() const;
             void setMareographStepTime(int mareographStepTime);
-            void readMareographsFromFile(const std::__cxx11::string &mareographsPath);
+            void readMareographsFromFile(const std::string &mareographsPath);
             void saveMareographs(std::string path = "");
-            void checkMareographs(const std::shared_ptr<MapArea<double>> eta);
-            bool mareographsUpdating() const;
-            void setMareographsUpdating(bool mareographsUpdating);
+            void checkMareographs(const std::shared_ptr<const MapArea<double>> &eta);
+            bool mareographsUpdating() const noexcept ;
+            void setMareographsUpdating(bool mareographsUpdating) noexcept ;
 
         private:
             std::shared_ptr<MapArea<double>> m_eta;

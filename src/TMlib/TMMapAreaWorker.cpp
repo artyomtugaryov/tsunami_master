@@ -198,7 +198,7 @@ void Map::MapAreaWorker::readMareographsFromFile(const std::string &mareographsP
     {
         return;
     }
-    m_mareographs =  std::shared_ptr<std::vector <Mareograph>>(new std::vector <Mareograph>());//new std::vector <Mareograph>();
+    m_mareographs =  std::make_shared<std::vector <Mareograph>>();
     const char * path = mareographsPath.c_str();
     file.open(path, std::fstream::in);
     int count;
@@ -231,25 +231,23 @@ void Map::MapAreaWorker::saveMareographs(std::__cxx11::string path)
         a.writeToParametersMareograph(path + "parameters.txt", m_mareographs);
 }
 
-void Map::MapAreaWorker::checkMareographs(const std::shared_ptr<MapArea<double> > eta)
-{
-    if (m_mareographs->size() == 0 || !m_mareographsUpdating)
-    {
+void Map::MapAreaWorker::checkMareographs(const std::shared_ptr<const MapArea<double>> &eta) {
+    if (!m_mareographs || (m_mareographs->empty() || !m_mareographsUpdating)) {
+        std::cout<<"Problems with mareographs";
         return;
     }
-    for (std::size_t i = 0; i < m_mareographs->size(); i++)
+    for (auto i =  m_mareographs->begin(); i != m_mareographs->end(); i++)
     {
-        (*m_mareographs)[i].pushHeight(eta->getDataByIndex((*m_mareographs)[i].getIndexX(),
-                                                           (*m_mareographs)[i].getIndexY()));
+        i->pushHeight(eta->getDataByIndex(i->getIndexX(),i->getIndexY()));
     }
 }
 
-bool Map::MapAreaWorker::mareographsUpdating() const
+bool Map::MapAreaWorker::mareographsUpdating() const noexcept
 {
     return m_mareographsUpdating;
 }
 
-void Map::MapAreaWorker::setMareographsUpdating(bool mareographsUpdating)
+void Map::MapAreaWorker::setMareographsUpdating(bool mareographsUpdating) noexcept
 {
     m_mareographsUpdating = mareographsUpdating;
 }
