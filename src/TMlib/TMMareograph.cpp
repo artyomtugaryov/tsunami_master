@@ -214,12 +214,12 @@ std::shared_ptr<std::vector<Mareograph> > Mareograph::readFromFile(std::string p
     file.open(path, std::fstream::in);
     int count, _stepTime;
     file >> count >> _stepTime;
-
-    for (std::size_t i = 0; i < count; i++) {
-        M->push_back(Mareograph(_stepTime));
+    M->resize(count);
+    for (auto i :*M ) {
+        i = Mareograph(_stepTime);
         std::string name;
         file >> name;
-        (*M)[i].setLocationName(std::string(name));
+        i.setLocationName(std::string(name));
     }
     for (auto i : *M) {
         double _longitude;
