@@ -33,9 +33,14 @@ namespace TM {
                                    const std::shared_ptr<TMSignal> &) = 0;
 
         protected:
+            void setTypesOfCells(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
+                                 const double &izobata);
+
             std::shared_ptr<TM::Focus::Focus> m_focus;
             std::shared_ptr<TMTimeManager> m_time;
             std::shared_ptr<TMSignal> m_signal;
+            std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> m_types_cells;
+
         };
     }
 }

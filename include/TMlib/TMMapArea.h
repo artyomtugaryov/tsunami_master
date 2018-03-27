@@ -75,13 +75,9 @@ namespace TM {
 
             const DataType getMinValue() const;
 
-            DataType min(){
-                return *std::min_element(m_data.begin(), m_data.end());
-            }
+            DataType min();
 
-            DataType max(){
-                return *std::max_element(m_data.begin(), m_data.end());
-            }
+            DataType max();
 
         private:
             std::size_t m_sizeX;

@@ -21,14 +21,11 @@ namespace TM {
                            const std::shared_ptr<const Focus::Focus> &focus,
                            const double &izobata,
                            const std::shared_ptr<TMTimeManager> &sender,
-                           const std::shared_ptr<TMSignal> &signal);
+                           const std::shared_ptr<TMSignal> &signal) override ;
 
-            double getTimeStep(const double &dPhi, const double &dTetta, const double Hm) const;
+            double getTimeStep(const double &dPhi, const double &dTetta, const double &Hm) const;
 
         private:
-
-            void setTypesOfCells(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
-                                 const double &izobata);
 
             void setUpBArrays(std::size_t &&x, std::size_t &&y);
 
@@ -83,7 +80,6 @@ namespace TM {
                             const std::array<int, 2> &d,
                             const int &to = 1);
 
-                std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> m_types_cells;
                 std::shared_ptr<TM::Map::MapArea<double>> m_B0;
                 std::shared_ptr<TM::Map::MapArea<double>> m_B1;
             };

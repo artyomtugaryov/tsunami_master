@@ -196,6 +196,20 @@ const DataType TM::Map::MapArea<DataType>::getMinValue() const {
     return *std::min_element(this->m_data.begin(), this->m_data.end());
 }
 
+template<typename DataType>
+DataType TM::Map::MapArea<DataType>::min(){
+    return *std::min_element(m_data.begin(), m_data.end());
+}
+
+template<typename DataType>
+DataType TM::Map::MapArea<DataType>::max(){
+    return *std::max_element(m_data.begin(), m_data.end());
+}
+template<typename DataType>
+DataType const& operator[](int index) const;
+{
+    return state[index];
+}
 template class TM::Map::MapArea<double>;
 template TM::Map::MapArea<double>::MapArea(const std::shared_ptr<const TM::Map::MapArea<double>> &);
 

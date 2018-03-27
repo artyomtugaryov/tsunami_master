@@ -6,7 +6,8 @@
 
 namespace TM{
     namespace Common{
-        double coefCoriolis(double lat);
+        double coefKoriolis(const double &lat);
+        double coefKoriolis_kolch(const double &lat);
     }
 }
 
