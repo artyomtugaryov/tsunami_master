@@ -71,6 +71,11 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
             }
         }
         area->setEta(newEta);
+
+        std::shared_ptr<TM::Map::MapArea<double>> newU =
+                std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
+        std::shared_ptr<TM::Map::MapArea<double>> newV =
+                std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
         auto M = G * dt / R_EACH; //make more common
 #pragma omp parallel for shared(M) private(j)
         for (j = 0; j < maxX; j++) {
@@ -91,10 +96,12 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
                     default:
                         break;
                 }
-                area->uVelocity()->setDataByIndex(j, k, u_new);
-                area->vVelocity()->setDataByIndex(j, k, v_new);
+                newU->setDataByIndex(j, k, u_new);
+                newV->setDataByIndex(j, k, v_new);
             }
         }
+        area->setU(newU);
+        area->setV(newV);
         //TODO: It's no good. How we can do this better?
         if (!fmod(t, m_time->sendingTimeStep())) {
             m_signal->emitSignal(newEta);

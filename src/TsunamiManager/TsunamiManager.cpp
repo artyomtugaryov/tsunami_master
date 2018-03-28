@@ -39,7 +39,7 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     connect(m_tsunamiData, &TsunamiData::timeUpdateChanged, this, &TsunamiManager::updateTimeChanged);
     //connect(m_tsunamiData, &TsunamiData::plotReadyChanged, this, TsunamiManager::plotFromQueue);
     //connect(m_tsunamiWorker, SIGNAL(updateTime(int)), this, SLOT(isUpdateTime(int)));
-    m_timemanager->setSendingTimeStep(10);
+    m_timemanager->setSendingTimeStep(1);
     qRegisterMetaType<std::shared_ptr<TM::Map::MapArea<double>>>("std::shared_ptr<TM::Map::MapArea<double>>");
     connect(m_signal.get(), &TM::TMSignal::signalUpdate, this, &TsunamiManagerInfo::TsunamiManager::isUpdateTime);
 

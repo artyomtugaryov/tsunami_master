@@ -30,6 +30,10 @@ namespace TM {
 
             void setEta(std::shared_ptr<TM::Map::MapArea<double>> &newEta) noexcept;
 
+            void setU(std::shared_ptr<TM::Map::MapArea<double>> &newU) noexcept;
+
+            void setV(std::shared_ptr<TM::Map::MapArea<double>> &newV) noexcept;
+
             const std::shared_ptr<TM::Map::MapArea<double>> uVelocity() noexcept;
 
             const std::shared_ptr<TM::Map::MapArea<double>> vVelocity() noexcept;

@@ -116,7 +116,12 @@ const std::shared_ptr<Map::MapArea<double>> Map::MapAreaWorker::eta() noexcept {
 void TM::Map::MapAreaWorker::setEta(std::shared_ptr<TM::Map::MapArea<double>> &newEta) noexcept {
     m_eta = newEta;
 }
-
+void TM::Map::MapAreaWorker::setU(std::shared_ptr<TM::Map::MapArea<double>> &newU) noexcept {
+    m_eta = newU;
+}
+void TM::Map::MapAreaWorker::setV(std::shared_ptr<TM::Map::MapArea<double>> &newV) noexcept {
+    m_eta = newV;
+}
 const std::shared_ptr<const Map::MapArea<double>> Map::MapAreaWorker::bathymetry() const noexcept {
     return m_bathymetry;
 }
@@ -228,7 +233,7 @@ void Map::MapAreaWorker::saveMareographs(std::__cxx11::string path)
 
 void Map::MapAreaWorker::checkMareographs(const std::shared_ptr<const MapArea<double>> &eta) {
     if (!m_mareographs || (m_mareographs->empty() || !m_mareographsUpdating)) {
-        std::cout<<"Problems with mareographs";
+        std::cout<<"Problems with mareographs"<<std::endl;
         return;
     }
     for (auto i =  m_mareographs->begin(); i != m_mareographs->end(); i++)
