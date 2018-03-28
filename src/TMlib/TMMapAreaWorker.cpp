@@ -109,10 +109,6 @@ bool Map::MapAreaWorker::setBathymetryPath(const std::string &path, bool readFro
     return false;
 }
 
-const std::shared_ptr<const Map::MapArea<double>> Map::MapAreaWorker::eta() const noexcept {
-    return m_eta;
-}
-
 const std::shared_ptr<Map::MapArea<double>> Map::MapAreaWorker::eta() noexcept {
     return m_eta;
 }
@@ -120,7 +116,6 @@ const std::shared_ptr<Map::MapArea<double>> Map::MapAreaWorker::eta() noexcept {
 void TM::Map::MapAreaWorker::setEta(std::shared_ptr<TM::Map::MapArea<double>> &newEta) noexcept {
     m_eta = newEta;
 }
-
 
 const std::shared_ptr<const Map::MapArea<double>> Map::MapAreaWorker::bathymetry() const noexcept {
     return m_bathymetry;

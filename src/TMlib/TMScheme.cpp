@@ -2,6 +2,7 @@
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMException.h>
 #include <TMlib/TMHelpers.h>
+#include <ctime>
 
 void TM::Scheme::TMScheme::setTypesOfCells(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                                            const double &izobata) {
