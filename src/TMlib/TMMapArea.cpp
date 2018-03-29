@@ -147,7 +147,7 @@ void TM::Map::MapArea<DataType>::setEndY(double endY) {
 }
 
 template<typename DataType>
-void TM::Map::MapArea<DataType>::setDataByIndex(std::size_t &x, std::size_t &y, DataType value) {
+void TM::Map::MapArea<DataType>::setDataByIndex(const std::size_t &x, const std::size_t &y,const  DataType &value) {
     m_data[getIndex(x, y)] = value;
 }
 

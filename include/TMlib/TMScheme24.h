@@ -4,7 +4,6 @@
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMMapArea.h>
 #include <TMlib/TMScheme.h>
-//#include <QtGui/qopengles2ext.h>
 
 namespace TM {
     namespace Scheme {
@@ -21,7 +20,7 @@ namespace TM {
                            const std::shared_ptr<const Focus::Focus> &focus,
                            const double &izobata,
                            const std::shared_ptr<TMTimeManager> &sender,
-                           const std::shared_ptr<TMSignal> &signal) override ;
+                           const std::shared_ptr<TMSignal> &signal) override;
 
             double getTimeStep(const double &dPhi, const double &dTetta, const double &Hm) const;
 
@@ -75,16 +74,16 @@ namespace TM {
                                              const double &dTetta);
 
             static double gradient(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
-                            const std::size_t &j,
-                            const std::size_t &k,
-                            const std::array<int, 2> &d,
-                            const int &to = 1);
+                                   const std::size_t &j,
+                                   const std::size_t &k,
+                                   const std::array<int, 2> &d,
+                                   const int &to = 1);
 
-                std::shared_ptr<TM::Map::MapArea<double>> m_B0;
-                std::shared_ptr<TM::Map::MapArea<double>> m_B1;
-            };
-        }
+            std::shared_ptr<TM::Map::MapArea<double>> m_B0;
+            std::shared_ptr<TM::Map::MapArea<double>> m_B1;
+        };
     }
+}
 
 #endif //TSUNAMIMANAGER_TMSHEME24_H
 

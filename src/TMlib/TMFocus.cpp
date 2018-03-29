@@ -38,7 +38,7 @@ TM::Focus::Focus::Focus(const std::string &path) {
     blocksFile.close();
 }
 
-const TM::Focus::Block TM::Focus::Focus::getBlock(std::size_t b) {
+const TM::Focus::Block TM::Focus::Focus::getBlock(std::size_t b) const noexcept {
     if (b < this->m_blocks.size()) {
         return m_blocks[b];
     } else {
@@ -54,4 +54,8 @@ double TM::Focus::Focus::getHeightByIndex(double lat, double lon, double t) {
         }
     }
     return 0;
+}
+
+const std::vector<TM::Focus::Block>& TM::Focus::Focus::blocks(){
+    return m_blocks;
 }

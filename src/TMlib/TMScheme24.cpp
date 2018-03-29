@@ -30,8 +30,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
             }
         }
         auto dt = this->m_time->step();
-        std::shared_ptr<TM::Map::MapArea<double>> newEta =
-                std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
+        auto newEta = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
 #pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
         for (j = 1; j < maxX; j++) {
             auto tetta = area->getLongitudeByIndex(j);
@@ -72,10 +71,8 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
         }
         area->setEta(newEta);
 
-        std::shared_ptr<TM::Map::MapArea<double>> newU =
-                std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
-        std::shared_ptr<TM::Map::MapArea<double>> newV =
-                std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
+        auto newU = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
+        auto newV = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
         auto M = G * dt / R_EACH; //make more common
 #pragma omp parallel for shared(M) private(j)
         for (j = 0; j < maxX; j++) {
@@ -89,8 +86,8 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
                     case WATER: { ;
                         auto u = area->uVelocity()->getDataByIndex(j, k);
                         auto v = area->vVelocity()->getDataByIndex(j, k);
-                        u_new = calcUVelocity(area, j, k, dTetta, M, f, v, u, dt);
-                        v_new = calcVVelocity(area, j, k, tetta, dPhi, M, f, v, u, dt);
+                        u_new = calcUVelocity(area, j, k, dTetta, M, f, u, v, dt);
+                        v_new = calcVVelocity(area, j, k, tetta, dPhi, M, f, u, v, dt);
                         break;
                     }
                     default:
@@ -216,8 +213,8 @@ double TM::Scheme::TMScheme24::calcUVelocity(const std::shared_ptr<TM::Map::MapA
                                              const double &dTetta,
                                              const double &M,
                                              const double &f,
-                                             const double &v,
                                              const double &u,
+                                             const double &v,
                                              const double &dt) {
     auto dEtaByTetta = gradient(area->eta(), j + 1, k, std::array<int, 2>({-1, 0}), -1);
     return u - M * dEtaByTetta / dTetta + f * v * dt;
@@ -230,8 +227,8 @@ double TM::Scheme::TMScheme24::calcVVelocity(const std::shared_ptr<TM::Map::MapA
                                              const double &dPhi,
                                              const double &M,
                                              const double &f,
-                                             const double &v,
                                              const double &u,
+                                             const double &v,
                                              const double &dt) {
     auto dEtaByPhi = gradient(area->eta(), j, k, std::array<int, 2>({0, -1}), -1);
     return v - M * dEtaByPhi / (sin(Tetta) * dPhi) - f * u * dt;

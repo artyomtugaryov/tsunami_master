@@ -8,6 +8,7 @@
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMException.h>
 #include <TMlib/TMScheme24.h>
+#include <TMlib/TMKolchSchema.h>
 #include <TMlib/TMFocus.h>
 #include <TMlib/TMSignal.h>
 #include <TMlib/TMTimeManager.h>
@@ -64,7 +65,7 @@ private:
 
     TsunamiManagerInfo::TsunamiData* m_tsunamiData;
     std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
-    std::shared_ptr<TM::Scheme::TMScheme24> m_scheme;
+    std::shared_ptr<TM::Scheme::TMScheme> m_scheme;
     std::shared_ptr<TM::Focus::Focus> m_focus;
     std::shared_ptr<TM::TMTimeManager> m_timemanager;
     std::shared_ptr<TM::TMSignal> m_signal;

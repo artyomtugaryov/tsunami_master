@@ -67,7 +67,7 @@ namespace TM {
 
             void setEndY(double endY);
 
-            void setDataByIndex(std::size_t &x, std::size_t &y, DataType value);
+            void setDataByIndex(const std::size_t &x, const std::size_t &y, const DataType &value);
 
             void setDataByPoint(double longitude, double latitude, DataType value);
 

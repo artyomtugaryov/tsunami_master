@@ -13,7 +13,8 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     QObject(parent),
     m_tsunamiData(new TsunamiManagerInfo::TsunamiData(this)),
     m_mapAreaWorker(std::make_shared<TM::Map::MapAreaWorker>()),
-    m_scheme(std::make_shared<TM::Scheme::TMScheme24>()),
+//    m_scheme(std::make_shared<TM::Scheme::TMScheme24>()),
+    m_scheme(std::make_shared<TM::Scheme::TMKolchSchema>()),
     m_focus(std::make_shared<TM::Focus::Focus>()),
     m_timemanager(std::make_shared<TM::TMTimeManager>()),
     m_signal(std::make_shared<TM::TMSignal>(this)),
@@ -39,7 +40,7 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     connect(m_tsunamiData, &TsunamiData::timeUpdateChanged, this, &TsunamiManager::updateTimeChanged);
     //connect(m_tsunamiData, &TsunamiData::plotReadyChanged, this, TsunamiManager::plotFromQueue);
     //connect(m_tsunamiWorker, SIGNAL(updateTime(int)), this, SLOT(isUpdateTime(int)));
-    m_timemanager->setSendingTimeStep(1);
+    m_timemanager->setSendingTimeStep(10);
     qRegisterMetaType<std::shared_ptr<TM::Map::MapArea<double>>>("std::shared_ptr<TM::Map::MapArea<double>>");
     connect(m_signal.get(), &TM::TMSignal::signalUpdate, this, &TsunamiManagerInfo::TsunamiManager::isUpdateTime);
 

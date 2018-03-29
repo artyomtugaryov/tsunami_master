@@ -77,6 +77,9 @@ namespace TM {
                 }
             }
 
+            int number_up() const noexcept {
+                return m_numberUp.size();
+            }
 
             double m_beginT; //Time start Up
             std::vector<BrickPoint> m_points;
