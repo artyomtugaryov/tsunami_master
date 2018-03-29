@@ -91,37 +91,29 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
         for (size_t i = 1; i < size_x - 1; ++i) {
             for (size_t j = 1; j < size_y - 1; ++j) {
                 auto etaValue = 0.;
-                switch (m_types_cells->getDataByIndex(i, j)) {
-                    case TM::Scheme::types_cells::WATER: {
-                        if (i < size_x - 2 && j < size_y - 2) {
-                            etaValue = eta_old->getDataByIndex(i, j) - delta_t[j] * ((1 / (2 * delta_x_m)) *
-                                                                                     (u_old->getDataByIndex(i, j +
-                                                                                                               1) *
-                                                                                      (-h->getDataByIndex(i,
-                                                                                                          j + 1) +
-                                                                                       -h->getDataByIndex(i, j)) -
-                                                                                      u_old->getDataByIndex(i, j) *
-                                                                                      (-h->getDataByIndex(i, j) +
-                                                                                       -h->getDataByIndex(i, j -
-                                                                                                             1))) +
-                                                                                     (1 / (2 * delta_y_m[j]) *
-                                                                                      (v_old->getDataByIndex(i + 1,
-                                                                                                             j) *
-                                                                                       (-h->getDataByIndex(i + 1,
-                                                                                                           j) +
-                                                                                        -h->getDataByIndex(i, j)) -
-                                                                                       v_old->getDataByIndex(i,
-                                                                                                             j) *
-                                                                                       (-h->getDataByIndex(i - 1,
-                                                                                                           j) +
-                                                                                        -h->getDataByIndex(i,
-                                                                                                           j)))));
+                if (m_types_cells->getDataByIndex(i, j) == TM::Scheme::types_cells::WATER) {
+                    if (i < size_x - 2 && j < size_y - 2) {
+                        etaValue = eta_old->getDataByIndex(i, j) - delta_t[j] * ((1. / (2. * delta_x_m)) *
+                                                                                 (u_old->getDataByIndex(i, j + 1) *
+                                                                                  (-h->getDataByIndex(i, j + 1) +
+                                                                                   -h->getDataByIndex(i, j)) -
+                                                                                  u_old->getDataByIndex(i, j) *
+                                                                                  (-h->getDataByIndex(i, j) +
+                                                                                   -h->getDataByIndex(i, j - 1))) +
+                                                                                 (1 / (2 * delta_y_m[j]) *
+                                                                                  (v_old->getDataByIndex(i + 1,
+                                                                                                         j) *
+                                                                                   (-h->getDataByIndex(i + 1,
+                                                                                                       j) +
+                                                                                    -h->getDataByIndex(i, j)) -
+                                                                                   v_old->getDataByIndex(i,
+                                                                                                         j) *
+                                                                                   (-h->getDataByIndex(i - 1,
+                                                                                                       j) +
+                                                                                    -h->getDataByIndex(i,
+                                                                                                       j)))));
 
-                        }
-                        break;
                     }
-                    default:
-                        break;
                 }
                 eta->setDataByIndex(i, j, etaValue + converting_motion_blocks(i, j, t));
             }
@@ -134,20 +126,16 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
             for (size_t j = 1; j < size_y - 1; ++j) {
                 auto u = 0.;
                 auto v = 0.;
-                switch (m_types_cells->getDataByIndex(i, j)) {
-                    case TM::Scheme::types_cells::WATER: {
-                        u = u_old->getDataByIndex(i, j) -
-                            G * delta_t[j] / delta_x_m * (eta->getDataByIndex(i, j) - eta->getDataByIndex(i, j - 1)) -
-                            delta_t[j] * Ch / (eta->getDataByIndex(i, j) + -h->getDataByIndex(i, j)) *
-                            fabs(u_old->getDataByIndex(i, j)) * u_old->getDataByIndex(i, j);
-                        v = v_old->getDataByIndex(i, j) - G * delta_t[j] / delta_y_m[j] *
-                                                          (eta->getDataByIndex(i, j) - eta->getDataByIndex(i - 1, j)) -
-                            delta_t[j] * Ch / (eta->getDataByIndex(i, j) + -h->getDataByIndex(i, j)) *
-                            fabs(v_old->getDataByIndex(i, j)) * v_old->getDataByIndex(i, j);
-                        break;
-                    }
-                    default:
-                        break;
+                if (m_types_cells->getDataByIndex(i, j) == TM::Scheme::types_cells::WATER) {
+                    u = u_old->getDataByIndex(i, j) -
+                        G * delta_t[j] / delta_x_m * (eta->getDataByIndex(i, j) - eta->getDataByIndex(i, j - 1)) -
+                        delta_t[j] * Ch / (eta->getDataByIndex(i, j) + -h->getDataByIndex(i, j)) *
+                        fabs(u_old->getDataByIndex(i, j)) * u_old->getDataByIndex(i, j);
+                    v = v_old->getDataByIndex(i, j) - G * delta_t[j] / delta_y_m[j] *
+                                                      (eta->getDataByIndex(i, j) - eta->getDataByIndex(i - 1, j)) -
+                        delta_t[j] * Ch / (eta->getDataByIndex(i, j) + -h->getDataByIndex(i, j)) *
+                        fabs(v_old->getDataByIndex(i, j)) * v_old->getDataByIndex(i, j);
+
                 }
                 newU->setDataByIndex(i, j, u);
                 newV->setDataByIndex(i, j, v);
@@ -176,7 +164,6 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
                 eta->setDataByIndex(i, size_y - 1, eta->getDataByIndex(i, size_y - 2));
             }
             catch (...) {
-
             }
         }
         for (std::size_t j = 1; j < size_y; j++) {
@@ -195,12 +182,10 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
                 eta->setDataByIndex(j, size_x - 1, newU->getDataByIndex(j, size_x - 2));
             }
             catch (...) {
-
             }
         }
         if (!fmod(t, m_time->sendingTimeStep())) {
             m_signal->emitSignal(eta);
         }
-
     }
 }

@@ -35,6 +35,10 @@ namespace TM {
         protected:
             void setTypesOfCells(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                                  const double &izobata);
+            virtual void setBoundary1Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &area, const std::size_t &i, const std::size_t &j,
+                                  const double &izobata) = 0;
+            virtual void setBoundary2Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &area, const std::size_t &i, const std::size_t &j,
+                                  const double &izobata) = 0;
 
             std::shared_ptr<TM::Focus::Focus> m_focus;
             std::shared_ptr<TMTimeManager> m_time;

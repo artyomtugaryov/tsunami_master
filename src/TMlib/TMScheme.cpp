@@ -18,24 +18,28 @@ void TM::Scheme::TMScheme::setTypesOfCells(const std::shared_ptr<const TM::Map::
 #pragma omp parallel for shared(bathymetry, types_of_cells) private(j)
         for (j = 0; j < maxY; j++) {
             auto v = bathymetry->getDataByIndex(i, j);
-            if (v >= izobata){
+            if (v >= izobata) {
                 types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::LAND);
                 continue;
             }
-            // else:
             types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::WATER);
-            for (int k(-1); k < 2; k++) {
-                for (int t(-1); t < 2; t++) {
-                    if (k != 0 && t != 0) {
-                        try {
-                            if (bathymetry->getDataByIndex(i + k, j + t) >= izobata) {
-                                types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::BOUNDARY1);
-                            }
-                        } catch (TM::details::TMException &ex) {
-                            types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::BOUNDARY2);
-                            break;
+            for (int k: {-1, 1}) {
+                for (int t: {-1, 1}) {
+                    try {
+                        if (bathymetry->getDataByIndex(i + k, j + t) >= izobata) {
+                            types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::BOUNDARY1);
                         }
+                    } catch (TM::details::TMException &ex) {
+                        types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::BOUNDARY2);
+                        break;
                     }
+                }
+            }
+            if (types_of_cells->getDataByIndex(i, j) == TM::Scheme::types_cells::BOUNDARY1) {
+                setBoundary1Coef(area, i, j, izobata);
+            } else {
+                if (types_of_cells->getDataByIndex(i, j) == TM::Scheme::types_cells::BOUNDARY2) {
+//                    setBoundary2Coef(area, i, j, izobata);
                 }
             }
         }

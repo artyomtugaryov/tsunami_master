@@ -237,7 +237,7 @@ void Map::MapAreaWorker::saveMareographs(std::__cxx11::string path)
 
 void Map::MapAreaWorker::checkMareographs(const std::shared_ptr<const MapArea<double>> &eta) {
     if (!m_mareographs || (m_mareographs->empty() || !m_mareographsUpdating)) {
-        std::cout<<"Problems with mareographs"<<std::endl;
+//        std::cout<<"Problems with mareographs"<<std::endl;
         return;
     }
     for (auto i =  m_mareographs->begin(); i != m_mareographs->end(); i++)

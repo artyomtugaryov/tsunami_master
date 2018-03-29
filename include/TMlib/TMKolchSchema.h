@@ -26,7 +26,6 @@ namespace TM {
         private:
             void set_delta(const std::shared_ptr<const TM::Map::MapArea<double>> &a);
             double converting_motion_blocks(const std::size_t &j, const std::size_t &i, const double &t);
-            void calculation_value_on_boundaries();
             std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> m_types_cells;
             std::vector<double> delta_t;
             std::vector<double> delta_y_m;
