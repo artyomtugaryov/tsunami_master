@@ -117,15 +117,14 @@ void TM::Map::MapAreaWorker::setEta(std::shared_ptr<TM::Map::MapArea<double>> &n
     m_eta = newEta;
 }
 void TM::Map::MapAreaWorker::setU(std::shared_ptr<TM::Map::MapArea<double>> &newU) noexcept {
-    m_eta = newU;
+    m_uVelocity = newU;
 }
 void TM::Map::MapAreaWorker::setV(std::shared_ptr<TM::Map::MapArea<double>> &newV) noexcept {
-    m_eta = newV;
+    m_vVelocity = newV;
 }
 const std::shared_ptr<const Map::MapArea<double>> Map::MapAreaWorker::bathymetry() const noexcept {
     return m_bathymetry;
 }
-
 
 const std::shared_ptr<Map::MapArea<double>> Map::MapAreaWorker::uVelocity() noexcept {
     return m_uVelocity;
