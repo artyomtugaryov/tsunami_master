@@ -30,56 +30,19 @@ namespace TM {
         };
 
         struct Block {
-            Block() : m_beginT(0) {
-
-            }
+            Block() : m_beginT(0) {}
 
             bool has(double lat, double lon);
 
-            double getUpHeihgt(double t);
+            double getUpHeight(double t);
 
-            bool pointloc(const BrickPoint &a);
+            bool pointLocation(const BrickPoint &a);
 
-            static double rotate(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c) {
-                /*
-                 * https://habrahabr.ru/post/144571/
-                 */
-                return (b.m_x - a.m_x) * (c.m_y - b.m_y) - (b.m_y - a.m_y) * (c.m_x - b.m_x);
-            }
+            static double rotate(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c);
 
-            static bool
-            intersect(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c, const BrickPoint &d) {
-                return ((rotate(a, b, c) * rotate(a, b, d)) <= 0) && ((rotate(c, d, a) * rotate(c, d, b)) < 0);
-            }
+            static bool intersect(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c, const BrickPoint &d);
 
-            void build_block(std::vector<TM::Focus::BrickPoint> points) {
-                auto n = points.size();
-                std::sort(points.begin(), points.end());
-                std::vector<size_t> p(n);
-                for (size_t i(0); i < n; i++) {
-                    p[i] = i;
-                }
-                for (size_t i(2); i < n; i++) {
-                    size_t j = i;
-                    while (j > 1 and rotate(points[p[0]], points[p[j - 1]], points[p[j]]) < 0) {
-                        size_t tmp = p[j];
-                        p[j] = p[j - 1];
-                        p[j - 1] = tmp;
-                        j--;
-                    }
-                }
-                m_points.resize(n);
-                if (points[*p.begin()].m_y > points[*(p.end()-1)].m_y){
-                    std::reverse(std::begin(p), std::end(p));
-                }
-                for (size_t i(0); i < n; i++) {
-                    m_points[i] = points[p[i]];
-                }
-            }
-
-            int number_up() const noexcept {
-                return m_numberUp.size();
-            }
+            void buildBlock(std::vector<TM::Focus::BrickPoint> points);
 
             double m_beginT; //Time start Up
             std::vector<BrickPoint> m_points;

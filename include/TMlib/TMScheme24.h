@@ -50,7 +50,7 @@ namespace TM {
             std::size_t m_xn_x;
             std::size_t m_xn_y;
             double eta(const std::shared_ptr<TM::Map::MapAreaWorker> &area) {
-//                return area->eta()->getDataByIndex(i, j);
+                return area->eta()->getDataByIndex(0,0);
             }
         };
 

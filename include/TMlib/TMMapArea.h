@@ -100,7 +100,7 @@ namespace TM {
             }
 
 
- /* END subscript operator
+ * END subscript operator
  * */
         private:
             std::size_t m_sizeX;

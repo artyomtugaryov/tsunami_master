@@ -1,5 +1,5 @@
 #include "TsunamiManager/TsunamiWorker.h"
-#include <TMlib/TMKolchSchema.h>
+#include <TMlib/TMKolchScheme.h>
 #include <QDebug>
 
 TsunamiWorker::TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker,

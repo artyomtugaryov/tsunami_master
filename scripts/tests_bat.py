@@ -2,7 +2,7 @@ import os
 import numpy as np
 
 if __name__ == '__main__':
-    size = 100
+    size = 1000
     step = 0.0167
     bathymetry = np.ndarray([size, size], dtype=np.float32)
     for i in range(size):

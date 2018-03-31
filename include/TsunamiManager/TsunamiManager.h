@@ -8,7 +8,7 @@
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMException.h>
 #include <TMlib/TMScheme24.h>
-#include <TMlib/TMKolchSchema.h>
+#include <TMlib/TMKolchScheme.h>
 #include <TMlib/TMFocus.h>
 #include <TMlib/TMSignal.h>
 #include <TMlib/TMTimeManager.h>

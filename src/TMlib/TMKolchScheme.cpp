@@ -1,4 +1,4 @@
-#include <TMlib/TMKolchSchema.h>
+#include <TMlib/TMKolchScheme.h>
 #include <TMlib/TMCommon.h>
 #include <TMlib/TMHelpers.h>
 
@@ -43,45 +43,6 @@ void TM::Scheme::TMKolchSchema::set_delta(const std::shared_ptr<const TM::Map::M
     }
 }
 
-double
-TM::Scheme::TMKolchSchema::converting_motion_blocks(const std::size_t &j, const std::size_t &i, const double &t) {
-    double temp_speed; // speed of terr on every interval of time
-    for (std::size_t b = 0; b < m_focus->getBlockCount(); b++) {
-        if (terr_up[j][i] == b + 1) {
-            if (m_focus->getBlock(b).number_up() == 1) {
-                if (t * delta_t[j] <= m_focus->getBlock(b).m_numberUp[0].m_brickUpT &&
-                    //if (t*delta_t[j] <= t_h_v_up[10][b] &&
-                    t * delta_t[j] >= m_focus->getBlock(b).m_beginT) {
-                    temp_speed = m_focus->getBlock(b).m_numberUp[0].m_heightUp /
-                                 (m_focus->getBlock(b).m_numberUp[0].m_brickUpT - m_focus->getBlock(b).m_beginT);
-                    return temp_speed * delta_t[j];
-                }
-            } else { // if there is any interval of time
-                if (t * delta_t[j] <= m_focus->getBlock(b).m_numberUp[0].m_brickUpT &&
-                    t * delta_t[j] >= m_focus->getBlock(b).m_beginT) {
-                    temp_speed = m_focus->getBlock(b).m_numberUp[0].m_heightUp /
-                                 (m_focus->getBlock(b).m_numberUp[0].m_brickUpT - m_focus->getBlock(b).m_beginT);
-                    return temp_speed * delta_t[j];
-                } else {
-                    if (t * delta_t[j] >= m_focus->getBlock(b).m_numberUp[0].m_brickUpT) {
-                        for (int d = 0; d < m_focus->getBlock(b).number_up(); d++) {
-                            if (t * delta_t[j] <=
-                                m_focus->getBlock(b).m_numberUp[d + 1].m_brickUpT) { //  t_h_v_up[12 + d * 2][b]) {
-                                temp_speed = (m_focus->getBlock(b).m_numberUp[d + 1].m_brickUpT -
-                                              m_focus->getBlock(b).m_numberUp[d].m_heightUp) /
-                                             (m_focus->getBlock(b).m_numberUp[d + 1].m_brickUpT -
-                                              m_focus->getBlock(b).m_numberUp[d].m_brickUpT);
-                                return temp_speed * delta_t[j];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return 0;
-}
-
 void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
                                             const double &timeEnd) {
     std::size_t size_y = area->bathymetry()->sizeY();
@@ -119,9 +80,7 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
 
                     }
                 }
-//                auto up = converting_motion_blocks(i, j, t);
-                auto up = m_focus->getHeightByIndex(area->getLongitudeByIndex(i), area->getLatitudeByIndex(j), t);
-                eta->setDataByIndex(i, j, etaValue + up);
+                eta->setDataByIndex(i, j, etaValue + m_focus->getHeightByIndex(area->getLongitudeByIndex(i), area->getLatitudeByIndex(j), t));
             }
         }
         area->setEta(eta);
@@ -152,7 +111,7 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
         area->setV(newV);
         for (std::size_t i = 1; i < size_x; i++) {
             try {
-                auto temp = (int) (i * size_y / size_x);
+                auto temp = static_cast<int>(i * size_y / size_x);
                 newV->setDataByIndex(i, 0, sqrt(fabs(-G * h->getDataByIndex(i, 0))) * eta->getDataByIndex(i, 0) /
                                            (eta->getDataByIndex(i, 1) - h->getDataByIndex(i, 0)));
                 newV->setDataByIndex(i, size_y - 2, sqrt(fabs((-G * h->getDataByIndex(i, size_y - 2)))) *
