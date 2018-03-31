@@ -1,6 +1,7 @@
 #include "TMlib/TMMapArea.h"
 #include "TMlib/TMException.h"
 #include "TMlib/TMScheme.h"
+#include "TMlib/TMScheme24.h"
 #include <algorithm>
 #include <fstream>
 #include <iomanip>
@@ -205,3 +206,6 @@ template TM::Map::MapArea<int>::MapArea(const std::shared_ptr<const TM::Map::Map
 
 template class TM::Map::MapArea<TM::Scheme::types_cells>;
 template TM::Map::MapArea<TM::Scheme::types_cells>::MapArea(const std::shared_ptr<const TM::Map::MapArea<double>> &);
+
+template class TM::Map::MapArea<std::shared_ptr<TM::Scheme::BoundaryCoefficients>>;
+template TM::Map::MapArea<std::shared_ptr<TM::Scheme::BoundaryCoefficients>>::MapArea(const std::shared_ptr<const TM::Map::MapArea<double>> &);

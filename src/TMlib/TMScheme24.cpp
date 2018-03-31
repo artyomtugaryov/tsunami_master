@@ -119,6 +119,7 @@ void TM::Scheme::TMScheme24::configure(const std::shared_ptr<const TM::Map::MapA
                                        const double &izobata,
                                        const std::shared_ptr<TMTimeManager> &sender,
                                        const std::shared_ptr<TMSignal> &signal) {
+    this->m_Boundaries = std::make_shared<TM::Map::MapArea<std::shared_ptr<TM::Scheme::BoundaryCoefficients>>>(area->bathymetry());
     this->setTypesOfCells(area, izobata);
     if (focus) {
         this->m_focus = std::make_shared<TM::Focus::Focus>(*focus);
@@ -182,9 +183,7 @@ double TM::Scheme::TMScheme24::calcBoundaryType1ValueEta(const std::shared_ptr<T
                                                          const std::size_t &k,
                                                          const double &dPhi,
                                                          const double &dTetta) {
-
-
-    return m_Boundaries->getDataByIndex(j, k).eta(area i, j);
+    return 0;
 }
 
 double TM::Scheme::TMScheme24::calcBoundaryType2ValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
@@ -235,43 +234,64 @@ void TM::Scheme::TMScheme24::setBoundary1Coef(const std::shared_ptr<const TM::Ma
                                               const double &izobata) {
     auto bathymetry = area->bathymetry();
     try {
-        if (bathymetry->getDataByIndex(i + 1, j) < izobata &&
-            bathymetry->getDataByIndex(i + 2, j) < izobata) {
-            Boundary2Coefficients(i + 1, j + 1, i + 2, j + 2, i + 1, j - 1, i + 2, j - 2, 0);
+        if (bathymetry->getDataByIndex(i - 2, j - 2) < izobata &&
+                bathymetry->getDataByIndex(i - 2, j + 2) < izobata) {
+            m_Boundaries->setDataByIndex(i, j, std::make_shared<Boundary1Coefficients>(std::vector<std::size_t>({
+                                                                                                           i - 1, j - 1,
+                                                                                                           i - 2, j - 2,
+                                                                                                           i - 1, j + 1,
+                                                                                                           i - 2, j + 2}),
+                                                                                                           -2 * M_PI));
+            return;
         }
-        return;
-    } catch (TM::details::TMException &ex) {
-
-    }
+    } catch (TM::details::TMException &e) {}
     try {
-        if (bathymetry->getDataByIndex(i - 1, j) < izobata &&
-            bathymetry->getDataByIndex(i - 2, j) < izobata) {
-            Boundary2Coefficients(i - 1, j + 1, i - 2, j + 2, i - 1, j - 1, i - 2, j - 2, 0);
+        if (bathymetry->getDataByIndex(i + 2, j - 2) < izobata && bathymetry->getDataByIndex(i + 2, j + 2) < izobata) {
+            m_Boundaries->setDataByIndex(i, j, std::make_shared<Boundary1Coefficients>(std::vector<std::size_t>({
+                                                                                                           i + 1, j + 1,
+                                                                                                           i + 2, j + 2,
+                                                                                                           i + 1, j - 1,
+                                                                                                           i + 2, j - 2}),
+                                                                                                           0));
+            return;
         }
-        return;
-    } catch (TM::details::TMException &ex) {
-
-    }
+    } catch (TM::details::TMException &ex) {}
     try {
-        if (bathymetry->getDataByIndex(i, j + 1) < izobata &&
-            bathymetry->getDataByIndex(i, j + 2) < izobata) {
-            Boundary2Coefficients(i - 1, j + 1, i - 2, j + 2, i + 1, j + 1, i + 2, j + 2, M_PI / 2.);
+        if (bathymetry->getDataByIndex(i - 2, j - 2) < izobata && bathymetry->getDataByIndex(i + 2, j - 2) < izobata) {
+            m_Boundaries->setDataByIndex(i, j, std::make_shared<Boundary1Coefficients>(std::vector<std::size_t>({
+                                                                                                           i + 1, j - 1,
+                                                                                                           i + 2, j - 2,
+                                                                                                           i - 1, j - 1,
+                                                                                                           i - 2, j - 2}),
+                                                                                                           -M_PI_2));
+            return;
         }
-        return;
-    } catch (TM::details::TMException &ex) {
-
-    }
-
+    } catch (TM::details::TMException &ex) {}
     try {
-        if (bathymetry->getDataByIndex(i, j + 1) < izobata &&
-            bathymetry->getDataByIndex(i, j + 2) < izobata) {
-            Boundary2Coefficients(i - 1, j + 1, i - 2, j + 2, i + 1, j + 1, i + 2, j + 2, M_PI / 2.);
+        if (bathymetry->getDataByIndex(i - 2, j + 2) < izobata && bathymetry->getDataByIndex(i + 2, j + 2) < izobata) {
+            m_Boundaries->setDataByIndex(i, j, std::make_shared<Boundary1Coefficients>(std::vector<std::size_t>({
+                                                                                                           i - 1, j + 1,
+                                                                                                           i - 2, j + 2,
+                                                                                                           i + 1, j + 1,
+                                                                                                           i + 2, j + 2}),
+                                                                                                           M_PI_2));
+            return;
         }
-        return;
-    } catch (TM::details::TMException &ex) {
-
-    }
+    } catch (TM::details::TMException &ex) {}
 }
 
-
+void TM::Scheme::TMScheme24::setBoundary2Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
+                                              const std::size_t &i, const std::size_t &j,
+                                              const double &izobata) {
+    auto bathymetry = area->bathymetry();
+    auto c = G*bathymetry->getDataByIndex(i,j);
+    if (bathymetry->sizeX() + 1 == i) {
+        m_Boundaries->setDataByIndex(i, j,
+                                     std::make_shared<Boundary2Coefficients>(bathymetry->getDataByIndex(i - 1, j), c));
+    }
+    if (bathymetry->sizeY() + 1 == j) {
+        m_Boundaries->setDataByIndex(i, j,
+                                     std::make_shared<Boundary2Coefficients>(bathymetry->getDataByIndex(i, j - 1), c));
+    }
+}
 

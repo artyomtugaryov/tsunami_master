@@ -11,22 +11,11 @@ namespace TM {
             virtual double eta(const std::shared_ptr<TM::Map::MapAreaWorker> &are) = 0;
         };
 
-        struct Boundary1Coefficients {
-            Boundary1Coefficients(const std::size_t &x_01, const std::size_t &y_01,
-                                  const std::size_t &x_02, const std::size_t &y_02,
-                                  const std::size_t &x_10, const std::size_t &y_10,
-                                  const std::size_t &x_20, const std::size_t &y_20,
-                                  const double &alpha) {
-                m_x_01 = x_01;
-                m_y_01 = y_01;
-                m_x_02 = x_02;
-                m_y_02 = y_02;
-                m_x_10 = x_10;
-                m_y_10 = y_10;
-                m_x_20 = x_20;
-                m_y_20 = y_20;
+        struct Boundary1Coefficients : public BoundaryCoefficients{
+            Boundary1Coefficients(const std::vector<std::size_t> &coords, const double &alpha){
+                m_x_01 = coords[0];
                 m_alpha = alpha;
-            }
+            };
 
             std::size_t m_x_01;
             std::size_t m_y_01;
@@ -49,8 +38,20 @@ namespace TM {
             }
         };
 
-        struct Boundary2Coefficients {
-
+        struct Boundary2Coefficients :public BoundaryCoefficients{
+            Boundary2Coefficients(const std::size_t &x, const std::size_t &y, const double &c, const std::size_t &dx){
+                m_xn_x = x;
+                m_xn_y = y;
+                m_c = c;
+                m_dn = dx;
+            }
+            double m_c;
+            double m_dn;
+            std::size_t m_xn_x;
+            std::size_t m_xn_y;
+            double eta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,const std::size_t &x, const std::size_t &y) {
+//                return area->eta()->getDataByIndex(i, j);
+            }
         };
 
         class TMScheme24 : public TMScheme {
@@ -75,6 +76,10 @@ namespace TM {
             void setUpBArrays(std::size_t &&x, std::size_t &&y);
 
             void setBoundary1Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &area, const std::size_t &i,
+                                  const std::size_t &j,
+                                  const double &izobata) override;
+
+            void setBoundary2Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &area, const std::size_t &i,
                                   const std::size_t &j,
                                   const double &izobata) override;
 
@@ -131,8 +136,7 @@ namespace TM {
 
             std::shared_ptr<TM::Map::MapArea<double>> m_B0;
             std::shared_ptr<TM::Map::MapArea<double>> m_B1;
-            std::shared_ptr<TM::Map::MapArea<TM::Scheme::BoundaryCoefficients>> m_Boundaries;
-
+            std::shared_ptr<TM::Map::MapArea< std::shared_ptr<TM::Scheme::BoundaryCoefficients>>> m_Boundaries;
         };
     }
 }

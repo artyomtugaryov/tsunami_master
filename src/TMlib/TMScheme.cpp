@@ -31,16 +31,13 @@ void TM::Scheme::TMScheme::setTypesOfCells(const std::shared_ptr<const TM::Map::
                         }
                     } catch (TM::details::TMException &ex) {
                         types_of_cells->setDataByIndex(i, j, TM::Scheme::types_cells::BOUNDARY2);
+                        setBoundary2Coef(area, i, j, izobata);
                         break;
                     }
                 }
             }
             if (types_of_cells->getDataByIndex(i, j) == TM::Scheme::types_cells::BOUNDARY1) {
                 setBoundary1Coef(area, i, j, izobata);
-            } else {
-                if (types_of_cells->getDataByIndex(i, j) == TM::Scheme::types_cells::BOUNDARY2) {
-//                    setBoundary2Coef(area, i, j, izobata);
-                }
             }
         }
     }

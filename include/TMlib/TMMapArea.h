@@ -78,25 +78,30 @@ namespace TM {
             void saveAsTextFile(std::string path, int setprecision) const;
 
 /*
- * Indexing operator
- * */
+ * START subscript operator
+ *
             class Operator {
             public:
-                Operator(MapArea<DataType> *p, const std::size_t  &x) : m_x(x) { m_p = p; };
+                Operator(const MapArea<DataType> *p, const std::size_t &x) : m_x(x) {
+                    m_p = p;
+                };
 
-                DataType operator[](const std::size_t  &y) {
+                DataType& operator[](const std::size_t &y) const {
                     return m_p->getDataByIndex(m_x, y);
                 }
 
             private:
                 std::size_t m_x;
-                MapArea<DataType> *m_p;
+                const MapArea<DataType> *m_p;
             };
 
-            Operator operator[](const std::size_t  &x){
+            const Operator operator[](const std::size_t &x) const {
                 return Operator(this, x);
             }
 
+
+ * END subscript operator
+ * */
         private:
             std::size_t m_sizeX;
             std::size_t m_sizeY;
