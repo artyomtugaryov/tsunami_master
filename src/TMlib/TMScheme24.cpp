@@ -92,10 +92,10 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
         }
         area->setU(newU);
         area->setV(newV);
-        //TODO: It's no good. How we can do this better?
+        //TODO: It's not good. How we can do this better?
         if (!fmod(t, m_time->sendingTimeStep())) {
             m_signal->emitSignal(newEta);
-            //TODO: It's no good but this task is low priority
+            //TODO: It's not good but this task is low priority
             area->checkMareographs(newEta);
         }
         //TODO: Remove after resolve problem with brick
@@ -286,12 +286,12 @@ void TM::Scheme::TMScheme24::setBoundary2Coef(const std::shared_ptr<const TM::Ma
     auto bathymetry = area->bathymetry();
     auto c = G*bathymetry->getDataByIndex(i,j);
     if (bathymetry->sizeX() + 1 == i) {
-        m_Boundaries->setDataByIndex(i, j,
-                                     std::make_shared<Boundary2Coefficients>(bathymetry->getDataByIndex(i - 1, j), c));
+//        m_Boundaries->setDataByIndex(i, j,
+//                                     std::make_shared<Boundary2Coefficients>(bathymetry->getDataByIndex(i - 1, j), c));
     }
     if (bathymetry->sizeY() + 1 == j) {
-        m_Boundaries->setDataByIndex(i, j,
-                                     std::make_shared<Boundary2Coefficients>(bathymetry->getDataByIndex(i, j - 1), c));
+//        m_Boundaries->setDataByIndex(i, j,
+//                                     std::make_shared<Boundary2Coefficients>(bathymetry->getDataByIndex(i, j - 1), c));
     }
 }
 

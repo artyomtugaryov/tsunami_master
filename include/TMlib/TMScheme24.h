@@ -49,7 +49,7 @@ namespace TM {
             double m_dn;
             std::size_t m_xn_x;
             std::size_t m_xn_y;
-            double eta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,const std::size_t &x, const std::size_t &y) {
+            double eta(const std::shared_ptr<TM::Map::MapAreaWorker> &area) {
 //                return area->eta()->getDataByIndex(i, j);
             }
         };

@@ -1,5 +1,5 @@
 #include "TsunamiManager/TsunamiWorker.h"
-
+#include <TMlib/TMKolchSchema.h>
 #include <QDebug>
 
 TsunamiWorker::TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker,
@@ -113,7 +113,8 @@ void TsunamiWorker::runCalculation()
         return;
     }
     if (!m_scheme) {
-        m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
+//        m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
+        m_scheme = std::make_shared<TM::Scheme::TMKolchSchema>();
     }
     m_scheme->configure(m_mapAreaWorker, m_focus, m_isobath, m_timemanager, m_signal);
     m_scheme->calculation(m_mapAreaWorker, m_calculationTime);

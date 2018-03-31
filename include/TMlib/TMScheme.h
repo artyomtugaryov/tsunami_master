@@ -44,7 +44,6 @@ namespace TM {
             std::shared_ptr<TMTimeManager> m_time;
             std::shared_ptr<TMSignal> m_signal;
             std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> m_types_cells;
-
         };
     }
 }

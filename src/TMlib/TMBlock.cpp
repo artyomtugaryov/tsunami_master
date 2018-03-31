@@ -5,11 +5,11 @@ bool TM::Focus::Block::has(double lat, double lon) {
 }
 
 double TM::Focus::Block::getUpHeihgt(double t) {
-    for (auto brickUp = this->m_numberUp.begin(); brickUp != m_numberUp.end(); brickUp++) {
-        if (this->m_beginT > t or t > this->m_beginT + brickUp->m_brickUpT) {
+    for (auto brickUp : m_numberUp) {
+        if (this->m_beginT > t or t > this->m_beginT + brickUp.m_brickUpT) {
             return 0;
         } else {
-            auto speed = (brickUp->m_heightUp) / static_cast<double>(brickUp->m_brickUpT);
+            auto speed = (brickUp.m_heightUp) / brickUp.m_brickUpT;
             return speed * t;
         }
     }

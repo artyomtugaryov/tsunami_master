@@ -1,5 +1,6 @@
 #include <TMlib/TMKolchSchema.h>
 #include <TMlib/TMCommon.h>
+#include <TMlib/TMHelpers.h>
 
 double TM::Scheme::TMKolchSchema::getTimeStep(const double &dPhi, const double &dTetta, const double &Hm) const {
 
@@ -25,13 +26,16 @@ void TM::Scheme::TMKolchSchema::configure(const std::shared_ptr<const TM::Map::M
     for (int j = 0; j < area->bathymetry()->endY(); j++) {
         terr_up[j].resize(area->bathymetry()->sizeY());
     }
-
+    this->m_time = sender;
+    this->m_signal = signal;
 }
 
 void TM::Scheme::TMKolchSchema::set_delta(const std::shared_ptr<const TM::Map::MapArea<double>> &area) {
     delta_x_m = area->stepX() * M_PI * R_EACH / 180;
+    delta_y_m.resize(area->sizeY());
+    delta_t.resize(area->sizeY());
     for (int j = 0; j < area->sizeY(); ++j) {
-        delta_y_m[j] = delta_x_m * cos((area->startY() + j * area->startY()) / 180.0 * M_PI);
+        delta_y_m[j] = delta_x_m * cos((area->startY() + j * area->stepY()) / 180.0 * M_PI);
         delta_t[j] = 1;
         auto v = sqrt(delta_y_m[j] * delta_y_m[j] + delta_x_m * delta_x_m) / sqrt(2 * G * 3000);
         if (delta_t[j] > v)
@@ -115,10 +119,13 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
 
                     }
                 }
-                eta->setDataByIndex(i, j, etaValue + converting_motion_blocks(i, j, t));
+//                auto up = converting_motion_blocks(i, j, t);
+                auto up = m_focus->getHeightByIndex(area->getLongitudeByIndex(i), area->getLatitudeByIndex(j), t);
+                eta->setDataByIndex(i, j, etaValue + up);
             }
         }
         area->setEta(eta);
+        saveMapAreaAsImage(eta, std::string("img/") + std::to_string(t) + std::string(".png"), area->bathymetry());
         const double Ch = 0.0025;
         auto newU = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
         auto newV = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
