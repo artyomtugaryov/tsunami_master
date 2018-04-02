@@ -135,7 +135,6 @@ void TsunamiManager::tsunamiWorkerThreadReaded()
 void TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::MapArea<double> > eta)
 {
     m_eta.reset();
-    std::cout << bool(eta == nullptr) <<std::endl;
     m_etaQueue.push(eta);
     if (!m_plotting)
     {

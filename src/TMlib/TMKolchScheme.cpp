@@ -2,13 +2,6 @@
 #include <TMlib/TMCommon.h>
 #include <TMlib/TMHelpers.h>
 
-double TM::Scheme::TMKolchSchema::getTimeStep(const double &dPhi, const double &dTetta, const double &Hm) const {
-
-    auto delta_x_m = dPhi * M_PI * R_EACH / 180;
-    auto delta_y_m = delta_x_m * cos((0/*start_y + j * delta_y*/) / 180.0 * M_PI);
-    return sqrt(pow(delta_y_m, 2) + pow(delta_x_m, 2)) / sqrt(2 * G * 3000);
-}
-
 void TM::Scheme::TMKolchSchema::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                                           const std::shared_ptr<const TM::Focus::Focus> &focus,
                                           const double &izobata,
@@ -49,12 +42,16 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
     std::size_t size_x = area->bathymetry()->sizeX();
     auto eta = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
     for (size_t t = 0; t < timeEnd; t += 1) {
+        size_t i = 1, j = 1;
         auto u_old = area->uVelocity();
         auto v_old = area->vVelocity();
         auto eta_old = area->eta();
         auto h = area->bathymetry();
-        for (size_t i = 1; i < size_x - 1; ++i) {
-            for (size_t j = 1; j < size_y - 1; ++j) {
+        clock_t begin = clock();
+#pragma omp parallel for shared(u_old, v_old, eta_old, h) private(i)
+        for (i = 1; i < size_x - 1; ++i) {
+#pragma omp parallel for shared(u_old, v_old, eta_old, h) private(j)
+            for (j = 1; j < size_y - 1; ++j) {
                 auto etaValue = 0.;
                 if (m_types_cells->getDataByIndex(i, j) == TM::Scheme::types_cells::WATER) {
                     if (i < size_x - 2 && j < size_y - 2) {
@@ -88,8 +85,10 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
         const double Ch = 0.0025;
         auto newU = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
         auto newV = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
-        for (size_t i = 1; i < size_x - 1; ++i) {
-            for (size_t j = 1; j < size_y - 1; ++j) {
+//#pragma omp parallel for shared(u_old, v_old, h) private(i)
+        for (i = 1; i < size_x - 1; ++i) {
+//#pragma omp parallel for shared(u_old, v_old, h) private(j)
+            for (j = 1; j < size_y - 1; ++j) {
                 auto u = 0.;
                 auto v = 0.;
                 if (m_types_cells->getDataByIndex(i, j) == TM::Scheme::types_cells::WATER) {
@@ -150,6 +149,11 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
             catch (...) {
             }
         }
+        clock_t end = clock();
+        std::cout << "Time of one calculation step by time is: "
+                  << static_cast<double>(end - begin) * 1000.0 / double(CLOCKS_PER_SEC)
+                  << " ms."
+                  << std::endl;
         if (!fmod(t, m_time->sendingTimeStep())) {
             m_signal->emitSignal(eta);
         }

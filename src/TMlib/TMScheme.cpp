@@ -41,8 +41,8 @@ void TM::Scheme::TMScheme::setTypesOfCells(const std::shared_ptr<const TM::Map::
             }
         }
     }
-    saveMapAreaAsImage(types_of_cells, "boundaries.png", bathymetry);
     clock_t end = clock();
+    saveMapAreaAsImage(types_of_cells, "boundaries.png", bathymetry);
     std::cout << "Time of setTypesOfCells is: "
               << static_cast<double>(end - begin) * 1000.0 / double(CLOCKS_PER_SEC)
               << " ms."

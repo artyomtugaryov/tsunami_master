@@ -21,13 +21,18 @@ namespace TM {
                            const std::shared_ptr<TMTimeManager> &,
                            const std::shared_ptr<TMSignal> &);
 
-            double getTimeStep(const double &dPhi, const double &dTetta, const double &Hm) const;
-
         private:
-            void set_delta(const std::shared_ptr<const TM::Map::MapArea<double>> &a);
-            void setBoundary1Coef(const std::shared_ptr<const TM::Map::MapAreaWorker>&, const size_t&, const size_t&, const double&) override{};
-            void setBoundary2Coef(const std::shared_ptr<const TM::Map::MapAreaWorker>&, const size_t&, const size_t&, const double&) override{};
-            double converting_motion_blocks(const std::size_t &j, const std::size_t &i, const double &t);
+            void set_delta(const std::shared_ptr<const TM::Map::MapArea<double>> &);
+
+            void setBoundary1Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &,
+                                  const size_t &,
+                                  const size_t &,
+                                  const double &) override {};
+
+            void setBoundary2Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &,
+                                  const size_t &,
+                                  const size_t &,
+                                  const double &) override {};
 
             double delta_x_m;
             std::vector<double> delta_t;
