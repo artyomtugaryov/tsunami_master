@@ -17,7 +17,7 @@ namespace TM {
 
             const TM::Focus::Block getBlock(std::size_t b)const noexcept ;
 
-            double getHeightByIndex(double i, double j, double t);
+            double getHeightByPoint(double i, double j, double t);
 
             const std::vector<TM::Focus::Block>& blocks();
 

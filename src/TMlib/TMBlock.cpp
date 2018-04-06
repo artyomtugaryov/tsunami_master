@@ -17,26 +17,26 @@ double TM::Focus::Block::getUpHeight(double t) {
 
 bool TM::Focus::Block::pointLocation(const BrickPoint &a) {
     std::size_t n = m_points.size();
-    if (rotate(m_points[0], m_points[1], a) < 0 || rotate(m_points[0], m_points[n - 1], a) > 0)
+    if (BrickPoint::rotate(m_points[0], m_points[1], a) < 0 || BrickPoint::rotate(m_points[0], m_points[n - 1], a) > 0)
         return false;
     std::size_t p = 1, r = n - 1;
     while (r - p > 1) {
         std::size_t q = (p + r) / 2;
-        if (rotate(m_points[0], m_points[q], a) < 0) {
+        if (BrickPoint::rotate(m_points[0], m_points[q], a) < 0) {
             r = q;
         } else {
             p = q;
         }
     }
-    return !intersect(m_points[0], a, m_points[p], m_points[r]);
+    return !BrickPoint::intersect(m_points[0], a, m_points[p], m_points[r]);
 }
 
-double TM::Focus::Block::rotate(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c) {
+double TM::Focus::BrickPoint::rotate(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c) {
     return (b.m_x - a.m_x) * (c.m_y - b.m_y) - (b.m_y - a.m_y) * (c.m_x - b.m_x);
 }
 
-bool TM::Focus::Block::intersect(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c, const BrickPoint &d) {
-    return ((rotate(a, b, c) * rotate(a, b, d)) <= 0) && ((rotate(c, d, a) * rotate(c, d, b)) < 0);
+bool TM::Focus::BrickPoint::intersect(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c, const BrickPoint &d) {
+    return ((BrickPoint::rotate(a, b, c) * BrickPoint::rotate(a, b, d)) <= 0) && ((BrickPoint::rotate(c, d, a) * BrickPoint::rotate(c, d, b)) < 0);
 }
 
 void TM::Focus::Block::buildBlock(std::vector<TM::Focus::BrickPoint> points) {
@@ -48,7 +48,7 @@ void TM::Focus::Block::buildBlock(std::vector<TM::Focus::BrickPoint> points) {
     }
     for (size_t i(2); i < n; i++) {
         size_t j = i;
-        while (j > 1 and rotate(points[p[0]], points[p[j - 1]], points[p[j]]) < 0) {
+        while (j > 1 and BrickPoint::rotate(points[p[0]], points[p[j - 1]], points[p[j]]) < 0) {
             size_t tmp = p[j];
             p[j] = p[j - 1];
             p[j - 1] = tmp;

@@ -21,7 +21,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
 #pragma omp parallel for private(k)
             for (k = 1; k < maxY; k++) {
                 auto phi = area->getLatitudeByIndex(k);
-                auto Up = this->m_focus->getHeightByIndex(tetta, phi, t);
+                auto Up = this->m_focus->getHeightByPoint(tetta, phi, t);
                 auto B = m_B1->getDataByIndex(j, k);
                 m_B0->setDataByIndex(j, k, B);
                 m_B1->setDataByIndex(j, k, B + Up);

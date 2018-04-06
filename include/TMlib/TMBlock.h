@@ -19,6 +19,10 @@ namespace TM {
             inline bool operator<(const BrickPoint &other) {
                 return (m_x < other.m_x);
             }
+
+            static double rotate(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c);
+
+            static bool intersect(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c, const BrickPoint &d);
         };
 
         struct BrickUp {
@@ -36,13 +40,9 @@ namespace TM {
 
             double getUpHeight(double t);
 
-            bool pointLocation(const BrickPoint &a);
-
-            static double rotate(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c);
-
-            static bool intersect(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c, const BrickPoint &d);
-
             void buildBlock(std::vector<TM::Focus::BrickPoint> points);
+
+            bool pointLocation(const BrickPoint &a);
 
             double m_beginT; //Time start Up
             std::vector<BrickPoint> m_points;

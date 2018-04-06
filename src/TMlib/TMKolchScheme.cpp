@@ -1,5 +1,6 @@
 #include <TMlib/TMKolchScheme.h>
 #include <TMlib/TMCommon.h>
+#include <time.h>
 #include <TMlib/TMHelpers.h>
 
 void TM::Scheme::TMKolchSchema::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
@@ -48,9 +49,9 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
         auto eta_old = area->eta();
         auto h = area->bathymetry();
         clock_t begin = clock();
-#pragma omp parallel for shared(u_old, v_old, eta_old, h) private(i)
+//#pragma omp parallel for shared(u_old, v_old, eta_old, h) private(i)
         for (i = 1; i < size_x - 1; ++i) {
-#pragma omp parallel for shared(u_old, v_old, eta_old, h) private(j)
+//#pragma omp parallel for shared(u_old, v_old, eta_old, h) private(j)
             for (j = 1; j < size_y - 1; ++j) {
                 auto etaValue = 0.;
                 if (m_types_cells->getDataByIndex(i, j) == TM::Scheme::types_cells::WATER) {
@@ -77,7 +78,8 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
 
                     }
                 }
-                eta->setDataByIndex(i, j, etaValue + m_focus->getHeightByIndex(area->getLongitudeByIndex(i), area->getLatitudeByIndex(j), t));
+                eta->setDataByIndex(i, j, etaValue +
+                        m_focus->getHeightByPoint(area->getLongitudeByIndex(i), area->getLatitudeByIndex(j), t));
             }
         }
         area->setEta(eta);
