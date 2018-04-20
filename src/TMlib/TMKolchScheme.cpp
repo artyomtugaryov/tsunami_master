@@ -152,10 +152,10 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
             }
         }
         clock_t end = clock();
-        std::cout << "Time of one calculation step by time is: "
-                  << static_cast<double>(end - begin) * 1000.0 / double(CLOCKS_PER_SEC)
-                  << " ms."
-                  << std::endl;
+//        std::cout << "Time of one calculation step by time is: "
+//                  << static_cast<double>(end - begin) * 1000.0 / double(CLOCKS_PER_SEC)
+//                  << " ms."
+//                  << std::endl;
         if (!fmod(t, m_time->sendingTimeStep())) {
             m_signal->emitSignal(eta);
         }
