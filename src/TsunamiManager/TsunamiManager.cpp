@@ -13,10 +13,10 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     QObject(parent),
     m_tsunamiData(new TsunamiManagerInfo::TsunamiData(this)),
     m_mapAreaWorker(std::make_shared<TM::Map::MapAreaWorker>()),
-    m_scheme(std::make_shared<TM::Scheme::TMScheme24>()),
+    m_scheme(std::make_shared<TM::Scheme::TMKolchSchema>()),
     m_focus(std::make_shared<TM::Focus::Focus>()),
     m_timemanager(std::make_shared<TM::TMTimeManager>()),
-    m_signal(std::make_shared<TM::TMSignal>()),
+    m_signal(std::make_shared<TM::TMSignal>(this)),
     m_plotProvider(new TsunamiPlotProvider(m_tsunamiData, m_mapAreaWorker)),
     m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker, m_scheme, m_focus, m_timemanager, m_signal)),
     m_tsunamiWorkerThread(new QThread),
@@ -34,11 +34,9 @@ TsunamiManager::TsunamiManager(QObject *parent) :
             m_tsunamiWorker, SLOT(execute()));
     connect(m_tsunamiWorker, SIGNAL(finished()), m_tsunamiWorkerThread, SLOT(terminate()));
     connect(m_tsunamiWorker, SIGNAL(readedFinished()), this, SLOT(tsunamiWorkerThreadReaded()));
-    connect(m_tsunamiData, &TsunamiData::calculationTimeChanged, this, TsunamiManager::calculationTimeChanged);
-    connect(m_tsunamiData, &TsunamiData::isobathChanged, this, TsunamiManager::isobathChanged);
-    connect(m_tsunamiData, &TsunamiData::timeUpdateChanged, this, TsunamiManager::updateTimeChanged);
-    //connect(m_tsunamiData, &TsunamiData::plotReadyChanged, this, TsunamiManager::plotFromQueue);
-    //connect(m_tsunamiWorker, SIGNAL(updateTime(int)), this, SLOT(isUpdateTime(int)));
+    connect(m_tsunamiData, &TsunamiData::calculationTimeChanged, this, &TsunamiManager::calculationTimeChanged);
+    connect(m_tsunamiData, &TsunamiData::isobathChanged, this, &TsunamiManager::isobathChanged);
+    connect(m_tsunamiData, &TsunamiData::timeUpdateChanged, this, &TsunamiManager::updateTimeChanged);
     m_timemanager->setSendingTimeStep(10);
     qRegisterMetaType<std::shared_ptr<TM::Map::MapArea<double>>>("std::shared_ptr<TM::Map::MapArea<double>>");
     connect(m_signal.get(), &TM::TMSignal::signalUpdate, this, &TsunamiManagerInfo::TsunamiManager::isUpdateTime);
@@ -54,7 +52,7 @@ TsunamiData *TsunamiManager::tsunamiData() const
 void TsunamiManager::readBathymetryFromFile(QString path)
 {
     m_tsunamiData->setReaded(false);
-    if (m_mapAreaWorker.get() != NULL)
+    if (m_mapAreaWorker)
     {
         m_mapAreaWorker.reset();
         m_mapAreaWorker = std::make_shared<TM::Map::MapAreaWorker>();
@@ -98,7 +96,7 @@ void TsunamiManager::startCalculation()
         {
             m_scheme.reset();
         }
-        m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
+        m_scheme = std::make_shared<TM::Scheme::TMKolchSchema>();
         m_tsunamiWorker->setScheme(m_scheme);
         m_tsunamiWorker->setCommand(TsunamiWorker::ThreadCommand::RunCalculation);
         m_tsunamiWorkerThread->start();
@@ -137,7 +135,6 @@ void TsunamiManager::tsunamiWorkerThreadReaded()
 void TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::MapArea<double> > eta)
 {
     m_eta.reset();
-
     m_etaQueue.push(eta);
     if (!m_plotting)
     {
@@ -170,6 +167,36 @@ void TsunamiManager::plotFromQueue(bool ready)
         emit imageUpdate();
     }
     m_plotting = false;
+}
+
+void TsunamiManager::readMareographsFromFile(QString path)
+{
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    path = path.remove("file:///");
+#else
+    path = path.remove("file://");
+#endif
+    m_tsunamiData->setMareographsPath(path);
+    m_mapAreaWorker->readMareographsFromFile(path.toStdString());
+    emit imageUpdate();
+    emit imageUpdate();
+}
+
+void TsunamiManager::setMareographsSavePath(QString path)
+{
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+    path = path.remove("file:///");
+#else
+    path = path.remove("file://");
+#endif
+    m_tsunamiData->setMareographsSavePath(path);
+    m_mapAreaWorker->setMareographsPath(path.toStdString());
+}
+
+void TsunamiManager::setMareographsUpdating(bool updating)
+{
+    m_tsunamiData->setMareographsUpdating(updating);
+    m_mapAreaWorker->setMareographsUpdating(updating);
 }
 
 std::shared_ptr<TM::Map::MapArea<double> > TsunamiManager::eta() const

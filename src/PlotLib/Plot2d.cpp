@@ -269,6 +269,19 @@ void Plot2d::drawColorbar(ColorMap &colorMap, std::vector<double> ticks, int fon
     m_painter.end();
 }
 
+void Plot2d::drawPointByIndex(double x, double y)
+{
+    if (!m_painter.isActive()) {
+        m_painter.begin(m_image);
+    }
+    QPoint a = getPoint(QPointF(x, y));
+    m_painter.setBrush(Qt::red);
+    m_painter.drawEllipse(a, 10, 10);
+    m_painter.setBrush(Qt::blue);
+    m_painter.drawEllipse(a, 5, 5);
+    m_painter.end();
+}
+
 QPointF Plot2d::getStep()
 {
     QRect r;

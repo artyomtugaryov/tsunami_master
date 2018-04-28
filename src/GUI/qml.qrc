@@ -39,5 +39,9 @@
         <file>Resources/Common/InstrumentPanel/Assets/image.png</file>
         <file>Resources/Common/InstrumentPanel/Assets/showPaths.png</file>
         <file>Resources/Common/InstrumentPanel/Assets/distribution.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/saveMareographs.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/openMareographs.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/openBrick.png</file>
+        <file>Resources/Common/InstrumentPanel/Assets/updatingMareographs.png</file>
     </qresource>
 </RCC>

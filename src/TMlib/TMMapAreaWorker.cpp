@@ -4,7 +4,11 @@
 #include <algorithm>
 #include <ctime>
 
-TM::Map::MapAreaWorker::MapAreaWorker(const std::string &path) {
+using namespace TM;
+
+Map::MapAreaWorker::MapAreaWorker(const std::string &path) :
+    m_mareographsUpdating(false)
+{
     clock_t begin = clock();
     this->setBathymetryPath(path, true);
     clock_t end = clock();
@@ -12,12 +16,12 @@ TM::Map::MapAreaWorker::MapAreaWorker(const std::string &path) {
               << double(end - begin) * 1000. / CLOCKS_PER_SEC
               << " ms."
               << std::endl;
-    this->m_uVelocity = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
-    this->m_vVelocity = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
-    this->m_eta = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
+    this->m_uVelocity = std::make_shared<Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
+    this->m_vVelocity = std::make_shared<Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
+    this->m_eta = std::make_shared<Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
 }
 
-void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
+void Map::MapAreaWorker::readBathymetryFromFileDat() {
     std::vector<double> longitude; // x
     std::vector<double> latitude;  // y
     std::vector<double> depth;
@@ -57,7 +61,7 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
     minX = *std::min_element(longitude.begin(), longitude.end());
     minY = *std::min_element(latitude.begin(), latitude.end());
 
-    m_bathymetry = std::make_shared<TM::Map::MapArea<double>>(sizeX, sizeY);
+    m_bathymetry = std::make_shared<Map::MapArea<double>>(sizeX, sizeY);
 
     m_bathymetry->setStepX((maxX - minX) / (sizeX - 1));
     m_bathymetry->setStepY((maxY - minY) / (sizeY - 1));
@@ -72,12 +76,12 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
         m_bathymetry->setDataByPoint(longitude[k], latitude[k], depth[k]);
     }
 
-    this->m_uVelocity = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
-    this->m_vVelocity = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
-    this->m_eta = std::make_shared<TM::Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
+    this->m_uVelocity = std::make_shared<Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
+    this->m_vVelocity = std::make_shared<Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
+    this->m_eta = std::make_shared<Map::MapArea<double>>(this->getMaxXIndex(), this->getMaxYIndex());
 }
 
-bool TM::Map::MapAreaWorker::readBathymetryFromFile() {
+bool Map::MapAreaWorker::readBathymetryFromFile() {
     if (m_bathymetryPath.size() < 5) { //WHAT??? Why 5? -
         //*.txt, *.doc *.xls ???
         //*.dat, *.mtx, *.grd - all formats can not be less than 5 characters
@@ -97,7 +101,7 @@ bool TM::Map::MapAreaWorker::readBathymetryFromFile() {
     return false;
 }
 
-bool TM::Map::MapAreaWorker::setBathymetryPath(const std::string &path, bool readFromFile) {
+bool Map::MapAreaWorker::setBathymetryPath(const std::string &path, bool readFromFile) {
     m_bathymetryPath = path;
     if (readFromFile) {
         return readBathymetryFromFile();
@@ -105,64 +109,159 @@ bool TM::Map::MapAreaWorker::setBathymetryPath(const std::string &path, bool rea
     return false;
 }
 
-const std::shared_ptr<const TM::Map::MapArea<double>> TM::Map::MapAreaWorker::eta() const noexcept {
-    return m_eta;
-}
 
-const std::shared_ptr<TM::Map::MapArea<double>> TM::Map::MapAreaWorker::eta() noexcept {
-    return m_eta;
-}
 
-void TM::Map::MapAreaWorker::setEta(std::shared_ptr<TM::Map::MapArea<double>> newEta) noexcept {
+void TM::Map::MapAreaWorker::setEta(std::shared_ptr<TM::Map::MapArea<double>> &newEta) noexcept {
     m_eta = newEta;
 }
+void TM::Map::MapAreaWorker::setU(std::shared_ptr<TM::Map::MapArea<double>> &newU) noexcept {
+    m_uVelocity = newU;
+}
+void TM::Map::MapAreaWorker::setV(std::shared_ptr<TM::Map::MapArea<double>> &newV) noexcept {
+    m_vVelocity = newV;
+}
 
 
-const std::shared_ptr<const TM::Map::MapArea<double>> TM::Map::MapAreaWorker::bathymetry() const noexcept {
+
+const std::shared_ptr<const Map::MapArea<double>> Map::MapAreaWorker::eta() const noexcept {
+    return m_eta;
+}
+
+const std::shared_ptr<const Map::MapArea<double>> Map::MapAreaWorker::bathymetry() const noexcept {
     return m_bathymetry;
 }
 
-
-const std::shared_ptr<TM::Map::MapArea<double>> TM::Map::MapAreaWorker::uVelocity() noexcept {
+const std::shared_ptr<Map::MapArea<double>> Map::MapAreaWorker::uVelocity() const noexcept {
     return m_uVelocity;
 }
 
-const std::shared_ptr<TM::Map::MapArea<double>> TM::Map::MapAreaWorker::vVelocity() noexcept {
+const std::shared_ptr<Map::MapArea<double>> Map::MapAreaWorker::vVelocity() const noexcept {
     return m_vVelocity;
 }
 
-size_t TM::Map::MapAreaWorker::getMaxXIndex() const {
+size_t Map::MapAreaWorker::getMaxXIndex() const {
     return m_bathymetry->sizeX();
 }
 
-size_t TM::Map::MapAreaWorker::getMaxYIndex() const {
+size_t Map::MapAreaWorker::getMaxYIndex() const {
     return m_bathymetry->sizeY();
 }
 
-double TM::Map::MapAreaWorker::getLongitudeByIndex(const double i) const noexcept {
+double TM::Map::MapAreaWorker::getLongitudeByIndex(const std::size_t &i) const noexcept {
     return m_bathymetry->startX() + m_bathymetry->stepX() * i;
 }
 
-double TM::Map::MapAreaWorker::getLatitudeByIndex(const double i) const noexcept {
+double TM::Map::MapAreaWorker::getLatitudeByIndex(const std::size_t &i) const noexcept {
     return m_bathymetry->endY() - m_bathymetry->stepY() * i;
 }
 
-double TM::Map::MapAreaWorker::getStepX() const noexcept {
+double Map::MapAreaWorker::getStepX() const noexcept {
     return m_bathymetry->stepX();
 }
 
-double TM::Map::MapAreaWorker::getStepY() const noexcept {
+double Map::MapAreaWorker::getStepY() const noexcept {
     return m_bathymetry->stepY();
 }
 
-double TM::Map::MapAreaWorker::getStepPhi() const noexcept {
+double Map::MapAreaWorker::getStepPhi() const noexcept {
     return getStepY();
 }
 
-double TM::Map::MapAreaWorker::getStepTetta() const noexcept {
+double Map::MapAreaWorker::getStepTetta() const noexcept {
     return getStepX();
 }
 
-double TM::Map::MapAreaWorker::getMaxDepth() const noexcept {
+double Map::MapAreaWorker::getMaxDepth() const noexcept {
     return m_bathymetry->getMinValue();
+}
+
+std::shared_ptr<std::vector<Mareograph> > Map::MapAreaWorker::mareoghraphs() const
+{
+    return m_mareographs;
+}
+
+void Map::MapAreaWorker::setMareoghraphs(const std::shared_ptr<std::vector<Mareograph> > &mareoghraphs)
+{
+    m_mareographs = mareoghraphs;
+}
+
+std::string Map::MapAreaWorker::mareographsPath() const
+{
+    return m_mareographsPath;
+}
+
+void Map::MapAreaWorker::setMareographsPath(const std::string &mareographsPath)
+{
+    m_mareographsPath = mareographsPath;
+}
+
+void Map::MapAreaWorker::readMareographsFromFile(const std::string &mareographsPath)
+{
+    std::fstream file;
+    if(mareographsPath.empty())
+    {
+        return;
+    }
+    m_mareographs =  std::make_shared<std::vector <Mareograph>>();
+    const char * path = mareographsPath.c_str();
+    file.open(path, std::fstream::in);
+    int count;
+    file >> count;
+    for (int i = 0; i < count; i++)
+    {
+        std::string location;
+        double x, y;
+        file >> location >> x >> y;
+        TM::Mareograph m(y, x, 10, location);
+
+        if(x < bathymetry()->startX() || y < bathymetry()->startY()
+                || x > bathymetry()->endX() || y > bathymetry()->endY()){
+            continue;
+        }
+        m.setIndexX(m_bathymetry->getIndexXByPoint(x));
+        m.setIndexY(m_bathymetry->getIndexYByPoint(y));
+        m_mareographs->push_back(m);
+    }
+    file.close();
+}
+
+void Map::MapAreaWorker::saveMareographs(std::__cxx11::string path)
+{
+        for (size_t i = 0; i < m_mareographs->size(); i++){
+            if (i < 10) (*m_mareographs)[i].writeToFileMareograph(path + "0"  + std::to_string(i));
+            else (*m_mareographs)[i].writeToFileMareograph(path + "0" + std::to_string(i));
+        }
+        Mareograph a;
+        a.writeToParametersMareograph(path + "parameters.txt", m_mareographs);
+}
+
+void Map::MapAreaWorker::checkMareographs(const std::shared_ptr<const MapArea<double>> &eta) {
+    if (!m_mareographs || (m_mareographs->empty() || !m_mareographsUpdating)) {
+//        std::cout<<"Problems with mareographs"<<std::endl;
+        return;
+    }
+    for (auto i =  m_mareographs->begin(); i != m_mareographs->end(); i++)
+    {
+        i->pushHeight(eta->getDataByIndex(i->getIndexX(),i->getIndexY()));
+    }
+}
+
+bool Map::MapAreaWorker::mareographsUpdating() const noexcept
+{
+    return m_mareographsUpdating;
+}
+
+void Map::MapAreaWorker::setMareographsUpdating(bool mareographsUpdating) noexcept
+{
+    m_mareographsUpdating = mareographsUpdating;
+}
+
+int Map::MapAreaWorker::mareographStepTime() const
+{
+    return m_mareographStepTime;
+}
+
+void Map::MapAreaWorker::setMareographStepTime(int mareographStepTime)
+{
+    m_mareographStepTime = mareographStepTime;
 }

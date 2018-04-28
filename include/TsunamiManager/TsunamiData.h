@@ -29,6 +29,10 @@ class TsunamiData : public QObject
                WRITE setImageSavePath NOTIFY imageSavePathChanged)
     Q_PROPERTY(QString maxDistributionSavePath READ maxDistributionSavePath
                WRITE setMaxDistributionSavePath NOTIFY maxDistributionSavePathChanged)
+    Q_PROPERTY(QString mareographsSavePath READ mareographsSavePath
+               WRITE setMareographsSavePath NOTIFY mareographsSavePathChanged)
+    Q_PROPERTY(QString mareographsPath READ mareographsPath
+               WRITE setMareographsPath NOTIFY mareographsPathChanged)
 
     Q_PROPERTY(double isobath READ isobath
                WRITE setIsobath NOTIFY isobathChanged)
@@ -41,6 +45,8 @@ class TsunamiData : public QObject
 
     Q_PROPERTY(bool plotReady READ plotReady
                WRITE setPlotReady NOTIFY plotReadyChanged)
+    Q_PROPERTY(bool mareographsUpdating READ mareographsUpdating
+               WRITE setMareographsUpdating NOTIFY mareographsUpdatingChanged)
 
     Q_PROPERTY(bool readed READ readed NOTIFY readedChanged)
 
@@ -98,6 +104,12 @@ public:
 
     bool plotReady() const;
 
+    QString mareographsSavePath() const;
+
+    QString mareographsPath() const;
+
+    bool mareographsUpdating() const;
+
 public slots:
     void setImageSavePath(QString imageSavePath);
     void setMaxDistributionSavePath(QString maxDistributionSavePath);
@@ -111,6 +123,12 @@ public slots:
     void setCalculationTime(int calculationTime);
 
     void setPlotReady(bool plotReady);
+
+    void setMareographsSavePath(QString mareographsSavePath);
+
+    void setMareographsPath(QString mareographsPath);
+
+    void setMareographsUpdating(bool mareographsUpdating);
 
 signals:
     void sizeXChanged(uint sizeX);
@@ -141,6 +159,12 @@ signals:
     void calculationTimeChanged(int calculationTime);
     void plotReadyChanged(bool plotReady);
 
+    void mareographsSavePathChanged(QString mareographsSavePath);
+
+    void mareographsPathChanged(QString mareographsPath);
+
+    void mareographsUpdatingChanged(bool mareographsUpdating);
+
 private:
 
     uint m_sizeX;
@@ -167,6 +191,9 @@ private:
     int m_calculationTime;
     bool m_plotReady;
     TsunamiPlotData *m_plotData;
+    QString m_mareographsSavePath;
+    QString m_mareographsPath;
+    bool m_mareographsUpdating;
 };
 }
 #endif // TSUNAMIDATA_H

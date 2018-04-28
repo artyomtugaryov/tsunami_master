@@ -3,7 +3,8 @@
 
 #include <iostream>
 #include <memory>
-#include "TMMapArea.h"
+#include "TMlib/TMMapArea.h"
+#include "TMlib/TMMareograph.h"
 
 namespace TM {
     namespace Map {
@@ -11,9 +12,7 @@ namespace TM {
         public:
             MapAreaWorker() = default;
 
-            MapAreaWorker(size_t x, size_t y); //TODO: Is it really needs?
-
-            MapAreaWorker(const std::string &);
+            explicit MapAreaWorker(const std::string &);
 
             size_t getMaxXIndex() const;
 
@@ -25,19 +24,21 @@ namespace TM {
 
             const std::shared_ptr<const TM::Map::MapArea<double>> bathymetry() const noexcept;
 
-            const std::shared_ptr<TM::Map::MapArea<double>> eta() noexcept;
-
             const std::shared_ptr<const TM::Map::MapArea<double>> eta() const noexcept;
 
-            void setEta(std::shared_ptr<TM::Map::MapArea<double>> newEta) noexcept ;
+            void setEta(std::shared_ptr<TM::Map::MapArea<double>> &newEta) noexcept;
 
-            const std::shared_ptr<TM::Map::MapArea<double>> uVelocity() noexcept;
+            void setU(std::shared_ptr<TM::Map::MapArea<double>> &newU) noexcept;
 
-            const std::shared_ptr<TM::Map::MapArea<double>> vVelocity() noexcept;
+            void setV(std::shared_ptr<TM::Map::MapArea<double>> &newV) noexcept;
 
-            double getLatitudeByIndex(const double i) const noexcept;
+            const std::shared_ptr<TM::Map::MapArea<double>> uVelocity() const noexcept;
 
-            double getLongitudeByIndex(const double i) const noexcept;
+            const std::shared_ptr<TM::Map::MapArea<double>> vVelocity() const noexcept;
+
+            double getLatitudeByIndex(const std::size_t &i) const noexcept;
+
+            double getLongitudeByIndex(const std::size_t &i) const noexcept;
 
             double getStepX() const noexcept;
 
@@ -49,6 +50,28 @@ namespace TM {
 
             double getMaxDepth() const noexcept;
 
+            std::shared_ptr<std::vector<Mareograph>> mareoghraphs() const;
+
+            std::string mareographsPath() const;
+
+            void setMareographsPath(const std::string &mareographsPath);
+
+            int mareographStepTime() const;
+
+            void setMareographStepTime(int mareographStepTime);
+
+            void readMareographsFromFile(const std::string &mareographsPath);
+
+            void saveMareographs(std::string path = "");
+
+            void checkMareographs(const std::shared_ptr<const MapArea<double>> &eta);
+
+            bool mareographsUpdating() const noexcept;
+
+            void setMareographsUpdating(bool mareographsUpdating) noexcept;
+
+            void setMareoghraphs(const std::shared_ptr<std::vector<Mareograph>> &mareoghraphs);
+
         private:
             std::shared_ptr<MapArea<double>> m_eta;
             std::shared_ptr<MapArea<double>> m_uVelocity;
@@ -56,8 +79,13 @@ namespace TM {
             std::shared_ptr<MapArea<double>> m_max;
             std::shared_ptr<MapArea<double>> m_min;
             std::shared_ptr<MapArea<double>> m_bathymetry;
+            std::shared_ptr<std::vector<Mareograph>> m_mareographs;
+
             //TODO: RENDER TO A SEPARATOR FILE
             std::string m_bathymetryPath;
+            std::string m_mareographsPath;
+            int m_mareographStepTime;
+            bool m_mareographsUpdating;
 
             void readBathymetryFromFileDat();
         };

@@ -13,11 +13,13 @@ namespace TM {
 
             Focus(const std::string &);
 
-            std::size_t getBlockCount() { return this->m_blocks.size(); }
+            std::size_t getBlockCount() const noexcept { return this->m_blocks.size(); }
 
-            const TM::Focus::Block getBlock(std::size_t b);
+            const TM::Focus::Block getBlock(std::size_t b)const noexcept ;
 
-            double getHeightByIndex(double i, double j, double t);
+            double getHeightByPoint(double i, double j, double t);
+
+            const std::vector<TM::Focus::Block>& blocks();
 
         private:
             std::vector<TM::Focus::Block> m_blocks;

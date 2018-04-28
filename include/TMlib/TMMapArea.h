@@ -18,11 +18,18 @@ namespace TM {
 
             MapArea() = default;
 
-            MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue=static_cast<DataType>(0));
+            MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue = static_cast<DataType>(0));
+
+            template<typename T>
+            MapArea(const std::shared_ptr<const MapArea<T>> &other);
 
             std::size_t getIndex(const std::size_t &x, const std::size_t &y) const;
 
             std::size_t getIndexByPoint(double lat, double lon) const;
+
+            std::size_t getIndexXByPoint(double lon) const;
+
+            std::size_t getIndexYByPoint(double lat) const;
 
             std::size_t sizeX() const noexcept;
 
@@ -60,30 +67,41 @@ namespace TM {
 
             void setEndY(double endY);
 
-            void setDataByIndex(std::size_t& x, std::size_t& y, DataType value);
+            void setDataByIndex(const std::size_t &x, const std::size_t &y, const DataType &value);
 
             void setDataByPoint(double longitude, double latitude, DataType value);
 
-            void saveMapAreaToTextFile(std::string path, int setprecision) const;
-
-            void saveMapAreaToBinFile(std::string path);
-
             const DataType getMinValue() const;
 
-            DataType min(){
-                return *std::min_element(m_data.begin(), m_data.end());
+            const DataType getMaxValue() const;
+
+            void saveAsTextFile(std::string path, int setprecision) const;
+
+/*
+ * START subscript operator
+ *
+            class Operator {
+            public:
+                Operator(const MapArea<DataType> *p, const std::size_t &x) : m_x(x) {
+                    m_p = p;
+                };
+
+                DataType& operator[](const std::size_t &y) const {
+                    return m_p->getDataByIndex(m_x, y);
+                }
+
+            private:
+                std::size_t m_x;
+                const MapArea<DataType> *m_p;
+            };
+
+            const Operator operator[](const std::size_t &x) const {
+                return Operator(this, x);
             }
 
-            DataType max(){
-                return *std::max_element(m_data.begin(), m_data.end());
-            }
 
-            //TODO: For test. Remove after all work with calculation part.
-            void savePlotMapArea(std::string savePath,
-                                 const std::shared_ptr<const TM::Map::MapArea<double> > bath,
-                                 bool drawBath = true);
-            //TODO END.
-
+ * END subscript operator
+ * */
         private:
             std::size_t m_sizeX;
             std::size_t m_sizeY;

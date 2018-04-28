@@ -16,13 +16,13 @@ TM::Focus::Focus::Focus(const std::string &path) {
     std::vector<TM::Focus::BrickPoint> points;
     for (std::size_t i = 0; i < terrCnt; i++) {
         int countBrickUp;
-        for (int j = 0; j < countAngles; j++) {
+        for (std::size_t j = 0; j < countAngles; j++) {
             double x(0), y(0);
             blocksFile >> x;
             blocksFile >> y;
             points.emplace_back(x, y);
         }
-        m_blocks[i].build_block(points);
+        m_blocks[i].buildBlock(points);
         blocksFile >> m_blocks[i].m_beginT ;
         blocksFile >> countBrickUp;
 
@@ -38,7 +38,7 @@ TM::Focus::Focus::Focus(const std::string &path) {
     blocksFile.close();
 }
 
-const TM::Focus::Block TM::Focus::Focus::getBlock(std::size_t b) {
+const TM::Focus::Block TM::Focus::Focus::getBlock(std::size_t b) const noexcept {
     if (b < this->m_blocks.size()) {
         return m_blocks[b];
     } else {
@@ -47,11 +47,15 @@ const TM::Focus::Block TM::Focus::Focus::getBlock(std::size_t b) {
 }
 
 
-double TM::Focus::Focus::getHeightByIndex(double lat, double lon, double t) {
-    for (auto block = m_blocks.begin(); block != this->m_blocks.end(); block++) {
-        if (block->has(lat, lon)) {
-            return block->getUpHeihgt(t);
+double TM::Focus::Focus::getHeightByPoint(double lat, double lon, double t) {
+    for (auto block : m_blocks) {
+        if (block.has(lat, lon)) {
+            return block.getUpHeight(t);
         }
     }
     return 0;
+}
+
+const std::vector<TM::Focus::Block>& TM::Focus::Focus::blocks(){
+    return m_blocks;
 }

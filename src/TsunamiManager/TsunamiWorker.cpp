@@ -1,9 +1,9 @@
 #include "TsunamiManager/TsunamiWorker.h"
-
+#include <TMlib/TMKolchScheme.h>
 #include <QDebug>
 
 TsunamiWorker::TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker,
-                             std::shared_ptr<TM::Scheme::TMScheme24> scheme,
+                             std::shared_ptr<TM::Scheme::TMScheme> scheme,
                              std::shared_ptr<TM::Focus::Focus> focus,
                              std::shared_ptr<TM::TMTimeManager> timemanager,
                              std::shared_ptr<TM::TMSignal> tmsignal,
@@ -70,7 +70,7 @@ void TsunamiWorker::setCalculationTime(int calculationTime)
     m_calculationTime = calculationTime;
 }
 
-std::shared_ptr<TM::Scheme::TMScheme24> TsunamiWorker::scheme() const
+std::shared_ptr<TM::Scheme::TMScheme> TsunamiWorker::scheme() const
 {
     return m_scheme;
 }
@@ -86,7 +86,7 @@ void TsunamiWorker::setFocus(const std::shared_ptr<TM::Focus::Focus> &focus)
     m_focus = focus;
 }
 
-void TsunamiWorker::setScheme(const std::shared_ptr<TM::Scheme::TMScheme24> &scheme)
+void TsunamiWorker::setScheme(const std::shared_ptr<TM::Scheme::TMScheme> &scheme)
 {
     m_scheme.reset();
     m_scheme = scheme;
@@ -113,7 +113,8 @@ void TsunamiWorker::runCalculation()
         return;
     }
     if (!m_scheme) {
-        m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
+//        m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
+        m_scheme = std::make_shared<TM::Scheme::TMKolchSchema>();
     }
     m_scheme->configure(m_mapAreaWorker, m_focus, m_isobath, m_timemanager, m_signal);
     m_scheme->calculation(m_mapAreaWorker, m_calculationTime);
