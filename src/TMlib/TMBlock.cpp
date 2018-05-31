@@ -1,15 +1,16 @@
+#include <algorithm>
 #include "TMlib/TMBlock.h"
 
-bool TM::Focus::Block::has(double lat, double lon) {
+bool TM::Focus::Block::has(const double &lat, const double &lon) {
     return pointLocation({lat, lon});
 }
 
-double TM::Focus::Block::getUpHeight(double t) {
+double TM::Focus::Block::getUpHeight(const double &t) {
     for (auto brickUp : m_numberUp) {
-        if (this->m_beginT > t or t > this->m_beginT + brickUp.m_brickUpT) {
+        if (this->m_beginT > t or t > this->m_beginT + brickUp.get_brickUpT()) {
             return 0;
         } else {
-            auto speed = (brickUp.m_heightUp) / brickUp.m_brickUpT;
+            auto speed = (brickUp.get_heightUp()) / brickUp.get_brickUpT();
             return speed * t;
         }
     }
@@ -39,7 +40,15 @@ bool TM::Focus::BrickPoint::intersect(const BrickPoint &a, const BrickPoint &b, 
     return ((BrickPoint::rotate(a, b, c) * BrickPoint::rotate(a, b, d)) <= 0) && ((BrickPoint::rotate(c, d, a) * BrickPoint::rotate(c, d, b)) < 0);
 }
 
-void TM::Focus::Block::buildBlock(std::vector<TM::Focus::BrickPoint> points) {
+double TM::Focus::BrickPoint::x() const {
+    return m_x;
+}
+
+double TM::Focus::BrickPoint::y() const {
+    return m_y;
+}
+
+void TM::Focus::Block::buildBlock(std::vector<TM::Focus::BrickPoint> &points) {
     auto n = points.size();
     std::sort(points.begin(), points.end());
     std::vector<size_t> p(n);
@@ -56,10 +65,22 @@ void TM::Focus::Block::buildBlock(std::vector<TM::Focus::BrickPoint> points) {
         }
     }
     m_points.resize(n);
-    if (points[*p.begin()].m_y > points[*(p.end()-1)].m_y){
+    if (points[*p.begin()].y() > points[*(p.end()-1)].y()){
         std::reverse(std::begin(p), std::end(p));
     }
     for (size_t i(0); i < n; i++) {
         m_points[i] = points[p[i]];
     }
+}
+
+double& TM::Focus::Block::get_beginT(){
+    return m_beginT;
+}
+
+std::vector<TM::Focus::BrickPoint>& TM::Focus::Block::get_points() {
+    return m_points;
+}
+
+std::vector<TM::Focus::BrickUp>& TM::Focus::Block::get_numberUp() {
+    return m_numberUp;
 }
