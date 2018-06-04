@@ -1,7 +1,6 @@
 #ifndef TSUNAMIMANAGER_TMBRICKPOINT_H
 #define TSUNAMIMANAGER_TMBRICKPOINT_H
 
-#include "TMBrickUp.h"
 #include <vector>
 
 namespace TM {
@@ -25,6 +24,7 @@ namespace TM {
                                   const BrickPoint &b,
                                   const BrickPoint &c,
                                   const BrickPoint &d);
+
             double x() const;
 
             double y() const;
