@@ -201,9 +201,3 @@ template
 class TM::Map::MapArea<TM::Scheme::types_cells>;
 
 template TM::Map::MapArea<TM::Scheme::types_cells>::MapArea(const std::shared_ptr<const TM::Map::MapArea<double>> &);
-
-template
-class TM::Map::MapArea<std::shared_ptr<TM::Scheme::BoundaryCoefficients>>;
-
-template TM::Map::MapArea<std::shared_ptr<TM::Scheme::BoundaryCoefficients>>::MapArea(
-        const std::shared_ptr<const TM::Map::MapArea<double>> &);
