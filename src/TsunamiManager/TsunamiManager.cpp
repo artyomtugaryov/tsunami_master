@@ -38,7 +38,7 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     connect(m_tsunamiData, &TsunamiData::isobathChanged, this, &TsunamiManager::isobathChanged);
     connect(m_tsunamiData, &TsunamiData::timeUpdateChanged, this, &TsunamiManager::updateTimeChanged);
     m_timemanager->setSendingTimeStep(10);
-    qRegisterMetaType<std::shared_ptr<TM::Map::MapArea<double>>>("std::shared_ptr<TM::Map::MapArea<double>>");
+    qRegisterMetaType<std::shared_ptr<TM::Map::RectangleMapArea<double>>>("std::shared_ptr<TM::Map::RectangleMapArea<double>>");
     connect(m_signal.get(), &TM::TMSignal::signalUpdate, this, &TsunamiManagerInfo::TsunamiManager::isUpdateTime);
 
     loadInitDataFromJson();
@@ -132,7 +132,7 @@ void TsunamiManager::tsunamiWorkerThreadReaded()
     }
 }
 
-void TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::MapArea<double> > eta)
+void TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::RectangleMapArea<double> > eta)
 {
     m_eta.reset();
     m_etaQueue.push(eta);
@@ -199,7 +199,7 @@ void TsunamiManager::setMareographsUpdating(bool updating)
     m_mapAreaWorker->setMareographsUpdating(updating);
 }
 
-std::shared_ptr<TM::Map::MapArea<double> > TsunamiManager::eta() const
+std::shared_ptr<TM::Map::RectangleMapArea<double> > TsunamiManager::eta() const
 {
     return m_eta;
 }

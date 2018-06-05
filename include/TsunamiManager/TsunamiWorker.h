@@ -4,7 +4,6 @@
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMException.h>
 #include <TMlib/TMScheme24.h>
-#include <TMlib/TMTimeManager.h>
 #include <TMlib/TMFocus.h>
 
 #include <QObject>

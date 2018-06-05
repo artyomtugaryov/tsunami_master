@@ -1,13 +1,11 @@
-#include <TMlib/TMKolchScheme.h>
 #include <TMlib/TMCommon.h>
+#include <TMlib/TMKolchScheme.h>
+
 #include <time.h>
-#include <TMlib/TMHelpers.h>
 
 void TM::Scheme::TMKolchSchema::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                                           const std::shared_ptr<const TM::Focus::Focus> &focus,
-                                          const double &izobata,
-                                          const std::shared_ptr<TMTimeManager> &sender,
-                                          const std::shared_ptr<TMSignal> &signal) {
+                                          const double &izobata) {
     this->setTypesOfCells(area, izobata);
     this->set_delta(area->bathymetry());
     if (focus) {
@@ -16,20 +14,18 @@ void TM::Scheme::TMKolchSchema::configure(const std::shared_ptr<const TM::Map::M
         std::cout << "[ WARNING ] Focus did not set." << std::endl;
         this->m_focus = std::make_shared<TM::Focus::Focus>();
     }
-    terr_up.resize(area->bathymetry()->sizeY());
-    for (int j = 0; j < area->bathymetry()->endY(); j++) {
-        terr_up[j].resize(area->bathymetry()->sizeY());
+    terr_up.resize(area->bathymetry()->sizeLatitude());
+    for (int j = 0; j < area->bathymetry()->endLatitude(); j++) {
+        terr_up[j].resize(area->bathymetry()->sizeLatitude());
     }
-    this->m_time = sender;
-    this->m_signal = signal;
 }
 
-void TM::Scheme::TMKolchSchema::set_delta(const std::shared_ptr<const TM::Map::MapArea<double>> &area) {
-    delta_x_m = area->stepX() * M_PI * R_EACH / 180;
-    delta_y_m.resize(area->sizeY());
-    delta_t.resize(area->sizeY());
-    for (int j = 0; j < area->sizeY(); ++j) {
-        delta_y_m[j] = delta_x_m * cos((area->startY() + j * area->stepY()) / 180.0 * M_PI);
+void TM::Scheme::TMKolchSchema::set_delta(const std::shared_ptr<const TM::Map::RectangleMapArea<double>> &area) {
+    delta_x_m = area->stepLongitude() * M_PI * R_EACH / 180;
+    delta_y_m.resize(area->sizeLatitude());
+    delta_t.resize(area->sizeLatitude());
+    for (int j = 0; j < area->sizeLatitude(); ++j) {
+        delta_y_m[j] = delta_x_m * cos((area->startLatitude() + j * area->stepLatitude()) / 180.0 * M_PI);
         delta_t[j] = 1;
         auto v = sqrt(delta_y_m[j] * delta_y_m[j] + delta_x_m * delta_x_m) / sqrt(2 * G * 3000);
         if (delta_t[j] > v)
@@ -39,9 +35,9 @@ void TM::Scheme::TMKolchSchema::set_delta(const std::shared_ptr<const TM::Map::M
 
 void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
                                             const double &timeEnd) {
-    std::size_t size_y = area->bathymetry()->sizeY();
-    std::size_t size_x = area->bathymetry()->sizeX();
-    auto eta = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
+    std::size_t size_y = area->bathymetry()->sizeLatitude();
+    std::size_t size_x = area->bathymetry()->sizeLongitude();
+    auto eta = std::make_shared<TM::Map::RectangleMapArea<double>>(area->bathymetry());
     for (size_t t = 0; t < timeEnd; t += 1) {
         size_t i = 1, j = 1;
         auto u_old = area->uVelocity();
@@ -54,7 +50,7 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
 //#pragma omp parallel for shared(u_old, v_old, eta_old, h) private(j)
             for (j = 1; j < size_y - 1; ++j) {
                 auto etaValue = 0.;
-                if (m_types_cells->getDataByIndex(i, j) == TM::Scheme::types_cells::WATER) {
+                if (m_types_cells->getDataByIndex(i, j) == TM::Map::TypesCells::WATER) {
                     if (i < size_x - 2 && j < size_y - 2) {
                         etaValue = eta_old->getDataByIndex(i, j) - delta_t[j] * ((1. / (2. * delta_x_m)) *
                                                                                  (u_old->getDataByIndex(i, j + 1) *
@@ -83,17 +79,16 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
             }
         }
         area->setEta(eta);
-        saveMapAreaAsImage(eta, std::string("img/") + std::to_string(t) + std::string(".png"), area->bathymetry());
         const double Ch = 0.0025;
-        auto newU = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
-        auto newV = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
+        auto newU = std::make_shared<TM::Map::RectangleMapArea<double>>(area->bathymetry());
+        auto newV = std::make_shared<TM::Map::RectangleMapArea<double>>(area->bathymetry());
 //#pragma omp parallel for shared(u_old, v_old, h) private(i)
         for (i = 1; i < size_x - 1; ++i) {
 //#pragma omp parallel for shared(u_old, v_old, h) private(j)
             for (j = 1; j < size_y - 1; ++j) {
                 auto u = 0.;
                 auto v = 0.;
-                if (m_types_cells->getDataByIndex(i, j) == TM::Scheme::types_cells::WATER) {
+                if (m_types_cells->getDataByIndex(i, j) == TM::Map::TypesCells ::WATER) {
                     u = u_old->getDataByIndex(i, j) -
                         G * delta_t[j] / delta_x_m * (eta->getDataByIndex(i, j) - eta->getDataByIndex(i, j - 1)) -
                         delta_t[j] * Ch / (eta->getDataByIndex(i, j) + -h->getDataByIndex(i, j)) *
@@ -156,8 +151,6 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
 //                  << static_cast<double>(end - begin) * 1000.0 / double(CLOCKS_PER_SEC)
 //                  << " ms."
 //                  << std::endl;
-        if (!fmod(t, m_time->sendingTimeStep())) {
-            m_signal->emitSignal(eta);
-        }
+
     }
 }

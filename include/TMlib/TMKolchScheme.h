@@ -1,12 +1,11 @@
 #ifndef TSUNAMIMANAGER_TMKOLCHSCHEMA_H
 #define TSUNAMIMANAGER_TMKOLCHSCHEMA_H
 
-#include "TMScheme.h"
-#include "TMMapAreaWorker.h"
+#include "TMlib/TMScheme.h"
 
 namespace TM {
     namespace Scheme {
-        class TMKolchSchema : public TMScheme {
+        class TMKolchSchema : public Scheme {
         public:
             TMKolchSchema() = default;
 
@@ -17,12 +16,10 @@ namespace TM {
 
             void configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &,
                            const std::shared_ptr<const TM::Focus::Focus> &,
-                           const double &,
-                           const std::shared_ptr<TMTimeManager> &,
-                           const std::shared_ptr<TMSignal> &);
+                           const double &);
 
         private:
-            void set_delta(const std::shared_ptr<const TM::Map::MapArea<double>> &);
+            void set_delta(const std::shared_ptr<const TM::Map::RectangleMapArea<double>> &);
 
             void setBoundary1Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &,
                                   const size_t &,

@@ -1,14 +1,13 @@
-#ifndef TSUNAMIMANAGER_TMSHEME24_H
-#define TSUNAMIMANAGER_TMSHEME24_H
+#ifndef TM_TMSHEME24_H
+#define TM_TMSHEME24_H
 
-#include <TMlib/TMMapAreaWorker.h>
-#include <TMlib/TMMapArea.h>
-#include <TMlib/TMScheme.h>
+#include "TMlib/TMScheme.h"
 
 namespace TM {
     namespace Scheme {
 
-        class TMScheme24 : public TMScheme {
+        //TODO: Documentation
+        class TMScheme24 : public Scheme {
         public:
             TMScheme24() = default;
 
@@ -19,9 +18,7 @@ namespace TM {
 
             void configure(const std::shared_ptr<const Map::MapAreaWorker> &area,
                            const std::shared_ptr<const Focus::Focus> &focus,
-                           const double &izobata,
-                           const std::shared_ptr<TMTimeManager> &sender,
-                           const std::shared_ptr<TMSignal> &signal) override;
+                           const double &izobata) override;
 
             double getTimeStep(const double &dPhi, const double &dTetta, const double &Hm) const;
 
@@ -82,17 +79,17 @@ namespace TM {
                                              const double &dPhi,
                                              const double &dTetta);
 
-            static double gradient(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
+            static double gradient(const std::shared_ptr<const TM::Map::RectangleMapArea<double>> &w,
                                    const std::size_t &j,
                                    const std::size_t &k,
                                    const std::array<int, 2> &d,
                                    const int &route = 1);
 
-            std::shared_ptr<TM::Map::MapArea<double>> m_B0;
-            std::shared_ptr<TM::Map::MapArea<double>> m_B1;
+            std::shared_ptr<TM::Map::RectangleMapArea<double>> m_B0;
+            std::shared_ptr<TM::Map::RectangleMapArea<double>> m_B1;
         };
     }
 }
 
-#endif //TSUNAMIMANAGER_TMSHEME24_H
+#endif //TM_TMSHEME24_H
 

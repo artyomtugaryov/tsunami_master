@@ -1,5 +1,9 @@
 #include "TMlib/TMBrickPoint.h"
 
+/*
+ * https://habr.com/post/144571/
+ */
+
 double TM::Focus::BrickPoint::rotate(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c) {
     return (b.m_x - a.m_x) * (c.m_y - b.m_y) - (b.m_y - a.m_y) * (c.m_x - b.m_x);
 }

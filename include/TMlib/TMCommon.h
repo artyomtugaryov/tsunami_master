@@ -1,8 +1,9 @@
 #ifndef TMCOMMON_H
 #define TMCOMMON_H
 
+#include "TMLib/TMConstants.h"
+
 #include <cmath>
-#include "TMConstants.h"
 
 namespace TM{
     namespace Common{

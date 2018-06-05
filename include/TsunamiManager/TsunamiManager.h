@@ -36,7 +36,7 @@ public:
     void setPlotProvider(TsunamiPlotProvider *plotProvider);
     int currentCalculationTime();
     void loadInitDataFromJson();
-    std::shared_ptr<TM::Map::MapArea<double> > eta() const;
+    std::shared_ptr<TM::Map::RectangleMapArea<double> > eta() const;
 
 public slots:
     void readBathymetryFromFile(QString path);
@@ -51,7 +51,7 @@ public slots:
     void setMareographsUpdating(bool updating);
 
 private slots:
-    void isUpdateTime(std::shared_ptr<TM::Map::MapArea<double>> eta);
+    void isUpdateTime(std::shared_ptr<TM::Map::RectangleMapArea<double>> eta);
     void isobathChanged(double isobath);
     void updateTimeChanged(int time);
     void calculationTimeChanged(int time);
@@ -69,14 +69,14 @@ private:
     std::shared_ptr<TM::Focus::Focus> m_focus;
     std::shared_ptr<TM::TMTimeManager> m_timemanager;
     std::shared_ptr<TM::TMSignal> m_signal;
-    std::shared_ptr<TM::Map::MapArea<double> > m_eta;
+    std::shared_ptr<TM::Map::RectangleMapArea<double> > m_eta;
     TsunamiManagerInfo::TsunamiPlotProvider* m_plotProvider;
     TsunamiWorker* m_tsunamiWorker;
     QThread* m_tsunamiWorkerThread;
     QImage* m_bathymetryImage;
     Plot2d* m_plot;
     int m_currentCalculationTime;
-    std::queue <std::shared_ptr<TM::Map::MapArea<double>>> m_etaQueue;
+    std::queue <std::shared_ptr<TM::Map::RectangleMapArea<double>>> m_etaQueue;
     bool m_plotting;
 };
 }

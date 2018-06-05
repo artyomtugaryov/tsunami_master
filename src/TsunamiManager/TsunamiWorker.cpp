@@ -113,7 +113,7 @@ void TsunamiWorker::runCalculation()
         return;
     }
     if (!m_scheme) {
-//        m_scheme = std::make_shared<TM::Scheme::TMScheme24>();
+//        m_scheme = std::make_shared<TM::Scheme::Scheme24>();
         m_scheme = std::make_shared<TM::Scheme::TMKolchSchema>();
     }
     m_scheme->configure(m_mapAreaWorker, m_focus, m_isobath, m_timemanager, m_signal);

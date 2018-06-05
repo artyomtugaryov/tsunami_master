@@ -8,27 +8,27 @@ namespace {
 }
 
 template <typename DataType>
-void saveMapAreaAsImage(const std::shared_ptr<TM::Map::MapArea<DataType>> &area,
+void saveMapAreaAsImage(const std::shared_ptr<TM::Map::RectangleMapArea<DataType>> &area,
                         const std::string &savePath,
-                        const std::shared_ptr<const TM::Map::MapArea<double>> &bath) {
-    area->setStartX(bath->startX());
-    area->setStartY(bath->startY());
-    area->setSizeX(bath->sizeX());
-    area->setSizeY(bath->sizeY());
-    area->setStepX(bath->stepX());
-    area->setStepY(bath->stepY());
+                        const std::shared_ptr<const TM::Map::RectangleMapArea<double>> &bath) {
+    area->setStartLongitude(bath->startLongitude());
+    area->setStartLatitude(bath->startLatitude());
+    area->setSizeLongitude(bath->sizeLongitude());
+    area->setSizeLatitude(bath->sizeLatitude());
+    area->setStepLongitude(bath->stepLongitude());
+    area->setStepLatitude(bath->stepLatitude());
     std::shared_ptr<QImage> plotImage =
-            std::make_shared<QImage>(bath->sizeX() + Width, bath->sizeY() + Height, QImage::Format_RGB32);
+            std::make_shared<QImage>(bath->sizeLongitude() + Width, bath->sizeLatitude() + Height, QImage::Format_RGB32);
     PlotLib::Plot2d plot;
 
     plot.setImage(plotImage.get());
     plot.setColorbar(true);
-    plot.setRegion(QRectF( QPointF(bath->startX(),
-                                   bath->startY()),
-                           QPointF(bath->endX(),
-                                   bath->endY())));
+    plot.setRegion(QRectF( QPointF(bath->startLongitude(),
+                                   bath->startLatitude()),
+                           QPointF(bath->endLongitude(),
+                                   bath->endLatitude())));
 
-    plot.setWindow(QRect(0, 0, bath->sizeX() + Width, bath->sizeY() + Height));
+    plot.setWindow(QRect(0, 0, bath->sizeLongitude() + Width, bath->sizeLatitude() + Height));
 
     PlotLib::ColorMap colorMap({{0, QColor(0, 91, 65)},
                                 {200, QColor(201, 180, 102)},
@@ -78,11 +78,11 @@ void saveMapAreaAsImage(const std::shared_ptr<TM::Map::MapArea<DataType>> &area,
 
 ///Implementations
 template
-void saveMapAreaAsImage(const std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> &,
+void saveMapAreaAsImage(const std::shared_ptr<TM::Map::RectangleMapArea<TM::Map::TypesCells>> &,
                         const std::string &,
-                        const std::shared_ptr<const TM::Map::MapArea<double>> &);
+                        const std::shared_ptr<const TM::Map::RectangleMapArea<double>> &);
 
 template
-void saveMapAreaAsImage(const std::shared_ptr<TM::Map::MapArea<double>> &,
+void saveMapAreaAsImage(const std::shared_ptr<TM::Map::RectangleMapArea<double>> &,
                         const std::string &,
-                        const std::shared_ptr<const TM::Map::MapArea<double>> &);
+                        const std::shared_ptr<const TM::Map::RectangleMapArea<double>> &);

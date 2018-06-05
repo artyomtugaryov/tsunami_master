@@ -1,10 +1,10 @@
-#ifndef MAPAREAWORKER_H
-#define MAPAREAWORKER_H
+#ifndef TM_MAPAREAWORKER_H
+#define TM_MAPAREAWORKER_H
 
-#include <iostream>
-#include <memory>
-#include "TMlib/TMMapArea.h"
+#include "TMlib/TMRectangleMapArea.h"
 #include "TMlib/TMMareograph.h"
+
+#include <memory>
 
 namespace TM {
     namespace Map {
@@ -14,6 +14,7 @@ namespace TM {
 
             explicit MapAreaWorker(const std::string &);
 
+
             size_t getMaxXIndex() const;
 
             size_t getMaxYIndex() const;
@@ -22,19 +23,19 @@ namespace TM {
 
             bool setBathymetryPath(const std::string &path, bool readFromFile = false);
 
-            const std::shared_ptr<const TM::Map::MapArea<double>> bathymetry() const noexcept;
+            const std::shared_ptr<const TM::Map::RectangleMapArea<double>> bathymetry() const noexcept;
 
-            const std::shared_ptr<const TM::Map::MapArea<double>> eta() const noexcept;
+            const std::shared_ptr<const TM::Map::RectangleMapArea<double>> eta() const noexcept;
 
-            void setEta(std::shared_ptr<TM::Map::MapArea<double>> &newEta) noexcept;
+            void setEta(std::shared_ptr<TM::Map::RectangleMapArea<double>> &newEta) noexcept;
 
-            void setU(std::shared_ptr<TM::Map::MapArea<double>> &newU) noexcept;
+            void setU(std::shared_ptr<TM::Map::RectangleMapArea<double>> &newU) noexcept;
 
-            void setV(std::shared_ptr<TM::Map::MapArea<double>> &newV) noexcept;
+            void setV(std::shared_ptr<TM::Map::RectangleMapArea<double>> &newV) noexcept;
 
-            const std::shared_ptr<TM::Map::MapArea<double>> uVelocity() const noexcept;
+            const std::shared_ptr<TM::Map::RectangleMapArea<double>> uVelocity() const noexcept;
 
-            const std::shared_ptr<TM::Map::MapArea<double>> vVelocity() const noexcept;
+            const std::shared_ptr<TM::Map::RectangleMapArea<double>> vVelocity() const noexcept;
 
             double getLatitudeByIndex(const std::size_t &i) const noexcept;
 
@@ -50,7 +51,7 @@ namespace TM {
 
             double getMaxDepth() const noexcept;
 
-            std::shared_ptr<std::vector<Mareograph>> mareoghraphs() const;
+//            std::shared_ptr<std::vector<Mareograph>> mareoghraphs() const;
 
             std::string mareographsPath() const;
 
@@ -64,7 +65,7 @@ namespace TM {
 
             void saveMareographs(std::string path = "");
 
-            void checkMareographs(const std::shared_ptr<const MapArea<double>> &eta);
+            void checkMareographs(const std::shared_ptr<const RectangleMapArea<double>> &eta);
 
             bool mareographsUpdating() const noexcept;
 
@@ -73,12 +74,12 @@ namespace TM {
             void setMareoghraphs(const std::shared_ptr<std::vector<Mareograph>> &mareoghraphs);
 
         private:
-            std::shared_ptr<MapArea<double>> m_eta;
-            std::shared_ptr<MapArea<double>> m_uVelocity;
-            std::shared_ptr<MapArea<double>> m_vVelocity;
-            std::shared_ptr<MapArea<double>> m_max;
-            std::shared_ptr<MapArea<double>> m_min;
-            std::shared_ptr<MapArea<double>> m_bathymetry;
+            std::shared_ptr<RectangleMapArea<double>> m_eta;
+            std::shared_ptr<RectangleMapArea<double>> m_uVelocity;
+            std::shared_ptr<RectangleMapArea<double>> m_vVelocity;
+            std::shared_ptr<RectangleMapArea<double>> m_max;
+            std::shared_ptr<RectangleMapArea<double>> m_min;
+            std::shared_ptr<RectangleMapArea<double>> m_bathymetry;
             std::shared_ptr<std::vector<Mareograph>> m_mareographs;
 
             //TODO: RENDER TO A SEPARATOR FILE
@@ -91,4 +92,4 @@ namespace TM {
         };
     }
 }
-#endif // MAPAREAWORKER_H
+#endif // TM_MAPAREAWORKER_H

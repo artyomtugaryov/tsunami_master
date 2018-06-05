@@ -12,7 +12,7 @@ SOURCES += TMMapArea.cpp \
            TMMapAreaWorker.cpp \
            TMCommon.cpp \
            TMScheme.cpp \
-           TMScheme24.cpp \
+           Scheme24.cpp \
            TMKolchScheme.cpp \
            TMFocus.cpp \
            TMBlock.cpp \
@@ -31,7 +31,7 @@ HEADERS += $${_PRO_FILE_PWD_}/../../include/TMlib/TMMapArea.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMCommon.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMConstants.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMScheme.h \
-           $${_PRO_FILE_PWD_}/../../include/TMlib/TMScheme24.h \
+           $${_PRO_FILE_PWD_}/../../include/TMlib/Scheme24.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMKolchScheme.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMFocus.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMBlock.h \
