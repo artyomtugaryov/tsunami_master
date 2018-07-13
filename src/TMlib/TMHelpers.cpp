@@ -6,13 +6,14 @@ namespace {
     const int Width = 300;
     const int Height = 20;
 }
+/*
 
 template <typename DataType>
 void saveMapAreaAsImage(const std::shared_ptr<TM::Map::RectangleMapArea<DataType>> &area,
                         const std::string &savePath,
                         const std::shared_ptr<const TM::Map::RectangleMapArea<double>> &bath) {
-    area->setStartLongitude(bath->startLongitude());
-    area->setStartLatitude(bath->startLatitude());
+    area->setMinLongitude(bath->beginLongitude());
+    area->setMintLatitude(bath->beginLatitude());
     area->setSizeLongitude(bath->sizeLongitude());
     area->setSizeLatitude(bath->sizeLatitude());
     area->setStepLongitude(bath->stepLongitude());
@@ -23,8 +24,8 @@ void saveMapAreaAsImage(const std::shared_ptr<TM::Map::RectangleMapArea<DataType
 
     plot.setImage(plotImage.get());
     plot.setColorbar(true);
-    plot.setRegion(QRectF( QPointF(bath->startLongitude(),
-                                   bath->startLatitude()),
+    plot.setRegion(QRectF( QPointF(bath->beginLongitude(),
+                                   bath->beginLatitude()),
                            QPointF(bath->endLongitude(),
                                    bath->endLatitude())));
 
@@ -86,3 +87,4 @@ template
 void saveMapAreaAsImage(const std::shared_ptr<TM::Map::RectangleMapArea<double>> &,
                         const std::string &,
                         const std::shared_ptr<const TM::Map::RectangleMapArea<double>> &);
+*/

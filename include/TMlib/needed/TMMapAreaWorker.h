@@ -14,7 +14,6 @@ namespace TM {
 
             explicit MapAreaWorker(const std::string &);
 
-
             size_t getMaxXIndex() const;
 
             size_t getMaxYIndex() const;
@@ -37,6 +36,7 @@ namespace TM {
 
             const std::shared_ptr<TM::Map::RectangleMapArea<double>> vVelocity() const noexcept;
 
+
             double getLatitudeByIndex(const std::size_t &i) const noexcept;
 
             double getLongitudeByIndex(const std::size_t &i) const noexcept;
@@ -51,7 +51,7 @@ namespace TM {
 
             double getMaxDepth() const noexcept;
 
-//            std::shared_ptr<std::vector<Mareograph>> mareoghraphs() const;
+
 
             std::string mareographsPath() const;
 

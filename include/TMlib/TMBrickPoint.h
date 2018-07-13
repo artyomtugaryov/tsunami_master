@@ -1,5 +1,5 @@
-#ifndef TSUNAMIMANAGER_TMBRICKPOINT_H
-#define TSUNAMIMANAGER_TMBRICKPOINT_H
+#ifndef TMBRICKPOINT_H
+#define TMBRICKPOINT_H
 
 #include <vector>
 
@@ -37,4 +37,4 @@ namespace TM {
     }
 }
 
-#endif //TSUNAMIMANAGER_TMBRICKPOINT_H
+#endif //TMBRICKPOINT_H

@@ -1,5 +1,5 @@
-#ifndef TSUNAMIMANAGER_TMKOLCHSCHEMA_H
-#define TSUNAMIMANAGER_TMKOLCHSCHEMA_H
+#ifndef TMKOLCHSCHEMA_H
+#define TMKOLCHSCHEMA_H
 
 #include "TMlib/TMScheme.h"
 
@@ -9,14 +9,14 @@ namespace TM {
         public:
             TMKolchSchema() = default;
 
-            virtual ~TMKolchSchema() = default;
+            ~TMKolchSchema() override = default;
 
             void calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &,
-                             const double &);
+                             const double &) override ;
 
             void configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &,
                            const std::shared_ptr<const TM::Focus::Focus> &,
-                           const double &);
+                           const double &) override ;
 
         private:
             void set_delta(const std::shared_ptr<const TM::Map::RectangleMapArea<double>> &);
@@ -40,4 +40,4 @@ namespace TM {
 }
 
 
-#endif //TSUNAMIMANAGER_TMKOLCHSCHEMA_H
+#endif //TMKOLCHSCHEMA_H

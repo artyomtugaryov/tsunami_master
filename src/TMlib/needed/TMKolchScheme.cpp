@@ -2,6 +2,9 @@
 #include <TMlib/TMKolchScheme.h>
 
 #include <time.h>
+#include <cmath>
+
+using namespace TM::Common;
 
 void TM::Scheme::TMKolchSchema::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                                           const std::shared_ptr<const TM::Focus::Focus> &focus,
@@ -15,7 +18,7 @@ void TM::Scheme::TMKolchSchema::configure(const std::shared_ptr<const TM::Map::M
         this->m_focus = std::make_shared<TM::Focus::Focus>();
     }
     terr_up.resize(area->bathymetry()->sizeLatitude());
-    for (int j = 0; j < area->bathymetry()->endLatitude(); j++) {
+    for (int j = 0; j < area->bathymetry()->sizeLatitude(); j++) {
         terr_up[j].resize(area->bathymetry()->sizeLatitude());
     }
 }
@@ -25,7 +28,7 @@ void TM::Scheme::TMKolchSchema::set_delta(const std::shared_ptr<const TM::Map::R
     delta_y_m.resize(area->sizeLatitude());
     delta_t.resize(area->sizeLatitude());
     for (int j = 0; j < area->sizeLatitude(); ++j) {
-        delta_y_m[j] = delta_x_m * cos((area->startLatitude() + j * area->stepLatitude()) / 180.0 * M_PI);
+        delta_y_m[j] = delta_x_m * cos((area->beginLatitude() + j * area->stepLatitude()) / 180.0 * M_PI);
         delta_t[j] = 1;
         auto v = sqrt(delta_y_m[j] * delta_y_m[j] + delta_x_m * delta_x_m) / sqrt(2 * G * 3000);
         if (delta_t[j] > v)

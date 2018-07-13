@@ -1,5 +1,5 @@
-#ifndef TSUNAMIMANAGER_TMBLOCK_H
-#define TSUNAMIMANAGER_TMBLOCK_H
+#ifndef TMBLOCK_H
+#define TMBLOCK_H
 
 #include "TMBrickUp.h"
 #include "TMBrickPoint.h"
@@ -9,7 +9,7 @@ namespace TM {
     namespace Focus {
         class Block {
         public:
-            Block() : m_beginT(0.0) {}
+            Block() : m_beginT(0.0){}
 
             bool has(const double &lat, const double &lon);
 
@@ -36,4 +36,4 @@ namespace TM {
     }
 }
 
-#endif //TSUNAMIMANAGER_TMBLOCK_H
+#endif //TMBLOCK_H

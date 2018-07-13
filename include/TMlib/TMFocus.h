@@ -1,7 +1,8 @@
-#ifndef TSUNAMIMANAGER_TMFOCUS_H
-#define TSUNAMIMANAGER_TMFOCUS_H
+#ifndef TMFOCUS_H
+#define TMFOCUS_H
 
 #include "TMBlock.h"
+
 #include <vector>
 #include <string>
 
@@ -11,15 +12,15 @@ namespace TM {
         public:
             Focus() = default;
 
-            Focus(const std::string &);
+            explicit Focus(const std::string &);
 
             std::size_t getBlockCount() const noexcept { return this->m_blocks.size(); }
 
-            const TM::Focus::Block getBlock(std::size_t b)const noexcept ;
+            const TM::Focus::Block getBlock(std::size_t b) const noexcept;
 
             double getHeightByPoint(double i, double j, double t);
 
-            const std::vector<TM::Focus::Block>& blocks();
+            const std::vector<TM::Focus::Block> &blocks();
 
         private:
             std::vector<TM::Focus::Block> m_blocks;
@@ -27,4 +28,4 @@ namespace TM {
     }
 }
 
-#endif //TSUNAMIMANAGER_TMFOCUS_H
+#endif //TMFOCUS_H

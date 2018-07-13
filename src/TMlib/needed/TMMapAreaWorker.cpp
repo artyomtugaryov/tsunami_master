@@ -72,7 +72,7 @@ void TM::Map::MapAreaWorker::readBathymetryFromFileDat() {
     m_bathymetry->setEndLatitude(maxY);
     m_bathymetry->setSizeLongitude(sizeX);
     m_bathymetry->setSizeLatitude(sizeY);
-    m_bathymetry->setStartLongitude(minX);
+    m_bathymetry->setBeginLongitude(minX);
     m_bathymetry->setStartLatitude(minY);
 
     for (std::size_t k = 0; k < static_cast<std::size_t>(depth.size()); k++) {
@@ -149,11 +149,11 @@ size_t TM::Map::MapAreaWorker::getMaxYIndex() const {
 }
 
 double TM::Map::MapAreaWorker::getLongitudeByIndex(const std::size_t &i) const noexcept {
-    return m_bathymetry->startLongitude() + m_bathymetry->stepLongitude() * i;
+    return m_bathymetry->beginLongitude() + m_bathymetry->stepLongitude() * i;
 }
 
 double TM::Map::MapAreaWorker::getLatitudeByIndex(const std::size_t &i) const noexcept {
-    return m_bathymetry->endLatitude() - m_bathymetry->stepLatitude() * i;
+    return m_bathymetry->sizeLatitude() - m_bathymetry->stepLatitude() * i;
 }
 
 double TM::Map::MapAreaWorker::getStepX() const noexcept {
@@ -215,8 +215,8 @@ void TM::Map::MapAreaWorker::readMareographsFromFile(const std::string &mareogra
         file >> location >> x >> y;
         TM::Mareograph m(y, x, 10, location);
 
-        if(x < bathymetry()->startLongitude() || y < bathymetry()->startLatitude()
-                || x > bathymetry()->endLongitude() || y > bathymetry()->endLatitude()){
+        if(x < bathymetry()->beginLongitude() || y < bathymetry()->beginLatitude()
+                || x > bathymetry()->sizeLongitude() || y > bathymetry()->sizeLatitude()){
             continue;
         }
         m.setIndexX(m_bathymetry->getIndexXByPoint(x));

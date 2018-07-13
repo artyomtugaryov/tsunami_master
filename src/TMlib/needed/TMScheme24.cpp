@@ -1,10 +1,13 @@
-#include <TMlib/TMScheme24.h>
-#include <TMlib/TMCommon.h>
-#include <TMlib/TMException.h>
-#include <TMlib/TMHelpers.h>
+#include "TMlib/TMScheme24.h"
+#include "TMlib/TMCommon.h"
+#include "TMlib/TMException.h"
+#include "TMlib/TMHelpers.h"
+
 #include <cmath>
 #include <ctime>
 #include <queue>
+
+using namespace TM::Common;
 
 void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
                                          const double &timeEnd) {
@@ -91,7 +94,7 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
     }
     area->setU(newU);
     area->setV(newV);
-    saveMapAreaAsImage(newEta, std::string("img/") + std::to_string(0) + std::string(".png"), area->bathymetry());
+//    saveMapAreaAsImage(newEta, std::string("img/") + std::to_string(0) + std::string(".png"), area->bathymetry());
     // END TODO
     area->saveMareographs();
     clock_t end = clock();

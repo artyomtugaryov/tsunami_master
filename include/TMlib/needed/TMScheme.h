@@ -1,5 +1,5 @@
-#ifndef TM_SHEME_H
-#define TM_SHEME_H
+#ifndef TM_SCHEME_H
+#define TM_SCHEME_H
 
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMFocus.h>
@@ -39,4 +39,4 @@ namespace TM {
     }
 }
 
-#endif //TM_SHEME_H
+#endif //TM_SCHEME_H
