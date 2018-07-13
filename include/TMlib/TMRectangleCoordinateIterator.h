@@ -6,24 +6,24 @@
 
 #include <memory>
 
+using namespace TM::Map;
 
 namespace TM {
     namespace Map {
+
         template<typename DataType>
         class RectangleMapArea;
 
         template<typename DataType>
-        class RectangleCoordinateIterator : public TM::Map::CoordinateIterator<DataType> {
-
-            friend class RectangleMapArea<DataType>;
+        class RectangleCoordinateIterator : public CoordinateIterator<DataType> {
 
         public:
             RectangleCoordinateIterator();
 
-            explicit RectangleCoordinateIterator(const TM::Map::MapArea<DataType> *container = nullptr,
+            explicit RectangleCoordinateIterator(const MapArea<DataType> *container = nullptr,
                                                  const std::size_t index = 0) {};
 
-            RectangleCoordinateIterator(const TM::Map::RectangleCoordinateIterator<DataType> &) {};
+            RectangleCoordinateIterator(const RectangleCoordinateIterator<DataType> &) {};
 
             virtual ~RectangleCoordinateIterator() {};
 
@@ -38,10 +38,9 @@ namespace TM {
             //TM::Map::RectangleCoordinateIterator<DataType> &operator--() {};
 
         private:
-            TM::Map::MapArea<DataType> *m_container;
+            MapArea<DataType> *m_container;
             std::size_t m_index;
         };
-
     }
 }
 

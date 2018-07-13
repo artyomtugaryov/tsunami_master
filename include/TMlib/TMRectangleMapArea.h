@@ -2,15 +2,20 @@
 #define TMRECTANGLEMAPAREA_H
 
 #include "TMLib/TMMapArea.h"
-#include "TMLib/TMRectangleCoordinateIterator.h"
+#include "TMlib/TMRectangleCoordinateIterator.h"
 
 #include <vector>
 #include <memory>
 
 using namespace TM::Map;
 
+
 namespace TM {
     namespace Map {
+
+        template<typename DataType>
+        class RectangleCoordinateIterator;
+
         template<typename DataType>
         class RectangleMapArea : public MapArea<DataType> {
         public:
@@ -64,13 +69,13 @@ namespace TM {
 
             const DataType getMaxValue() const override;
 
-            void saveAsTextFile(std::string path, int precision = 3) const;
-
-            using RectangleCoordinateIterator<DataType> iterator;
+            using iterator=RectangleCoordinateIterator<DataType>;
 
             using ptr_iterator=std::unique_ptr<RectangleCoordinateIterator<DataType>>;
 
-            MapArea<DataType>::ptr_iterator beginLongitude(); // X
+            typename MapArea<DataType>::ptr_iterator beginLatitude() override { return nullptr; } // X
+
+            void saveAsTextFile(std::string path, int precision = 3) const;
 
         protected:
 
