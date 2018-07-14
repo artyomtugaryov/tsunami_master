@@ -71,9 +71,9 @@ namespace TM {
 
             using iterator=RectangleCoordinateIterator<DataType>;
 
-            using ptr_iterator=std::unique_ptr<RectangleCoordinateIterator<DataType>>;
+//            const std::shared_ptr<CoordinateIterator<DataType>> & beginLatitude() override { return std::make_shared<RectangleCoordinateIterator<DataType>>(this, 0); } // X
 
-            typename MapArea<DataType>::ptr_iterator beginLatitude() override { return nullptr; } // X
+//            const std::shared_ptr<CoordinateIterator<DataType>> & endLatitude() override {return std::make_shared<RectangleCoordinateIterator<DataType>>(this, 1000); } // X
 
             void saveAsTextFile(std::string path, int precision = 3) const;
 

@@ -23,22 +23,24 @@ namespace TM {
             explicit RectangleCoordinateIterator(const MapArea<DataType> *container = nullptr,
                                                  const std::size_t index = 0) {};
 
-            RectangleCoordinateIterator(const RectangleCoordinateIterator<DataType> &) {};
 
             virtual ~RectangleCoordinateIterator() {};
 
-            bool operator==(const std::unique_ptr<CoordinateIterator<DataType>> &other) const {};
+            bool operator==(const std::shared_ptr<CoordinateIterator<DataType>> &other) const override;
 
-            bool operator!=(const std::unique_ptr<CoordinateIterator<DataType>> &other) const {};
+            bool operator!=(const std::shared_ptr<CoordinateIterator<DataType>> &other) const override;
 
             //typename TM::Map::RectangleCoordinateIterator<DataType>::reference operator*() const {};
 
-            //TM::Map::RectangleCoordinateIterator<DataType> &operator++() {};
+            const std::shared_ptr<CoordinateIterator<DataType>> & operator++() override ;
 
-            //TM::Map::RectangleCoordinateIterator<DataType> &operator--() {};
+            const std::shared_ptr<CoordinateIterator<DataType>> & operator--() override ;
+        private:
+
+            static inline const std::shared_ptr<RectangleCoordinateIterator<DataType>>& dynamic_ptr_cast(const std::shared_ptr<CoordinateIterator<DataType>> &ptr);
 
         private:
-            MapArea<DataType> *m_container;
+            std::shared_ptr<MapArea<DataType>> m_container;
             std::size_t m_index;
         };
     }
