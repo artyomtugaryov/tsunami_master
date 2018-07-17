@@ -8,5 +8,5 @@ pipelines:
           - apt-get install -y cmake
           - mkdir build_tmlib
           - cd build_tmlib
-          - ls -la ../src/TMib
+          - ls -la ../
           - cmake ../src/TMib
