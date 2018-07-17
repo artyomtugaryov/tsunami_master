@@ -37,13 +37,13 @@ namespace TM {
 
             using iterator=CoordinateIterator<DataType>;
 
-            virtual const std::shared_ptr<CoordinateIterator<DataType>> & beginLatitude() = 0; // Y
+            virtual const std::shared_ptr<CoordinateIterator<DataType>> const  beginLatitude() = 0; // Y
 
 //            /*virtual ptr_iterator beginLongitude() = 0; // X
 
 //            virtual ptr_iterator endLongitude() = 0;// X
 
-            virtual const std::shared_ptr<CoordinateIterator<DataType>> & endLatitude() = 0; // Y*/
+            virtual const std::shared_ptr<CoordinateIterator<DataType>> const  endLatitude() = 0; // Y
         };
     }
 }

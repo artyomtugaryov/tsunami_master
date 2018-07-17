@@ -192,10 +192,11 @@ void TM::Map::RectangleMapArea<DataType>::saveAsTextFile(std::string path, int s
     }
 }
 
-//template<typename DataType>
-//TM::Map::MapArea<DataType>::ptr_iterator TM::Map::RectangleMapArea<DataType>::beginLongitude(){
-//    return std::make_unique<TM::Map::MapArea<DataType>::iterator>(this, 0);
-//}
+template<typename DataType>
+const std::shared_ptr<CoordinateIterator<DataType>> TM::Map::RectangleMapArea<DataType>::beginLatitude() const {
+    return std::make_shared(this, 0);
+}
+
 
 
 template
