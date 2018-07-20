@@ -6,9 +6,7 @@ namespace TM {
         class BrickUp {
         public:
 
-            BrickUp() : m_brickUpT(0.0), m_heightUp(0.0) {}
-
-            BrickUp(const double &b, const double &h) : m_brickUpT(b), m_heightUp(h) {}
+            explicit BrickUp(const double &b=0, const double &h=0);
 
             double get_brickUpT() const;
 

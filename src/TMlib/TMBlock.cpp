@@ -10,19 +10,19 @@ double TM::Focus::Block::getUpHeight(const double &t) {
         if (this->m_beginT > t or t > this->m_beginT + brickUp.get_brickUpT()) {
             return 0;
         } else {
-            auto speed = (brickUp.get_heightUp()) / brickUp.get_brickUpT();
-            return speed * t;
+            return brickUp.get_heightUp() / brickUp.get_brickUpT() * t;
         }
     }
 }
 
 bool TM::Focus::Block::pointLocation(const BrickPoint &a) {
-    std::size_t n = m_points.size();
+    auto n = m_points.size();
     if (BrickPoint::rotate(m_points[0], m_points[1], a) < 0 || BrickPoint::rotate(m_points[0], m_points[n - 1], a) > 0)
         return false;
-    std::size_t p = 1, r = n - 1;
+    auto p = 1;
+    auto r = n - 1;
     while (r - p > 1) {
-        std::size_t q = (p + r) / 2;
+        auto q = (p + r) / 2;
         if (BrickPoint::rotate(m_points[0], m_points[q], a) < 0) {
             r = q;
         } else {
@@ -30,14 +30,6 @@ bool TM::Focus::Block::pointLocation(const BrickPoint &a) {
         }
     }
     return !BrickPoint::intersect(m_points[0], a, m_points[p], m_points[r]);
-}
-
-double TM::Focus::BrickPoint::x() const {
-    return m_x;
-}
-
-double TM::Focus::BrickPoint::y() const {
-    return m_y;
 }
 
 void TM::Focus::Block::buildBlock(std::vector<TM::Focus::BrickPoint> &points) {

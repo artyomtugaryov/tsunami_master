@@ -5,9 +5,7 @@
 
 void TM::Scheme::TMKolchSchema::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                                           const std::shared_ptr<const TM::Focus::Focus> &focus,
-                                          const double &izobata,
-                                          const std::shared_ptr<TMTimeManager> &sender,
-                                          const std::shared_ptr<TMSignal> &signal) {
+                                          const double &izobata) {
     this->setTypesOfCells(area, izobata);
     this->set_delta(area->bathymetry());
     if (focus) {
@@ -20,18 +18,16 @@ void TM::Scheme::TMKolchSchema::configure(const std::shared_ptr<const TM::Map::M
     for (int j = 0; j < area->bathymetry()->endY(); j++) {
         terr_up[j].resize(area->bathymetry()->sizeY());
     }
-    this->m_time = sender;
-    this->m_signal = signal;
 }
 
 void TM::Scheme::TMKolchSchema::set_delta(const std::shared_ptr<const TM::Map::MapArea<double>> &area) {
-    delta_x_m = area->stepX() * M_PI * R_EACH / 180;
+    delta_x_m = area->stepX() * M_PI * TM::Constants::R_EACH / 180;
     delta_y_m.resize(area->sizeY());
     delta_t.resize(area->sizeY());
     for (int j = 0; j < area->sizeY(); ++j) {
         delta_y_m[j] = delta_x_m * cos((area->startY() + j * area->stepY()) / 180.0 * M_PI);
         delta_t[j] = 1;
-        auto v = sqrt(delta_y_m[j] * delta_y_m[j] + delta_x_m * delta_x_m) / sqrt(2 * G * 3000);
+        auto v = sqrt(delta_y_m[j] * delta_y_m[j] + delta_x_m * delta_x_m) / sqrt(2 * TM::Constants::G * 3000);
         if (delta_t[j] > v)
             delta_t[j] = v;
     }
@@ -95,10 +91,10 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
                 auto v = 0.;
                 if (m_types_cells->getDataByIndex(i, j) == TM::Scheme::types_cells::WATER) {
                     u = u_old->getDataByIndex(i, j) -
-                        G * delta_t[j] / delta_x_m * (eta->getDataByIndex(i, j) - eta->getDataByIndex(i, j - 1)) -
+                            TM::Constants::G * delta_t[j] / delta_x_m * (eta->getDataByIndex(i, j) - eta->getDataByIndex(i, j - 1)) -
                         delta_t[j] * Ch / (eta->getDataByIndex(i, j) + -h->getDataByIndex(i, j)) *
                         fabs(u_old->getDataByIndex(i, j)) * u_old->getDataByIndex(i, j);
-                    v = v_old->getDataByIndex(i, j) - G * delta_t[j] / delta_y_m[j] *
+                    v = v_old->getDataByIndex(i, j) - TM::Constants::G * delta_t[j] / delta_y_m[j] *
                                                       (eta->getDataByIndex(i, j) - eta->getDataByIndex(i - 1, j)) -
                         delta_t[j] * Ch / (eta->getDataByIndex(i, j) + -h->getDataByIndex(i, j)) *
                         fabs(v_old->getDataByIndex(i, j)) * v_old->getDataByIndex(i, j);
@@ -113,18 +109,18 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
         for (std::size_t i = 1; i < size_x; i++) {
             try {
                 auto temp = static_cast<int>(i * size_y / size_x);
-                newV->setDataByIndex(i, 0, sqrt(fabs(-G * h->getDataByIndex(i, 0))) * eta->getDataByIndex(i, 0) /
+                newV->setDataByIndex(i, 0, sqrt(fabs(-TM::Constants::G * h->getDataByIndex(i, 0))) * eta->getDataByIndex(i, 0) /
                                            (eta->getDataByIndex(i, 1) - h->getDataByIndex(i, 0)));
-                newV->setDataByIndex(i, size_y - 2, sqrt(fabs((-G * h->getDataByIndex(i, size_y - 2)))) *
+                newV->setDataByIndex(i, size_y - 2, sqrt(fabs((-TM::Constants::G * h->getDataByIndex(i, size_y - 2)))) *
                                                     eta->getDataByIndex(i, size_y - 3) /
                                                     (eta->getDataByIndex(i, size_y - 3) -
                                                      h->getDataByIndex(i, size_y - 2)));
                 newV->setDataByIndex(i, size_y - 1, area->vVelocity()->getDataByIndex(i, size_y - 2));
                 eta->setDataByIndex(i, 0, eta_old->getDataByIndex(i, 0) -
-                                          sqrt(fabs(-h->getDataByIndex(i, 0) * G)) * (delta_t[temp] / delta_y_m[temp]) *
+                                          sqrt(fabs(-h->getDataByIndex(i, 0) * TM::Constants::G)) * (delta_t[temp] / delta_y_m[temp]) *
                                           (eta_old->getDataByIndex(i, 0) - eta_old->getDataByIndex(i, 1)));
                 eta->setDataByIndex(i, size_y - 2, eta_old->getDataByIndex(i, size_y - 2) -
-                                                   sqrt(fabs((-h->getDataByIndex(i, size_y - 2) * G))) *
+                                                   sqrt(fabs((-h->getDataByIndex(i, size_y - 2) * TM::Constants::G))) *
                                                    (delta_t[temp] / delta_y_m[temp]) *
                                                    (eta_old->getDataByIndex(i, size_y - 2) -
                                                     eta_old->getDataByIndex(i, size_y - 3)));
@@ -135,15 +131,15 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
         }
         for (std::size_t j = 1; j < size_y; j++) {
             try {
-                newU->setDataByIndex(j, 0, sqrt((-G * h->getDataByIndex(0, j))) * eta->getDataByIndex(1, j) /
+                newU->setDataByIndex(j, 0, sqrt((-TM::Constants::G * h->getDataByIndex(0, j))) * eta->getDataByIndex(1, j) /
                                            (eta->getDataByIndex(1, j) - h->getDataByIndex(0, j)));
                 newU->setDataByIndex(j, size_x - 2, newU->getDataByIndex(j, size_x - 3));
                 newU->setDataByIndex(j, size_x - 1, newU->getDataByIndex(j, size_x - 2));
                 eta->setDataByIndex(j, 0, eta_old->getDataByIndex(0, j) -
-                                          sqrt(fabs((-h->getDataByIndex(0, j) * G))) * (delta_t[j] / delta_x_m) *
+                                          sqrt(fabs((-h->getDataByIndex(0, j) * TM::Constants::G))) * (delta_t[j] / delta_x_m) *
                                           (eta_old->getDataByIndex(0, j) - eta_old->getDataByIndex(1, j)));
                 eta->setDataByIndex(j, size_x - 2, eta_old->getDataByIndex(size_x - 2, j) -
-                                                   sqrt(fabs((-h->getDataByIndex(size_x - 2, j) * G))) *
+                                                   sqrt(fabs((-h->getDataByIndex(size_x - 2, j) * TM::Constants::G))) *
                                                    (delta_t[j] / delta_x_m) * (eta_old->getDataByIndex(size_x - 2, j) -
                                                                                eta_old->getDataByIndex(size_x - 3, j)));
                 eta->setDataByIndex(j, size_x - 1, newU->getDataByIndex(j, size_x - 2));
@@ -156,8 +152,5 @@ void TM::Scheme::TMKolchSchema::calculation(const std::shared_ptr<TM::Map::MapAr
 //                  << static_cast<double>(end - begin) * 1000.0 / double(CLOCKS_PER_SEC)
 //                  << " ms."
 //                  << std::endl;
-        if (!fmod(t, m_time->sendingTimeStep())) {
-            m_signal->emitSignal(eta);
-        }
     }
 }

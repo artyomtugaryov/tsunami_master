@@ -12,32 +12,20 @@ namespace TM {
 
             virtual ~TMKolchSchema() = default;
 
-            void calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &,
+            void calculation(const shared_ptr<MapAreaWorker> &,
                              const double &);
 
-            void configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &,
-                           const std::shared_ptr<const TM::Focus::Focus> &,
-                           const double &,
-                           const std::shared_ptr<TMTimeManager> &,
-                           const std::shared_ptr<TMSignal> &);
+            void configure(const shared_ptr<const MapAreaWorker> &,
+                           const shared_ptr<const Focus::Focus> &,
+                           const double &) override ;
 
         private:
-            void set_delta(const std::shared_ptr<const TM::Map::MapArea<double>> &);
-
-            void setBoundary1Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &,
-                                  const size_t &,
-                                  const size_t &,
-                                  const double &) override {};
-
-            void setBoundary2Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &,
-                                  const size_t &,
-                                  const size_t &,
-                                  const double &) override {};
+            void set_delta(const shared_ptr<const MapArea<double>> &);
 
             double delta_x_m;
             std::vector<double> delta_t;
             std::vector<double> delta_y_m;
-            std::vector<std::vector<int>> terr_up;
+            std::vector<vector<int>> terr_up;
         };
     }
 }

@@ -8,7 +8,13 @@
 #include <TMlib/TMTimeManager.h>
 #include <TMlib/TMSignal.h>
 
+using namespace std;
+
+using namespace TM::Map;
+using namespace TM::Focus;
+
 namespace TM {
+
     namespace Scheme {
         enum types_cells {
             LAND = 0,
@@ -23,27 +29,19 @@ namespace TM {
 
             virtual ~TMScheme() = default;
 
-            virtual void calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &,
+            virtual void calculation(const shared_ptr<MapAreaWorker> &,
                                      const double &) = 0;
 
-            virtual void configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &,
-                                   const std::shared_ptr<const TM::Focus::Focus> &,
-                                   const double &,
-                                   const std::shared_ptr<TMTimeManager> &,
-                                   const std::shared_ptr<TMSignal> &) = 0;
+            virtual void configure(const shared_ptr<const MapAreaWorker> &,
+                                   const shared_ptr<const Focus::Focus> &,
+                                   const double &) = 0;
 
         protected:
-            void setTypesOfCells(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
+            void setTypesOfCells(const shared_ptr<const MapAreaWorker> &area,
                                  const double &izobata);
-            virtual void setBoundary1Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &area, const std::size_t &i, const std::size_t &j,
-                                  const double &izobata) = 0;
-            virtual void setBoundary2Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &area, const std::size_t &i, const std::size_t &j,
-                                  const double &izobata) = 0;
 
-            std::shared_ptr<TM::Focus::Focus> m_focus;
-            std::shared_ptr<TMTimeManager> m_time;
-            std::shared_ptr<TMSignal> m_signal;
-            std::shared_ptr<TM::Map::MapArea<TM::Scheme::types_cells>> m_types_cells;
+            shared_ptr<Focus::Focus> m_focus;
+            shared_ptr<MapArea<types_cells>> m_types_cells;
         };
     }
 }

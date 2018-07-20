@@ -8,13 +8,9 @@ namespace TM {
         class BrickPoint {
         public:
 
-            BrickPoint() : m_x(0.0), m_y(0.0) {}
+            BrickPoint(double x=0.0, double y=0.0);
 
-            BrickPoint(double x, double y) : m_x(x), m_y(y) {}
-
-            bool operator<(const BrickPoint &other) {
-                return (m_x < other.m_x);
-            }
+            bool operator<(const BrickPoint &other) const noexcept;
 
             static double rotate(const BrickPoint &a,
                                  const BrickPoint &b,

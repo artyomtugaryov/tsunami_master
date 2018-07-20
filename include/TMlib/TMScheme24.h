@@ -14,14 +14,12 @@ namespace TM {
 
             ~TMScheme24() override = default;
 
-            void calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+            void calculation(const shared_ptr<MapAreaWorker> &area,
                              const double &timeEnd) override;
 
-            void configure(const std::shared_ptr<const Map::MapAreaWorker> &area,
-                           const std::shared_ptr<const Focus::Focus> &focus,
-                           const double &izobata,
-                           const std::shared_ptr<TMTimeManager> &sender,
-                           const std::shared_ptr<TMSignal> &signal) override;
+            void configure(const shared_ptr<const MapAreaWorker> &area,
+                           const shared_ptr<const Focus::Focus> &focus,
+                           const double &izobata) override;
 
             double getTimeStep(const double &dPhi, const double &dTetta, const double &Hm) const;
 
@@ -29,13 +27,6 @@ namespace TM {
 
             void setUpBArrays(std::size_t &&x, std::size_t &&y);
 
-            void setBoundary1Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &area, const std::size_t &i,
-                                  const std::size_t &j,
-                                  const double &izobata) override;
-
-            void setBoundary2Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &area, const std::size_t &i,
-                                  const std::size_t &j,
-                                  const double &izobata) override;
 
             double calcMainValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
                                     const std::size_t &j,

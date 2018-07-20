@@ -1,8 +1,9 @@
 #ifndef TSUNAMIMANAGER_TMBLOCK_H
 #define TSUNAMIMANAGER_TMBLOCK_H
 
-#include "TMBrickUp.h"
-#include "TMBrickPoint.h"
+#include "TMlib/TMBrickUp.h"
+#include "TMlib/TMBrickPoint.h"
+
 #include <vector>
 
 namespace TM {
@@ -15,11 +16,11 @@ namespace TM {
 
             double getUpHeight(const double &t);
 
-            void buildBlock(std::vector<TM::Focus::BrickPoint> &points);
+            void buildBlock(std::vector<BrickPoint> &points);
 
-            bool pointLocation(const TM::Focus::BrickPoint &a);
+            bool pointLocation(const BrickPoint &a);
 
-            double& get_beginT();
+            double &get_beginT();
 
             std::vector<BrickPoint> &get_points();
 
@@ -30,7 +31,7 @@ namespace TM {
              * Time start Up
              * */
             double m_beginT;
-            std::vector<TM::Focus::BrickPoint> m_points;
+            std::vector<BrickPoint> m_points;
             std::vector<BrickUp> m_numberUp;
         };
     }
