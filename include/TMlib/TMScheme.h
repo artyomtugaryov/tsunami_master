@@ -5,8 +5,6 @@
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMFocus.h>
 #include <TMlib/TMConstants.h>
-#include <TMlib/TMTimeManager.h>
-#include <TMlib/TMSignal.h>
 
 using namespace std;
 
@@ -29,12 +27,12 @@ namespace TM {
 
             virtual ~TMScheme() = default;
 
-            virtual void calculation(const shared_ptr<MapAreaWorker> &,
-                                     const double &) = 0;
+            virtual void calculation(const shared_ptr<MapAreaWorker> & area,
+                                     const double & time) = 0;
 
-            virtual void configure(const shared_ptr<const MapAreaWorker> &,
-                                   const shared_ptr<const Focus::Focus> &,
-                                   const double &) = 0;
+            virtual void configure(const shared_ptr<const MapAreaWorker> & area,
+                                   const shared_ptr<const Focus::Focus> & focus,
+                                   const double & izobata) = 0;
 
         protected:
             void setTypesOfCells(const shared_ptr<const MapAreaWorker> &area,

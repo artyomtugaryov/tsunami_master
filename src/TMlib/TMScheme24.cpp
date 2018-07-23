@@ -212,6 +212,7 @@ double TM::Scheme::TMScheme24::calcVVelocity(const std::shared_ptr<TM::Map::MapA
     return v - M * dEtaByPhi / (sin(Tetta) * dPhi) - f * u * dt;
 }
 
+
 double TM::Scheme::TMScheme24::gradient(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
                                         const std::size_t &j,
                                         const std::size_t &k,

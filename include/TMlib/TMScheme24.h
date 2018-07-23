@@ -15,7 +15,7 @@ namespace TM {
             ~TMScheme24() override = default;
 
             void calculation(const shared_ptr<MapAreaWorker> &area,
-                             const double &timeEnd) override;
+                             const double &time) override;
 
             void configure(const shared_ptr<const MapAreaWorker> &area,
                            const shared_ptr<const Focus::Focus> &focus,
@@ -72,6 +72,9 @@ namespace TM {
                                              const std::size_t &k,
                                              const double &dPhi,
                                              const double &dTetta);
+
+
+
 
             static double gradient(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
                                    const std::size_t &j,
