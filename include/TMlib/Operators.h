@@ -29,6 +29,12 @@ namespace TM {
                        const double &latitude,
                        const double &longitude,
                        const direction &dir);
+
+            template<typename DataType>
+            DataType feature(const std::shared_ptr<const MapArea<DataType>> &w,
+                       const double &latitude,
+                       const double &longitude,
+                       const direction &dir);
         }
     }
 }

@@ -1,9 +1,9 @@
 #ifndef TSUNAMIMANAGER_TMSHEME24_H
 #define TSUNAMIMANAGER_TMSHEME24_H
 
-#include <TMlib/TMMapAreaWorker.h>
-#include <TMlib/TMMapArea.h>
-#include <TMlib/TMScheme.h>
+#include "TMlib/TMMapAreaWorker.h"
+#include "TMlib/TMMapArea.h"
+#include "TMlib/TMScheme.h"
 
 namespace TM {
     namespace Scheme {
