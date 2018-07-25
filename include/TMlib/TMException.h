@@ -41,7 +41,7 @@ namespace TM {
 
             ~TMException() override = default;
 
-            template<class T>
+            template<typename T>
             TMException &operator<<(const T &arg) noexcept {
                 if (!m_exceptionStream) {
                     m_exceptionStream.reset(new std::stringstream());

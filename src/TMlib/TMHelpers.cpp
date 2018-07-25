@@ -1,4 +1,5 @@
-#include <TMlib/TMHelpers.h>
+#include <TMlib/TMMapArea.h>
+#include <TMlib/TMScheme.h>
 #include <QtGui/QImage>
 #include <PlotLib/Plot2d.h>
 

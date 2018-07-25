@@ -1,50 +1,36 @@
 #ifndef TSUNAMIMANAGER_TMBLOCK_H
 #define TSUNAMIMANAGER_TMBLOCK_H
 
+#include "TMlib/TMBrickUp.h"
+#include "TMlib/TMBrickPoint.h"
+
 #include <vector>
-#include <algorithm>
-#include <iostream>
 
 namespace TM {
     namespace Focus {
-        struct BrickPoint {
+        class Block {
         public:
-            double m_x;
-            double m_y;
+            Block() : m_beginT(0.0) {}
 
-            BrickPoint() = default;
+            bool has(const double &lat, const double &lon);
 
-            BrickPoint(double x, double y) : m_x(x), m_y(y) {}
+            double getUpHeight(const double &t);
 
-            inline bool operator<(const BrickPoint &other) {
-                return (m_x < other.m_x);
-            }
-
-            static double rotate(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c);
-
-            static bool intersect(const BrickPoint &a, const BrickPoint &b, const BrickPoint &c, const BrickPoint &d);
-        };
-
-        struct BrickUp {
-        public:
-            double m_brickUpT; // Time Up the block
-            double m_heightUp; // Height Up the  block
-
-            BrickUp(int b, double h) : m_brickUpT(b), m_heightUp(h) {}
-        };
-
-        struct Block {
-            Block() : m_beginT(0) {}
-
-            bool has(double lat, double lon);
-
-            double getUpHeight(double t);
-
-            void buildBlock(std::vector<TM::Focus::BrickPoint> points);
+            void buildBlock(std::vector<BrickPoint> &points);
 
             bool pointLocation(const BrickPoint &a);
 
-            double m_beginT; //Time start Up
+            double &get_beginT();
+
+            std::vector<BrickPoint> &get_points();
+
+            std::vector<BrickUp> &get_numberUp();
+
+        private:
+            /**
+             * Time start Up
+             * */
+            double m_beginT;
             std::vector<BrickPoint> m_points;
             std::vector<BrickUp> m_numberUp;
         };

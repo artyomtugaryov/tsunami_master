@@ -1,12 +1,19 @@
 #include <TMlib/TMScheme24.h>
 #include <TMlib/TMCommon.h>
+#include <TMlib/TMOperators.hpp>
 #include <TMlib/TMException.h>
 #include <TMlib/TMHelpers.h>
 #include <cmath>
 #include <ctime>
 #include <queue>
 
-void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+using namespace TM;
+using namespace TM::Scheme;
+using namespace TM::Scheme::Operators;
+using namespace TM::Common;
+using namespace TM::Constants;
+
+void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<MapAreaWorker> &area,
                                          const double &timeEnd) {
     size_t maxX = area->getMaxXIndex();
     size_t maxY = area->getMaxYIndex();
@@ -14,94 +21,87 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
     auto dPhi = area->getStepPhi();
     auto dTetta = area->getStepTetta();
     clock_t begin = clock();
-    for (double t = 0; t <= timeEnd; t += m_time->step()) {
 #pragma omp parallel for private(j)
-        for (j = 1; j < maxX; j++) {
-            auto tetta = area->getLongitudeByIndex(j);
+    for (j = 1; j < maxX; j++) {
+        auto tetta = area->getLongitudeByIndex(j);
 #pragma omp parallel for private(k)
-            for (k = 1; k < maxY; k++) {
-                auto phi = area->getLatitudeByIndex(k);
-                auto Up = this->m_focus->getHeightByPoint(tetta, phi, t);
-                auto B = m_B1->getDataByIndex(j, k);
-                m_B0->setDataByIndex(j, k, B);
-                m_B1->setDataByIndex(j, k, B + Up);
-            }
+        for (k = 1; k < maxY; k++) {
+            auto phi = area->getLatitudeByIndex(k);
+            // TODO: How get t for this?
+            auto Up = this->m_focus->getHeightByPoint(tetta, phi, 0);
+            auto B = m_B1->getDataByIndex(j, k);
+            m_B0->setDataByIndex(j, k, B);
+            m_B1->setDataByIndex(j, k, B + Up);
         }
-        auto dt = this->m_time->step();
-        auto newEta = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
-#pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
-        for (j = 1; j < maxX; j++) {
-            auto tetta = area->getLongitudeByIndex(j);
-            auto tetta2 = area->getLongitudeByIndex(j + 1. / 2.);
-            auto tetta_2 = area->getLongitudeByIndex(j - 1. / 2.);
-            auto M = dt / (2 * R_EACH * sin(tetta));
-#pragma omp parallel for shared(dPhi, dTetta, dt, tetta, tetta2, tetta_2) private(k)
-            for (k = 1; k < maxY; k++) {
-                auto phi = area->getLatitudeByIndex(k);
-                switch (this->m_types_cells->getDataByIndex(j, k)) {
-                    case WATER: {
-                        newEta->setDataByIndex(j, k, this->calcMainValueEta(area,
-                                                                            j, k,
-                                                                            dt,
-                                                                            dPhi, dTetta,
-                                                                            tetta, phi,
-                                                                            tetta2, tetta_2,
-                                                                            M));
-                        break;
-                    }
-                    case BOUNDARY1: {
-                        newEta->setDataByIndex(j, k, this->calcBoundaryType1ValueEta(area,
-                                                                                     j, k,
-                                                                                     dPhi, dTetta));
-                        break;
-                    }
-                    case BOUNDARY2: {
-                        newEta->setDataByIndex(j, k, this->calcBoundaryType2ValueEta(area,
-                                                                                     j, k,
-                                                                                     dPhi, dTetta));
-                        break;
-                    }
-                    case LAND:
-                    default:
-                        break;
-                }
-            }
-        }
-        area->setEta(newEta);
-
-        auto newU = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
-        auto newV = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
-        auto M = G * dt / R_EACH; //make more common
-#pragma omp parallel for shared(M) private(j)
-        for (j = 0; j < maxX; j++) {
-            auto tetta = area->getLongitudeByIndex(j);
-            auto f = TM::Common::coefKoriolis(tetta);
-#pragma omp parallel for  shared(f, M) private(k)
-            for (k = 0; k < maxY; k++) {
-                auto u_new = 0.;
-                auto v_new = 0.;
-                if (this->m_types_cells->getDataByIndex(j, k) == WATER) {
-                    auto u = area->uVelocity()->getDataByIndex(j, k);
-                    auto v = area->vVelocity()->getDataByIndex(j, k);
-                    u_new = calcUVelocity(area, j, k, dTetta, M, f, u, v, dt);
-                    v_new = calcVVelocity(area, j, k, tetta, dPhi, M, f, u, v, dt);
-                }
-                newU->setDataByIndex(j, k, u_new);
-                newV->setDataByIndex(j, k, v_new);
-            }
-        }
-        area->setU(newU);
-        area->setV(newV);
-        //TODO: It's not good. How we can do this better?
-        if (!fmod(t, m_time->sendingTimeStep())) {
-            m_signal->emitSignal(newEta);
-            //TODO: It's not good but this task is low priority
-            area->checkMareographs(newEta);
-        }
-        //TODO: Remove after resolve problem with brick
-        saveMapAreaAsImage(newEta, std::string("img/") + std::to_string(t) + std::string(".png"), area->bathymetry());
-        // END TODO
     }
+// TODO: DEFINE time step
+    auto dt = 1;
+    auto newEta = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
+#pragma omp parallel for shared(dPhi, dTetta, dt) private(j)
+    for (j = 1; j < maxX; j++) {
+        auto tetta = area->getLongitudeByIndex(j);
+        auto tetta2 = area->getLongitudeByIndex(j + 1. / 2.);
+        auto tetta_2 = area->getLongitudeByIndex(j - 1. / 2.);
+        auto M = dt / (2 * R_EACH * sin(tetta));
+#pragma omp parallel for shared(dPhi, dTetta, dt, tetta, tetta2, tetta_2) private(k)
+        for (k = 1; k < maxY; k++) {
+            auto phi = area->getLatitudeByIndex(k);
+            switch (this->m_types_cells->getDataByIndex(j, k)) {
+                case WATER: {
+                    newEta->setDataByIndex(j, k, this->calcMainValueEta(area,
+                                                                        j, k,
+                                                                        dt,
+                                                                        dPhi, dTetta,
+                                                                        tetta, phi,
+                                                                        tetta2, tetta_2,
+                                                                        M));
+                    break;
+                }
+                case BOUNDARY1: {
+                    newEta->setDataByIndex(j, k, this->calcBoundaryType1ValueEta(area,
+                                                                                 j, k,
+                                                                                 dPhi, dTetta));
+                    break;
+                }
+                case BOUNDARY2: {
+                    newEta->setDataByIndex(j, k, this->calcBoundaryType2ValueEta(area,
+                                                                                 j, k,
+                                                                                 dPhi, dTetta));
+                    break;
+                }
+                case LAND:
+                default:
+                    break;
+            }
+        }
+    }
+    area->setEta(newEta);
+
+    auto newU = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
+    auto newV = std::make_shared<TM::Map::MapArea<double>>(area->bathymetry());
+    auto M = G * dt / R_EACH; //make more common
+#pragma omp parallel for shared(M) private(j)
+    for (j = 0; j < maxX; j++) {
+        auto tetta = area->getLongitudeByIndex(j);
+        auto f = coefKoriolis(tetta);
+#pragma omp parallel for  shared(f, M) private(k)
+        for (k = 0; k < maxY; k++) {
+            auto u_new = 0.;
+            auto v_new = 0.;
+            if (this->m_types_cells->getDataByIndex(j, k) == WATER) {
+                auto u = area->uVelocity()->getDataByIndex(j, k);
+                auto v = area->vVelocity()->getDataByIndex(j, k);
+                u_new = calcUVelocity(area, j, k, dTetta, M, f, u, v, dt);
+                v_new = calcVVelocity(area, j, k, tetta, dPhi, M, f, u, v, dt);
+            }
+            newU->setDataByIndex(j, k, u_new);
+            newV->setDataByIndex(j, k, v_new);
+        }
+    }
+    area->setU(newU);
+    area->setV(newV);
+    //TODO: Remove after resolve problem with brick
+    saveMapAreaAsImage(newEta, std::string("img/") + std::to_string(0) + std::string(".png"), area->bathymetry());
     area->saveMareographs();
     clock_t end = clock();
     std::cout << "Time of calculation is: " << double(end - begin) * 1000. / CLOCKS_PER_SEC << " ms." << std::endl;
@@ -109,17 +109,14 @@ void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaW
 
 double TM::Scheme::TMScheme24::getTimeStep(const double &dPhi, const double &dTetta, const double &Hm) const {
 
-    auto M = sqrt(1.0 + sqrt(TM::Common::coefKoriolis(0) + 1) / 2.0);
+    auto M = sqrt(1.0 + sqrt(coefKoriolis(0) + 1) / 2.0);
     auto dt = (M * R_EACH * dPhi * dTetta) / sqrt(G * fabs(Hm) * (dPhi * dPhi + dTetta * dTetta));
     return dt;
 }
 
 void TM::Scheme::TMScheme24::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
                                        const std::shared_ptr<const TM::Focus::Focus> &focus,
-                                       const double &izobata,
-                                       const std::shared_ptr<TMTimeManager> &sender,
-                                       const std::shared_ptr<TMSignal> &signal) {
-    this->m_Boundaries = std::make_shared<TM::Map::MapArea<std::shared_ptr<TM::Scheme::BoundaryCoefficients>>>(area->bathymetry());
+                                       const double &izobata) {
     this->setTypesOfCells(area, izobata);
     if (focus) {
         this->m_focus = std::make_shared<TM::Focus::Focus>(*focus);
@@ -128,12 +125,9 @@ void TM::Scheme::TMScheme24::configure(const std::shared_ptr<const TM::Map::MapA
         this->m_focus = std::make_shared<TM::Focus::Focus>();
     }
     this->setUpBArrays(area->getMaxXIndex(), area->getMaxXIndex());
-    this->m_time = sender;
-    this->m_signal = signal;
     auto dPhi = area->getStepPhi();
     auto dTetta = area->getStepTetta();
     auto Hm = area->getMaxDepth();
-    this->m_time->setMaxTimeStep(getTimeStep(dPhi, dTetta, Hm));
 }
 
 void TM::Scheme::TMScheme24::setUpBArrays(std::size_t &&x, std::size_t &&y) {
@@ -141,9 +135,9 @@ void TM::Scheme::TMScheme24::setUpBArrays(std::size_t &&x, std::size_t &&y) {
     this->m_B1 = std::make_shared<TM::Map::MapArea<double>>(x, y);
 }
 
-double TM::Scheme::TMScheme24::calcMainValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
-                                                const std::size_t &j,
-                                                const std::size_t &k,
+double TM::Scheme::TMScheme24::calcMainValueEta(const shared_ptr<MapAreaWorker> &area,
+                                                const size_t &j,
+                                                const size_t &k,
                                                 const double &dt,
                                                 const double &dPhi,
                                                 const double &dTetta,
@@ -152,6 +146,7 @@ double TM::Scheme::TMScheme24::calcMainValueEta(const std::shared_ptr<TM::Map::M
                                                 const double &tetta2,
                                                 const double &tetta_2,
                                                 const double &M) {
+    auto H_Bj0k0 = feature(area->bathymetry(), j, k, direction::X_FORWARD) - feature(m_B0, j, k, direction::X_FORWARD);
     auto Hj0k0 = gradient(area->bathymetry(), j, k, std::array<int, 2>({1, 0}));
     auto Hj_1k0 = gradient(area->bathymetry(), j - 1, k, std::array<int, 2>({1, 0}));
     auto Hj0k_1 = gradient(area->bathymetry(), j, k - 1, std::array<int, 2>({0, 1}));
@@ -221,6 +216,7 @@ double TM::Scheme::TMScheme24::calcVVelocity(const std::shared_ptr<TM::Map::MapA
     return v - M * dEtaByPhi / (sin(Tetta) * dPhi) - f * u * dt;
 }
 
+
 double TM::Scheme::TMScheme24::gradient(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
                                         const std::size_t &j,
                                         const std::size_t &k,
@@ -228,70 +224,3 @@ double TM::Scheme::TMScheme24::gradient(const std::shared_ptr<const TM::Map::Map
                                         const int &to) {
     return w->getDataByIndex(j, k) + to * w->getDataByIndex(j + d[0], k + d[0]);
 }
-
-void TM::Scheme::TMScheme24::setBoundary1Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
-                                              const std::size_t &i, const std::size_t &j,
-                                              const double &izobata) {
-    auto bathymetry = area->bathymetry();
-    try {
-        if (bathymetry->getDataByIndex(i - 2, j - 2) < izobata &&
-                bathymetry->getDataByIndex(i - 2, j + 2) < izobata) {
-            m_Boundaries->setDataByIndex(i, j, std::make_shared<Boundary1Coefficients>(std::vector<std::size_t>({
-                                                                                                           i - 1, j - 1,
-                                                                                                           i - 2, j - 2,
-                                                                                                           i - 1, j + 1,
-                                                                                                           i - 2, j + 2}),
-                                                                                                           -2 * M_PI));
-            return;
-        }
-    } catch (TM::details::TMException &e) {}
-    try {
-        if (bathymetry->getDataByIndex(i + 2, j - 2) < izobata && bathymetry->getDataByIndex(i + 2, j + 2) < izobata) {
-            m_Boundaries->setDataByIndex(i, j, std::make_shared<Boundary1Coefficients>(std::vector<std::size_t>({
-                                                                                                           i + 1, j + 1,
-                                                                                                           i + 2, j + 2,
-                                                                                                           i + 1, j - 1,
-                                                                                                           i + 2, j - 2}),
-                                                                                                           0));
-            return;
-        }
-    } catch (TM::details::TMException &ex) {}
-    try {
-        if (bathymetry->getDataByIndex(i - 2, j - 2) < izobata && bathymetry->getDataByIndex(i + 2, j - 2) < izobata) {
-            m_Boundaries->setDataByIndex(i, j, std::make_shared<Boundary1Coefficients>(std::vector<std::size_t>({
-                                                                                                           i + 1, j - 1,
-                                                                                                           i + 2, j - 2,
-                                                                                                           i - 1, j - 1,
-                                                                                                           i - 2, j - 2}),
-                                                                                                           -M_PI_2));
-            return;
-        }
-    } catch (TM::details::TMException &ex) {}
-    try {
-        if (bathymetry->getDataByIndex(i - 2, j + 2) < izobata && bathymetry->getDataByIndex(i + 2, j + 2) < izobata) {
-            m_Boundaries->setDataByIndex(i, j, std::make_shared<Boundary1Coefficients>(std::vector<std::size_t>({
-                                                                                                           i - 1, j + 1,
-                                                                                                           i - 2, j + 2,
-                                                                                                           i + 1, j + 1,
-                                                                                                           i + 2, j + 2}),
-                                                                                                           M_PI_2));
-            return;
-        }
-    } catch (TM::details::TMException &ex) {}
-}
-
-void TM::Scheme::TMScheme24::setBoundary2Coef(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
-                                              const std::size_t &i, const std::size_t &j,
-                                              const double &izobata) {
-    auto bathymetry = area->bathymetry();
-    auto c = G*bathymetry->getDataByIndex(i,j);
-    if (bathymetry->sizeX() + 1 == i) {
-//        m_Boundaries->setDataByIndex(i, j,
-//                                     std::make_shared<Boundary2Coefficients>(bathymetry->getDataByIndex(i - 1, j), c));
-    }
-    if (bathymetry->sizeY() + 1 == j) {
-//        m_Boundaries->setDataByIndex(i, j,
-//                                     std::make_shared<Boundary2Coefficients>(bathymetry->getDataByIndex(i, j - 1), c));
-    }
-}
-

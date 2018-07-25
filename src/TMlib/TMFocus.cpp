@@ -23,7 +23,7 @@ TM::Focus::Focus::Focus(const std::string &path) {
             points.emplace_back(x, y);
         }
         m_blocks[i].buildBlock(points);
-        blocksFile >> m_blocks[i].m_beginT ;
+        blocksFile >> m_blocks[i].get_beginT();
         blocksFile >> countBrickUp;
 
         for (int j = 0; j < countBrickUp; j++) {
@@ -31,7 +31,7 @@ TM::Focus::Focus::Focus(const std::string &path) {
             int tmpBrickUpT;
             blocksFile >> tmpBrickUpT;
             blocksFile >> tmpHeightUp;
-            m_blocks[i].m_numberUp.emplace_back(tmpBrickUpT, tmpHeightUp);
+            m_blocks[i].get_numberUp().emplace_back(tmpBrickUpT, tmpHeightUp);
         }
         points.clear();
     }
