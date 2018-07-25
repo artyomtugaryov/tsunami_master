@@ -21,7 +21,7 @@ namespace TM {
             MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue = static_cast<DataType>(0));
 
             template<typename T>
-            MapArea(const std::shared_ptr<const MapArea<T>> &other);
+            MapArea(const std::shared_ptr<MapArea<T>> &other);
 
             std::size_t getIndex(const std::size_t &x, const std::size_t &y) const;
 

@@ -15,7 +15,7 @@ TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY, DataTy
 
 template<typename DataType>
 template<typename T>
-TM::Map::MapArea<DataType>::MapArea(const std::shared_ptr<const MapArea<T>> &other) : m_sizeX(other->sizeX()),
+TM::Map::MapArea<DataType>::MapArea(const std::shared_ptr<MapArea<T>> &other) : m_sizeX(other->sizeX()),
                                                                                       m_sizeY(other->sizeY()),
                                                                                       m_data(m_sizeX * m_sizeY, static_cast<DataType>(0)),
                                                                                       m_startX(other->startX()),
@@ -183,24 +183,24 @@ const DataType TM::Map::MapArea<DataType>::getMaxValue() const {
 template
 class TM::Map::MapArea<double>;
 
-template TM::Map::MapArea<double>::MapArea(const std::shared_ptr<const TM::Map::MapArea<double>> &);
+template TM::Map::MapArea<double>::MapArea(const std::shared_ptr<TM::Map::MapArea<double>> &);
 
 template
 class TM::Map::MapArea<float>;
 
-template TM::Map::MapArea<float>::MapArea(const std::shared_ptr<const TM::Map::MapArea<double>> &);
+template TM::Map::MapArea<float>::MapArea(const std::shared_ptr<TM::Map::MapArea<double>> &);
 
 template
 class TM::Map::MapArea<bool>;
 
-template TM::Map::MapArea<bool>::MapArea(const std::shared_ptr<const TM::Map::MapArea<double>> &);
+template TM::Map::MapArea<bool>::MapArea(const std::shared_ptr<TM::Map::MapArea<double>> &);
 
 template
 class TM::Map::MapArea<int>;
 
-template TM::Map::MapArea<int>::MapArea(const std::shared_ptr<const TM::Map::MapArea<double>> &);
+template TM::Map::MapArea<int>::MapArea(const std::shared_ptr<TM::Map::MapArea<double>> &);
 
 template
 class TM::Map::MapArea<TM::Scheme::types_cells>;
 
-template TM::Map::MapArea<TM::Scheme::types_cells>::MapArea(const std::shared_ptr<const TM::Map::MapArea<double>> &);
+template TM::Map::MapArea<TM::Scheme::types_cells>::MapArea(const std::shared_ptr<TM::Map::MapArea<double>> &);

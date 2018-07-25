@@ -1,5 +1,6 @@
 #include <TMlib/TMScheme24.h>
 #include <TMlib/TMCommon.h>
+#include <TMlib/TMOperators.hpp>
 #include <TMlib/TMException.h>
 #include <TMlib/TMHelpers.h>
 #include <cmath>
@@ -7,10 +8,12 @@
 #include <queue>
 
 using namespace TM;
+using namespace TM::Scheme;
+using namespace TM::Scheme::Operators;
 using namespace TM::Common;
 using namespace TM::Constants;
 
-void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+void TM::Scheme::TMScheme24::calculation(const std::shared_ptr<MapAreaWorker> &area,
                                          const double &timeEnd) {
     size_t maxX = area->getMaxXIndex();
     size_t maxY = area->getMaxYIndex();
@@ -132,9 +135,9 @@ void TM::Scheme::TMScheme24::setUpBArrays(std::size_t &&x, std::size_t &&y) {
     this->m_B1 = std::make_shared<TM::Map::MapArea<double>>(x, y);
 }
 
-double TM::Scheme::TMScheme24::calcMainValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
-                                                const std::size_t &j,
-                                                const std::size_t &k,
+double TM::Scheme::TMScheme24::calcMainValueEta(const shared_ptr<MapAreaWorker> &area,
+                                                const size_t &j,
+                                                const size_t &k,
                                                 const double &dt,
                                                 const double &dPhi,
                                                 const double &dTetta,
@@ -143,6 +146,7 @@ double TM::Scheme::TMScheme24::calcMainValueEta(const std::shared_ptr<TM::Map::M
                                                 const double &tetta2,
                                                 const double &tetta_2,
                                                 const double &M) {
+    auto H_Bj0k0 = feature(area->bathymetry(), j, k, direction::X_FORWARD) - feature(m_B0, j, k, direction::X_FORWARD);
     auto Hj0k0 = gradient(area->bathymetry(), j, k, std::array<int, 2>({1, 0}));
     auto Hj_1k0 = gradient(area->bathymetry(), j - 1, k, std::array<int, 2>({1, 0}));
     auto Hj0k_1 = gradient(area->bathymetry(), j, k - 1, std::array<int, 2>({0, 1}));

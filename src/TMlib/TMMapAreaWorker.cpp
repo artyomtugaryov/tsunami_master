@@ -127,7 +127,7 @@ const std::shared_ptr<const Map::MapArea<double>> Map::MapAreaWorker::eta() cons
     return m_eta;
 }
 
-const std::shared_ptr<const Map::MapArea<double>> Map::MapAreaWorker::bathymetry() const noexcept {
+const std::shared_ptr<Map::MapArea<double>> Map::MapAreaWorker::bathymetry() const noexcept {
     return m_bathymetry;
 }
 

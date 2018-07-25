@@ -22,7 +22,7 @@ namespace TM {
 
             bool setBathymetryPath(const std::string &path, bool readFromFile = false);
 
-            const std::shared_ptr<const TM::Map::MapArea<double>> bathymetry() const noexcept;
+            const std::shared_ptr<TM::Map::MapArea<double>> bathymetry() const noexcept;
 
             const std::shared_ptr<const TM::Map::MapArea<double>> eta() const noexcept;
 
