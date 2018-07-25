@@ -21,19 +21,19 @@ namespace TM {
 
             template<typename DataType>
             DataType T(const std::shared_ptr<MapArea<DataType>> &w,
-                                              const double &latitude,
-                                              const double &longitude,
-                                              const direction &dir) {
+                       const std::size_t &lat_i,
+                       const std::size_t &lon_j,
+                       const direction &dir) {
 
                 switch (dir) {
                     case direction::X_FORWARD:
-                        return w->getDataByPoint(latitude + w->stepX(), longitude);
+                        return w->getDataByIndex(lat_i + 1, lon_j);
                     case direction::X_BACKWARD:
-                        return w->getDataByPoint(latitude - w->stepX(), longitude);
+                        return w->getDataByIndex(lat_i - 1, lon_j);
                     case direction::Y_FORWARD:
-                        return w->getDataByPoint(latitude, longitude + w->stepY());
+                        return w->getDataByIndex(lat_i, lon_j + 1);
                     case direction::Y_BACKWARD:
-                        return w->getDataByPoint(latitude, longitude - w->stepY());
+                        return w->getDataByIndex(lat_i, lon_j - 1);
                     default:
                         THROW_TM_EXCEPTION << "Undefined operator T for TM::Scheme::Operators::" << dir;
                 }
@@ -41,17 +41,17 @@ namespace TM {
 
             template<typename DataType>
             DataType delta(const std::shared_ptr<MapArea<DataType>> &w,
-                                                  const double &latitude,
-                                                  const double &longitude,
-                                                  const direction &dir) {
+                           const std::size_t &lat_i,
+                           const std::size_t &lon_j,
+                           const direction &dir) {
 
                 switch (dir) {
                     case direction::X_FORWARD:
                     case direction::Y_FORWARD:
-                        return T(w, latitude, longitude, dir) - w->getDataByPoint(latitude, longitude);
+                        return T(w, lat_i, lon_j, dir) - w->getDataByIndex(lat_i, lon_j);
                     case direction::X_BACKWARD:
                     case direction::Y_BACKWARD:
-                        return w->getDataByPoint(latitude, longitude) - T(w, latitude, longitude, dir);
+                        return w->getDataByIndex(lat_i, lon_j) - T(w, lat_i, lon_j, dir);
                     default:
                         THROW_TM_EXCEPTION << "Undefined operator delta for TM::Scheme::Operators::" << dir;
                 }
@@ -59,14 +59,14 @@ namespace TM {
 
             template<typename DataType>
             DataType feature(const std::shared_ptr<MapArea<DataType>> &w,
-                                                    const double &latitude,
-                                                    const double &longitude,
-                                                    const direction &dir) {
+                             const std::size_t &lat_i,
+                             const std::size_t &lon_j,
+                             const direction &dir) {
 
                 switch (dir) {
                     case direction::X_FORWARD:
                     case direction::Y_FORWARD:
-                        return 1. / 2. * (w->getDataByPoint(latitude, longitude) + T(w, latitude, longitude, dir));
+                        return 1. / 2. * (w->getDataByIndex(lat_i, lon_j) + T(w, lat_i, lon_j, dir));
                     case direction::X_BACKWARD:
                     case direction::Y_BACKWARD:
                     default:
@@ -76,7 +76,6 @@ namespace TM {
         }
     }
 }
-
 
 
 #endif //TSUNAMIMANAGER_OPERATORS_H

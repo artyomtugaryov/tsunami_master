@@ -7,8 +7,11 @@
 #include <iomanip>
 
 template<typename DataType>
-TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue) :
-        m_sizeX(sizeX), m_sizeY(sizeY), m_data(m_sizeX * m_sizeY, defaultValue) {}
+TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue) : m_sizeX(sizeX), m_sizeY(sizeY),
+        m_startX(0), m_startY(0),
+        m_stepX(1), m_stepY(1),
+        m_endX(sizeX - 1), m_endY(sizeX - 1),
+        m_data(m_sizeX * m_sizeY, defaultValue) {}
 
 template<typename DataType>
 template<typename T>
