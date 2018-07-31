@@ -7,11 +7,9 @@
 
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMException.h>
-#include <TMlib/TMScheme24.h>
+#include <TMlib/TMScheme23.h>
 #include <TMlib/TMKolchScheme.h>
 #include <TMlib/TMFocus.h>
-#include <TMlib/TMSignal.h>
-#include <TMlib/TMTimeManager.h>
 #include <PlotLib/Plot2d.h>
 #include <PlotLib/ColorMap.h>
 
@@ -53,7 +51,6 @@ public slots:
 private slots:
     void isUpdateTime(std::shared_ptr<TM::Map::MapArea<double>> eta);
     void isobathChanged(double isobath);
-    void updateTimeChanged(int time);
     void calculationTimeChanged(int time);
     void plotFromQueue(bool ready);
 
@@ -67,8 +64,6 @@ private:
     std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
     std::shared_ptr<TM::Scheme::TMScheme> m_scheme;
     std::shared_ptr<TM::Focus::Focus> m_focus;
-    std::shared_ptr<TM::TMTimeManager> m_timemanager;
-    std::shared_ptr<TM::TMSignal> m_signal;
     std::shared_ptr<TM::Map::MapArea<double> > m_eta;
     TsunamiManagerInfo::TsunamiPlotProvider* m_plotProvider;
     TsunamiWorker* m_tsunamiWorker;

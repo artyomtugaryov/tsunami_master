@@ -8,11 +8,11 @@
 namespace TM {
     namespace Scheme {
 
-        class TMScheme24 : public TMScheme {
+        class TMScheme23 : public TMScheme {
         public:
-            TMScheme24() = default;
+            TMScheme23() = default;
 
-            ~TMScheme24() override = default;
+            ~TMScheme23() override = default;
 
             void calculation(const shared_ptr<MapAreaWorker> &area,
                              const double &time) override;
@@ -21,7 +21,10 @@ namespace TM {
                            const shared_ptr<const Focus::Focus> &focus,
                            const double &izobata) override;
 
-            double getTimeStep(const double &dPhi, const double &dTetta, const double &Hm) const;
+            double getTimeStep(const double &phi,
+                               const double &dPhi,
+                               const double &dTetta,
+                               const double &Hm) const;
 
         private:
 

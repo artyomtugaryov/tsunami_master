@@ -3,8 +3,7 @@
 
 #include <TMlib/TMMapAreaWorker.h>
 #include <TMlib/TMException.h>
-#include <TMlib/TMScheme24.h>
-#include <TMlib/TMTimeManager.h>
+#include <TMlib/TMScheme23.h>
 #include <TMlib/TMFocus.h>
 
 #include <QObject>
@@ -25,8 +24,6 @@ public:
     explicit TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker,
                            std::shared_ptr<TM::Scheme::TMScheme> scheme,
                            std::shared_ptr<TM::Focus::Focus> focus,
-                           std::shared_ptr<TM::TMTimeManager> timemanager,
-                           std::shared_ptr<TM::TMSignal> tmsignal,
                            QObject *parent = 0);
     QString bathymetryPath() const;
     void setBathymetryPath(const QString &path);
@@ -57,8 +54,6 @@ private:
     std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
     std::shared_ptr<TM::Scheme::TMScheme> m_scheme;
     std::shared_ptr<TM::Focus::Focus> m_focus;
-    std::shared_ptr<TM::TMTimeManager> m_timemanager;
-    std::shared_ptr<TM::TMSignal> m_signal;
     bool m_readed;
     ThreadCommand m_command;
     int m_updateTime;

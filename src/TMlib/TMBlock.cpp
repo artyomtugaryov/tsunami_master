@@ -1,5 +1,7 @@
 #include <algorithm>
+
 #include "TMlib/TMBlock.h"
+#include "TMlib/TMException.h"
 
 bool TM::Focus::Block::has(const double &lat, const double &lon) {
     return pointLocation({lat, lon});
@@ -13,6 +15,7 @@ double TM::Focus::Block::getUpHeight(const double &t) {
             return brickUp.get_heightUp() / brickUp.get_brickUpT() * t;
         }
     }
+    return 0;
 }
 
 bool TM::Focus::Block::pointLocation(const BrickPoint &a) {

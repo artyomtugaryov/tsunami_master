@@ -15,10 +15,8 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     m_mapAreaWorker(std::make_shared<TM::Map::MapAreaWorker>()),
     m_scheme(std::make_shared<TM::Scheme::TMKolchSchema>()),
     m_focus(std::make_shared<TM::Focus::Focus>()),
-    m_timemanager(std::make_shared<TM::TMTimeManager>()),
-    m_signal(std::make_shared<TM::TMSignal>(this)),
     m_plotProvider(new TsunamiPlotProvider(m_tsunamiData, m_mapAreaWorker)),
-    m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker, m_scheme, m_focus, m_timemanager, m_signal)),
+    m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker, m_scheme, m_focus)),
     m_tsunamiWorkerThread(new QThread),
     m_plot(new Plot2d()),
     m_currentCalculationTime(0),
@@ -36,10 +34,7 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     connect(m_tsunamiWorker, SIGNAL(readedFinished()), this, SLOT(tsunamiWorkerThreadReaded()));
     connect(m_tsunamiData, &TsunamiData::calculationTimeChanged, this, &TsunamiManager::calculationTimeChanged);
     connect(m_tsunamiData, &TsunamiData::isobathChanged, this, &TsunamiManager::isobathChanged);
-    connect(m_tsunamiData, &TsunamiData::timeUpdateChanged, this, &TsunamiManager::updateTimeChanged);
-    m_timemanager->setSendingTimeStep(10);
     qRegisterMetaType<std::shared_ptr<TM::Map::MapArea<double>>>("std::shared_ptr<TM::Map::MapArea<double>>");
-    connect(m_signal.get(), &TM::TMSignal::signalUpdate, this, &TsunamiManagerInfo::TsunamiManager::isUpdateTime);
 
     loadInitDataFromJson();
 }
@@ -145,11 +140,6 @@ void TsunamiManager::isUpdateTime(std::shared_ptr<TM::Map::MapArea<double> > eta
 void TsunamiManager::isobathChanged(double isobath)
 {
     m_tsunamiWorker->setIsobath(isobath);
-}
-
-void TsunamiManager::updateTimeChanged(int time)
-{
-    m_timemanager->setSendingTimeStep(time);
 }
 
 void TsunamiManager::calculationTimeChanged(int time)

@@ -1,7 +1,7 @@
 #include "TMlib/TMMapArea.h"
 #include "TMlib/TMException.h"
 #include "TMlib/TMScheme.h"
-#include "TMlib/TMScheme24.h"
+#include "TMlib/TMScheme23.h"
 #include <algorithm>
 #include <fstream>
 #include <iomanip>

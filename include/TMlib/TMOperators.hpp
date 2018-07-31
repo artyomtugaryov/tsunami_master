@@ -14,9 +14,13 @@ namespace TM {
         namespace Operators {
             enum direction : unsigned {
                 X_FORWARD = 1,
+                TETTA_FORWARD = 1,
                 Y_FORWARD = 2,
+                PHI_FORWARD = 2,
                 X_BACKWARD = 3,
-                Y_BACKWARD = 4
+                TETTA_BACKWARD = 3,
+                Y_BACKWARD = 4,
+                PHI_BACKWARD = 4
             };
 
             template<typename DataType>
