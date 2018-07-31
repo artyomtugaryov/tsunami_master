@@ -14,11 +14,11 @@ namespace TM {
 
             ~TMScheme23() override = default;
 
-            void calculation(const shared_ptr<MapAreaWorker> &area,
+            void calculation(MapAreaWorker &area,
                              const double &time) override;
 
-            void configure(const shared_ptr<const MapAreaWorker> &area,
-                           const shared_ptr<const Focus::Focus> &focus,
+            void configure(const MapAreaWorker &area,
+                           const Focus::Focus &focus,
                            const double &izobata) override;
 
             double getTimeStep(const double &phi,
@@ -31,7 +31,7 @@ namespace TM {
             void setUpBArrays(std::size_t &&x, std::size_t &&y);
 
 
-            double calcMainValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+            double calcMainValueEta(MapAreaWorker &area,
                                     const std::size_t &j,
                                     const std::size_t &k,
                                     const double &dt,
@@ -43,7 +43,7 @@ namespace TM {
                                     const double &tetta_2,
                                     const double &M);
 
-            double calcUVelocity(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+            double calcUVelocity(const MapAreaWorker &area,
                                  const std::size_t &j,
                                  const std::size_t &k,
                                  const double &dTetta,
@@ -53,7 +53,7 @@ namespace TM {
                                  const double &u,
                                  const double &dt);
 
-            double calcVVelocity(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+            double calcVVelocity(const MapAreaWorker &area,
                                  const std::size_t &j,
                                  const std::size_t &k,
                                  const double &Tetta,
@@ -64,29 +64,27 @@ namespace TM {
                                  const double &u,
                                  const double &dt);
 
-            double calcBoundaryType1ValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+            double calcBoundaryType1ValueEta(const MapAreaWorker &area,
                                              const std::size_t &j,
                                              const std::size_t &k,
                                              const double &dPhi,
                                              const double &dTetta);
 
-            double calcBoundaryType2ValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+            double calcBoundaryType2ValueEta(const MapAreaWorker &area,
                                              const std::size_t &j,
                                              const std::size_t &k,
                                              const double &dPhi,
                                              const double &dTetta);
 
 
-
-
-            static double gradient(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
+            static double gradient(const TM::Map::MapArea<double> &w,
                                    const std::size_t &j,
                                    const std::size_t &k,
                                    const std::array<int, 2> &d,
                                    const int &route = 1);
 
-            std::shared_ptr<TM::Map::MapArea<double>> m_B0;
-            std::shared_ptr<TM::Map::MapArea<double>> m_B1;
+            MapArea<double> m_B0;
+            MapArea<double> m_B1;
         };
     }
 }

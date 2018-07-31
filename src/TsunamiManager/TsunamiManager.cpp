@@ -104,17 +104,17 @@ void TsunamiManager::tsunamiWorkerThreadReaded()
     m_tsunamiData->setReaded(m_tsunamiWorker->readed());
     if (m_tsunamiWorker->readed())
     {
-        m_tsunamiData->setStartX(m_mapAreaWorker->bathymetry()->startX());
-        m_tsunamiData->setStartY(m_mapAreaWorker->bathymetry()->startY());
+        m_tsunamiData->setStartX(m_mapAreaWorker->bathymetry().startX());
+        m_tsunamiData->setStartY(m_mapAreaWorker->bathymetry().startY());
 
-        m_tsunamiData->setEndX(m_mapAreaWorker->bathymetry()->endX());
-        m_tsunamiData->setEndY(m_mapAreaWorker->bathymetry()->endY());
+        m_tsunamiData->setEndX(m_mapAreaWorker->bathymetry().endX());
+        m_tsunamiData->setEndY(m_mapAreaWorker->bathymetry().endY());
 
-        m_tsunamiData->setSizeX(m_mapAreaWorker->bathymetry()->sizeX());
-        m_tsunamiData->setSizeY(m_mapAreaWorker->bathymetry()->sizeY());
+        m_tsunamiData->setSizeX(m_mapAreaWorker->bathymetry().sizeX());
+        m_tsunamiData->setSizeY(m_mapAreaWorker->bathymetry().sizeY());
 
-        m_tsunamiData->setStepX(m_mapAreaWorker->bathymetry()->stepX());
-        m_tsunamiData->setStepY(m_mapAreaWorker->bathymetry()->stepY());
+        m_tsunamiData->setStepX(m_mapAreaWorker->bathymetry().stepX());
+        m_tsunamiData->setStepY(m_mapAreaWorker->bathymetry().stepY());
 
         m_plotProvider->setPlotImageSize(m_tsunamiData->sizeX(), m_tsunamiData->sizeY());
 

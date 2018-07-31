@@ -120,36 +120,36 @@ void Mareograph::pushHeight(double height) {
 }
 
 void Mareograph::writeToFile(std::string path,
-                             const std::shared_ptr<const std::vector<Mareograph>> &M,
+                             const std::vector<Mareograph> &M,
                              bool writeHeights) {
-    if (!M || M->empty()) return;
+    if (M.empty()) return;
     std::fstream file;
     file.open(path, std::fstream::out);
-    file << M->size() << "\n";
-    file << (*M)[0].getStepTime() << "\n";
+    file << M.size() << "\n";
+    file << M[0].getStepTime() << "\n";
 
-    auto size = static_cast<int>(M->size());
+    auto size = static_cast<int>(M.size());
 
     for (int j = 0; j < size; j++) {
-        file << (*M)[j].getLocationNameASCII().c_str() << "\t";
+        file << M[j].getLocationNameASCII().c_str() << "\t";
     }
     file << "\n";
 
     for (int j = 0; j < size; j++) {
-        file << (*M)[j].getLongitude() << "\t";
+        file << M[j].getLongitude() << "\t";
     }
     file << "\n";
 
     for (int j = 0; j < size; j++) {
-        file << (*M)[j].getLatitude() << "\t";
+        file << M[j].getLatitude() << "\t";
     }
     if (writeHeights) {
-        if (!(*M)[0].getSizeHeights()) file << "\n";
+        if (!M[0].getSizeHeights()) file << "\n";
 
-        for (int i = 0; i < (int) (*M)[0].getSizeHeights(); i++) {
+        for (int i = 0; i < (int) M[0].getSizeHeights(); i++) {
 
             for (int j = 0; j < size; j++) {
-                file << (*M)[j].getHeight(i) << "\t";
+                file << M[j].getHeight(i) << "\t";
             }
             file << "\n";
         }
@@ -184,50 +184,51 @@ std::string Mareograph::getStartTimeString(int t) {
 }
 
 void Mareograph::writeToParametersMareograph(const std::string &path,
-                                             const std::shared_ptr<const std::vector<Mareograph>> &M) {
-    int size = (int) M->size();
-    if (!size) return;
+                                             const std::vector<Mareograph> &M) {
+    int size = (int) M.size();
+    if (!size)
+        return;
     std::fstream file;
     file.open(path, std::fstream::out);
     file << "Location Name\tMax Height\tMinHeight\tStart Time\n";
     for (int i = 0; i < size; i++) {
 
 
-        file << (*M)[i].getLocationNameASCII() << "\t" << (*M)[i].getMaxHeight()
-             << "\t" << (*M)[i].getMinHeight() << "\t" << getStartTimeString((*M)[i].getStartTime()) << "\n";
+        file << M[i].getLocationNameASCII() << "\t" << M[i].getMaxHeight()
+             << "\t" << M[i].getMinHeight() << "\t" << getStartTimeString(M[i].getStartTime()) << "\n";
     }
 }
 
 void Mareograph::writeToFile(std::wstring path,
-                             const std::shared_ptr<const std::vector<Mareograph> > &M,
+                             const std::vector<Mareograph> &M,
                              bool writeHeights) {
     std::string _path(path.begin(), path.end());
     writeToFile(_path, M, writeHeights);
 }
 
-std::shared_ptr<std::vector<Mareograph> > Mareograph::readFromFile(std::string path,
-                                                                   double startX, double startY,
-                                                                   double deltaX, double deltaY,
-                                                                   int sizeY, bool readHeights) {
-    std::shared_ptr<std::vector<Mareograph> > M = std::make_shared<std::vector<Mareograph>>();
+std::vector<Mareograph> Mareograph::readFromFile(std::string path,
+                                                 double startX, double startY,
+                                                 double deltaX, double deltaY,
+                                                 int sizeY, bool readHeights) {
+    std::vector<Mareograph> M;
     std::fstream file;
     file.open(path, std::fstream::in);
     int count, _stepTime;
     file >> count >> _stepTime;
-    M->resize(count);
-    for (auto i :*M ) {
+    M.resize(count);
+    for (auto i :M) {
         i = Mareograph(_stepTime);
         std::string name;
         file >> name;
         i.setLocationName(std::string(name));
     }
-    for (auto i : *M) {
+    for (auto i : M) {
         double _longitude;
         file >> _longitude;
         i.setLongitude(_longitude);
         i.setIndexX(startX, deltaX);
     }
-    for (auto i : *M) {
+    for (auto i : M) {
         double _latitude;
         file >> _latitude;
         i.setLatitude(_latitude);
@@ -235,7 +236,7 @@ std::shared_ptr<std::vector<Mareograph> > Mareograph::readFromFile(std::string p
     }
     if (readHeights) {
         while (!file.eof()) {
-            for (auto j : *M) {
+            for (auto j : M) {
                 double height;
                 file >> height;
                 j.pushHeight(height);
@@ -245,12 +246,11 @@ std::shared_ptr<std::vector<Mareograph> > Mareograph::readFromFile(std::string p
     return M;
 }
 
-std::shared_ptr<std::vector<Mareograph> > Mareograph::readFromFile(std::__cxx11::wstring path,
-                                                                   double startX, double startY,
-                                                                   double deltaX, double deltaY,
-                                                                   int sizeY, bool readHeights) {
+std::vector<Mareograph> Mareograph::readFromFile(std::__cxx11::wstring path,
+                                                 double startX, double startY,
+                                                 double deltaX, double deltaY,
+                                                 int sizeY, bool readHeights) {
     std::string _path(path.begin(), path.end());
-    std::shared_ptr<std::vector<Mareograph> > M = readFromFile(_path, startX, startY,
-                                                               deltaX, deltaY, sizeY, readHeights);
-    return M;
+    return readFromFile(_path, startX, startY,
+                        deltaX, deltaY, sizeY, readHeights);
 }

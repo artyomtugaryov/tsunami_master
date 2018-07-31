@@ -24,27 +24,27 @@ namespace TM {
             };
 
             template<typename DataType>
-            DataType T(const std::shared_ptr<MapArea<DataType>> &w,
+            DataType T(const MapArea<DataType> &w,
                        const std::size_t &lat_i,
                        const std::size_t &lon_j,
                        const direction &dir) {
 
                 switch (dir) {
                     case direction::X_FORWARD:
-                        return w->getDataByIndex(lat_i + 1, lon_j);
+                        return w.getDataByIndex(lat_i + 1, lon_j);
                     case direction::X_BACKWARD:
-                        return w->getDataByIndex(lat_i - 1, lon_j);
+                        return w.getDataByIndex(lat_i - 1, lon_j);
                     case direction::Y_FORWARD:
-                        return w->getDataByIndex(lat_i, lon_j + 1);
+                        return w.getDataByIndex(lat_i, lon_j + 1);
                     case direction::Y_BACKWARD:
-                        return w->getDataByIndex(lat_i, lon_j - 1);
+                        return w.getDataByIndex(lat_i, lon_j - 1);
                     default:
                         THROW_TM_EXCEPTION << "Undefined operator T for TM::Scheme::Operators::" << dir;
                 }
             }
 
             template<typename DataType>
-            DataType delta(const std::shared_ptr<MapArea<DataType>> &w,
+            DataType delta(const MapArea<DataType> &w,
                            const std::size_t &lat_i,
                            const std::size_t &lon_j,
                            const direction &dir) {
@@ -52,17 +52,17 @@ namespace TM {
                 switch (dir) {
                     case direction::X_FORWARD:
                     case direction::Y_FORWARD:
-                        return T(w, lat_i, lon_j, dir) - w->getDataByIndex(lat_i, lon_j);
+                        return T(w, lat_i, lon_j, dir) - w.getDataByIndex(lat_i, lon_j);
                     case direction::X_BACKWARD:
                     case direction::Y_BACKWARD:
-                        return w->getDataByIndex(lat_i, lon_j) - T(w, lat_i, lon_j, dir);
+                        return w.getDataByIndex(lat_i, lon_j) - T(w, lat_i, lon_j, dir);
                     default:
                         THROW_TM_EXCEPTION << "Undefined operator delta for TM::Scheme::Operators::" << dir;
                 }
             }
 
             template<typename DataType>
-            DataType feature(const std::shared_ptr<MapArea<DataType>> &w,
+            DataType feature(const MapArea<DataType> &w,
                              const std::size_t &lat_i,
                              const std::size_t &lon_j,
                              const direction &dir) {
@@ -70,7 +70,7 @@ namespace TM {
                 switch (dir) {
                     case direction::X_FORWARD:
                     case direction::Y_FORWARD:
-                        return 1. / 2. * (w->getDataByIndex(lat_i, lon_j) + T(w, lat_i, lon_j, dir));
+                        return 1. / 2. * (w.getDataByIndex(lat_i, lon_j) + T(w, lat_i, lon_j, dir));
                     case direction::X_BACKWARD:
                     case direction::Y_BACKWARD:
                     default:

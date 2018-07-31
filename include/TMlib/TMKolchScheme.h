@@ -12,15 +12,15 @@ namespace TM {
 
             virtual ~TMKolchSchema() = default;
 
-            void calculation(const shared_ptr<MapAreaWorker> &,
+            void calculation(MapAreaWorker &,
                              const double &);
 
-            void configure(const shared_ptr<const MapAreaWorker> &,
-                           const shared_ptr<const Focus::Focus> &,
+            void configure(const MapAreaWorker &,
+                           const Focus::Focus &,
                            const double &) override ;
 
         private:
-            void set_delta(const shared_ptr<const MapArea<double>> &);
+            void set_delta(const MapArea<double> &map);
 
             double delta_x_m;
             std::vector<double> delta_t;

@@ -25,46 +25,46 @@ std::shared_ptr<MapArea<double>> TMOperatorsTests::m_maparea;
  * TESTS FOR OPERATOR T
  */
 TEST_F(TMOperatorsTests, operatorTForwardX) {
-    EXPECT_EQ(T(m_maparea, 0, 0, direction::X_FORWARD), 20);
+    EXPECT_EQ(T(*m_maparea, 0, 0, direction::X_FORWARD), 20);
 }
 
 TEST_F(TMOperatorsTests, operatorTForwardY) {
-    EXPECT_EQ(T(m_maparea, 1, 0, direction::Y_FORWARD), 40);
+    EXPECT_EQ(T(*m_maparea, 1, 0, direction::Y_FORWARD), 40);
 }
 
 TEST_F(TMOperatorsTests, operatorTBackwarddX) {
-    EXPECT_EQ(T(m_maparea, 1, 1, direction::X_BACKWARD), 30);
+    EXPECT_EQ(T(*m_maparea, 1, 1, direction::X_BACKWARD), 30);
 }
 
 TEST_F(TMOperatorsTests, operatorTBackwardY) {
-    EXPECT_EQ(T(m_maparea, 1, 1, direction::Y_BACKWARD), 20);
+    EXPECT_EQ(T(*m_maparea, 1, 1, direction::Y_BACKWARD), 20);
 }
 
 TEST_F(TMOperatorsTests, operatorTException) {
-    ASSERT_THROW(T(m_maparea, 1, 1, static_cast<direction>(5)), TM::details::TMException);
+    ASSERT_THROW(T(*m_maparea, 1, 1, static_cast<direction>(5)), TM::details::TMException);
 }
 
 /*
  * TESTS FOR OPERATOR DELTA
  */
 TEST_F(TMOperatorsTests, operatorDeltaForwardX) {
-    EXPECT_EQ(delta(m_maparea, 0, 0, direction::X_FORWARD), 10);
+    EXPECT_EQ(delta(*m_maparea, 0, 0, direction::X_FORWARD), 10);
 }
 
 TEST_F(TMOperatorsTests, operatorDeltaForwardY) {
-    EXPECT_EQ(delta(m_maparea, 1, 0, direction::Y_FORWARD), 20);
+    EXPECT_EQ(delta(*m_maparea, 1, 0, direction::Y_FORWARD), 20);
 }
 
 TEST_F(TMOperatorsTests, operatorDeltaBackwarddX) {
-    EXPECT_EQ(delta(m_maparea, 1, 1, direction::X_BACKWARD), 10);
+    EXPECT_EQ(delta(*m_maparea, 1, 1, direction::X_BACKWARD), 10);
 }
 
 TEST_F(TMOperatorsTests, operatorDeltaBackwardY) {
-    EXPECT_EQ(delta(m_maparea, 1, 1, direction::Y_BACKWARD), 20);
+    EXPECT_EQ(delta(*m_maparea, 1, 1, direction::Y_BACKWARD), 20);
 }
 
 TEST_F(TMOperatorsTests, operatorDeltaException) {
-    ASSERT_THROW(delta(m_maparea, 1, 1, static_cast<direction>(5)), TM::details::TMException);
+    ASSERT_THROW(delta(*m_maparea, 1, 1, static_cast<direction>(5)), TM::details::TMException);
 }
 
 
@@ -72,21 +72,21 @@ TEST_F(TMOperatorsTests, operatorDeltaException) {
  * TESTS FOR OPERATOR FEATURE
  */
 TEST_F(TMOperatorsTests, operatorFeatureForwardX) {
-    EXPECT_EQ(feature(m_maparea, 0, 0, direction::X_FORWARD), 15);
+    EXPECT_EQ(feature(*m_maparea, 0, 0, direction::X_FORWARD), 15);
 }
 
 TEST_F(TMOperatorsTests, operatorFeatureForwardY) {
-    EXPECT_EQ(feature(m_maparea, 1, 0, direction::Y_FORWARD), 30);
+    EXPECT_EQ(feature(*m_maparea, 1, 0, direction::Y_FORWARD), 30);
 }
 
 TEST_F(TMOperatorsTests, operatorFeatureBackwarddX) {
-    ASSERT_THROW(feature(m_maparea, 1, 1, direction::X_BACKWARD), TM::details::TMException);
+    ASSERT_THROW(feature(*m_maparea, 1, 1, direction::X_BACKWARD), TM::details::TMException);
 }
 
 TEST_F(TMOperatorsTests, operatorFeatureBackwardY) {
-    ASSERT_THROW(feature(m_maparea, 1, 1, direction::Y_BACKWARD), TM::details::TMException);
+    ASSERT_THROW(feature(*m_maparea, 1, 1, direction::Y_BACKWARD), TM::details::TMException);
 }
 
 TEST_F(TMOperatorsTests, operatorFeatureException) {
-    ASSERT_THROW(feature(m_maparea, 1, 1, static_cast<direction>(5)), TM::details::TMException);
+    ASSERT_THROW(feature(*m_maparea, 1, 1, static_cast<direction>(5)), TM::details::TMException);
 }
