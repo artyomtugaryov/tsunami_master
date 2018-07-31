@@ -1,7 +1,7 @@
 isEmpty(GOOGLETEST_DIR):GOOGLETEST_DIR=$$(GOOGLETEST_DIR)
 
 isEmpty(GOOGLETEST_DIR) {
-    GOOGLETEST_DIR = $${_PRO_FILE_PWD_}//googletest
+    GOOGLETEST_DIR = $$PWD/googletest
 }
 
 !isEmpty(GOOGLETEST_DIR): {
