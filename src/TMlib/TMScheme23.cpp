@@ -117,18 +117,49 @@ double TM::Scheme::TMScheme23::getTimeStep(const double &phi,
     return dt;
 }
 
+<<<<<<<
+HEAD: src
+/TMlib/TMScheme23.
+
+cpp
 void TM::Scheme::TMScheme23::configure(const MapAreaWorker &area,
                                        const Focus::Focus &focus,
-                                       const double &izobata) {
-    this->setTypesOfCells(area, izobata);
-    this->m_focus = focus;
-    this->setUpBArrays(area.getMaxXIndex(), area.getMaxXIndex());
-    auto dPhi = area.getStepPhi();
-    auto dTetta = area.getStepTetta();
-    auto Hm = area.getMaxDepth();
+
+=======
+
+void TM::Scheme::TMScheme23::configure(const std::shared_ptr<const TM::Map::MapAreaWorker> &area,
+                                       const std::shared_ptr<const TM::Focus::Focus> &focus,
+
+>>>>>>>
+master: src
+/TMlib/TMScheme23.
+cpp
+const double &izobata
+) {
+this->
+setTypesOfCells(area, izobata
+);
+this->
+m_focus = focus;
+this->
+setUpBArrays(area
+.
+
+getMaxXIndex(), area
+
+.
+
+getMaxXIndex()
+
+);
+auto dPhi = area.getStepPhi();
+auto dTetta = area.getStepTetta();
+auto Hm = area.getMaxDepth();
 }
 
 void TM::Scheme::TMScheme23::setUpBArrays(std::size_t &&x, std::size_t &&y) {
+    <<<<<<< HEAD:
+    src / TMlib / TMScheme23.cpp
     this->m_B0.setSizeX(x);
     this->m_B0.setSizeY(y);
     this->m_B1.setSizeX(x);
@@ -136,92 +167,225 @@ void TM::Scheme::TMScheme23::setUpBArrays(std::size_t &&x, std::size_t &&y) {
 }
 
 double TM::Scheme::TMScheme23::calcMainValueEta(MapAreaWorker &area,
-                                                const size_t &j,
-                                                const size_t &k,
-                                                const double &dt,
-                                                const double &dPhi,
-                                                const double &dTetta,
-                                                const double &tetta,
-                                                const double &phi,
-                                                const double &tetta2,
-                                                const double &tetta_2,
-                                                const double &M) {
 
-    auto H_Bj0k0 = feature(area.bathymetry(), j, k, direction::TETTA_FORWARD) - feature(m_B0, j, k, direction::TETTA_FORWARD);
-    auto H_Bj_1k0 = feature(area.bathymetry(), j-1, k, direction::TETTA_FORWARD) - feature(m_B0, j-1, k, direction::TETTA_FORWARD);
-
-    auto Hj0k0 = gradient(area.bathymetry(), j, k, std::array<int, 2>({1, 0}));
-    auto Hj0k_1 = gradient(area.bathymetry(), j, k - 1, std::array<int, 2>({0, 1}));
-
-    auto Bj0k0 = gradient(m_B0, j, k, std::array<int, 2>({1, 0}));
-    auto Bj0k_1 = gradient(m_B0, j, k - 1, std::array<int, 2>({0, 1}));
-
-    auto oldBj0k0 = m_B0.getDataByIndex(j, k);
-    auto newBj0k0 = m_B1.getDataByIndex(j, k);
-
-    auto eta0 = area.eta().getDataByIndex(j, k);
-
-    //Getting velocity
-    auto Uj0k0 = area.uVelocity().getDataByIndex(j, k);
-    auto Uj1k0 = area.uVelocity().getDataByIndex(j + 1, k);
-    auto Vj0k0 = area.vVelocity().getDataByIndex(j, k);
-    auto Vj0k1 = area.vVelocity().getDataByIndex(j, k + 1);
-
-    auto u_multiplier = Uj1k0 * H_Bj0k0 * sin(tetta2) - Uj0k0 * H_Bj_1k0 * sin(tetta_2);
-    auto v_multiplier = Vj0k1 * (Hj0k0 - Bj0k0) / 2. - Vj0k0 * (Hj0k_1 - Bj0k_1) / 2.;
-
-    auto eta = eta0 + ((newBj0k0 - oldBj0k0) - M * (u_multiplier / dTetta - v_multiplier / dPhi)) * dt;
-    return eta;
+=======
+this->
+m_B0 = std::make_shared<TM::Map::MapArea<double>>(x, y);
+this->
+m_B1 = std::make_shared<TM::Map::MapArea<double>>(x, y);
 }
 
+double TM::Scheme::TMScheme23::calcMainValueEta(const shared_ptr<MapAreaWorker> &area,
+
+>>>>>>>
+master: src
+/TMlib/TMScheme23.
+cpp
+const size_t
+&j,
+const size_t &k,
+const double &dt,
+const double &dPhi,
+const double &dTetta,
+const double &tetta,
+const double &phi,
+const double &tetta2,
+const double &tetta_2,
+const double &M
+) {
+
+<<<<<<<
+HEAD: src
+/TMlib/TMScheme23.
+cpp
+auto H_Bj0k0 =
+        feature(area.bathymetry(), j, k, direction::TETTA_FORWARD) - feature(m_B0, j, k, direction::TETTA_FORWARD);
+auto H_Bj_1k0 = feature(area.bathymetry(), j - 1, k, direction::TETTA_FORWARD) -
+                feature(m_B0, j - 1, k, direction::TETTA_FORWARD);
+
+auto Hj0k0 = gradient(area.bathymetry(), j, k, std::array<int, 2>({1, 0}));
+auto Hj0k_1 = gradient(area.bathymetry(), j, k - 1, std::array<int, 2>({0, 1}));
+=======
+auto H_Bj0k0 =
+        feature(area->bathymetry(), j, k, direction::TETTA_FORWARD) - feature(m_B0, j, k, direction::TETTA_FORWARD);
+auto H_Bj_1k0 = feature(area->bathymetry(), j - 1, k, direction::TETTA_FORWARD) -
+                feature(m_B0, j - 1, k, direction::TETTA_FORWARD);
+
+auto Hj0k0 = gradient(area->bathymetry(), j, k, std::array<int, 2>({1, 0}));
+auto Hj0k_1 = gradient(area->bathymetry(), j, k - 1, std::array<int, 2>({0, 1}));
+>>>>>>>
+master: src
+/TMlib/TMScheme23.
+cpp
+
+auto Bj0k0 = gradient(m_B0, j, k, std::array<int, 2>({1, 0}));
+auto Bj0k_1 = gradient(m_B0, j, k - 1, std::array<int, 2>({0, 1}));
+
+auto oldBj0k0 = m_B0.getDataByIndex(j, k);
+auto newBj0k0 = m_B1.getDataByIndex(j, k);
+
+auto eta0 = area.eta().getDataByIndex(j, k);
+
+//Getting velocity
+auto Uj0k0 = area.uVelocity().getDataByIndex(j, k);
+auto Uj1k0 = area.uVelocity().getDataByIndex(j + 1, k);
+auto Vj0k0 = area.vVelocity().getDataByIndex(j, k);
+auto Vj0k1 = area.vVelocity().getDataByIndex(j, k + 1);
+
+auto u_multiplier = Uj1k0 * H_Bj0k0 * sin(tetta2) - Uj0k0 * H_Bj_1k0 * sin(tetta_2);
+auto v_multiplier = Vj0k1 * (Hj0k0 - Bj0k0) / 2. - Vj0k0 * (Hj0k_1 - Bj0k_1) / 2.;
+
+auto eta = eta0 + ((newBj0k0 - oldBj0k0) - M * (u_multiplier / dTetta - v_multiplier / dPhi)) * dt;
+return
+eta;
+}
+
+<<<<<<<
+HEAD: src
+/TMlib/TMScheme23.
+
+cpp
 double TM::Scheme::TMScheme23::calcBoundaryType1ValueEta(const MapAreaWorker &area,
-                                                         const std::size_t &j,
-                                                         const std::size_t &k,
-                                                         const double &dPhi,
-                                                         const double &dTetta) {
-    return 0;
+
+=======
+
+double TM::Scheme::TMScheme23::calcBoundaryType1ValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+
+>>>>>>>
+master: src
+/TMlib/TMScheme23.
+cpp
+const std::size_t
+&j,
+const std::size_t &k,
+const double &dPhi,
+const double &dTetta
+) {
+return 0;
 }
 
+<<<<<<<
+HEAD: src
+/TMlib/TMScheme23.
+
+cpp
 double TM::Scheme::TMScheme23::calcBoundaryType2ValueEta(const MapAreaWorker &area,
-                                                         const std::size_t &j,
-                                                         const std::size_t &k,
-                                                         const double &dPhi,
-                                                         const double &dTetta) {
-    return 0;
+
+=======
+
+double TM::Scheme::TMScheme23::calcBoundaryType2ValueEta(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+
+>>>>>>>
+master: src
+/TMlib/TMScheme23.
+cpp
+const std::size_t
+&j,
+const std::size_t &k,
+const double &dPhi,
+const double &dTetta
+) {
+return 0;
 }
 
+<<<<<<<
+HEAD: src
+/TMlib/TMScheme23.
+
+cpp
 double TM::Scheme::TMScheme23::calcUVelocity(const MapAreaWorker &area,
-                                             const std::size_t &j,
-                                             const std::size_t &k,
-                                             const double &dTetta,
-                                             const double &M,
-                                             const double &f,
-                                             const double &u,
-                                             const double &v,
-                                             const double &dt) {
-    auto dEtaByTetta = gradient(area.eta(), j + 1, k, std::array<int, 2>({-1, 0}), -1);
-    return u - M * dEtaByTetta / dTetta + f * v * dt;
+
+=======
+
+double TM::Scheme::TMScheme23::calcUVelocity(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+
+>>>>>>>
+master: src
+/TMlib/TMScheme23.
+cpp
+const std::size_t
+&j,
+const std::size_t &k,
+const double &dTetta,
+const double &M,
+const double &f,
+const double &u,
+const double &v,
+const double &dt
+) {
+auto dEtaByTetta = gradient(area.eta(), j + 1, k, std::array<int, 2>({-1, 0}), -1);
+return u -
+M *dEtaByTetta
+/ dTetta +
+f *v
+*
+dt;
 }
 
+<<<<<<<
+HEAD: src
+/TMlib/TMScheme23.
+
+cpp
 double TM::Scheme::TMScheme23::calcVVelocity(const MapAreaWorker &area,
-                                             const std::size_t &j,
-                                             const std::size_t &k,
-                                             const double &Tetta,
-                                             const double &dPhi,
-                                             const double &M,
-                                             const double &f,
-                                             const double &u,
-                                             const double &v,
-                                             const double &dt) {
-    auto dEtaByPhi = gradient(area.eta(), j, k, std::array<int, 2>({0, -1}), -1);
-    return v - M * dEtaByPhi / (sin(Tetta) * dPhi) - f * u * dt;
+
+=======
+
+double TM::Scheme::TMScheme23::calcVVelocity(const std::shared_ptr<TM::Map::MapAreaWorker> &area,
+
+>>>>>>>
+master: src
+/TMlib/TMScheme23.
+cpp
+const std::size_t
+&j,
+const std::size_t &k,
+const double &Tetta,
+const double &dPhi,
+const double &M,
+const double &f,
+const double &u,
+const double &v,
+const double &dt
+) {
+auto dEtaByPhi = gradient(area.eta(), j, k, std::array<int, 2>({0, -1}), -1);
+return v -
+M *dEtaByPhi
+/ (
+sin(Tetta)
+* dPhi) -
+f *u
+*
+dt;
 }
 
 
+<<<<<<<
+HEAD: src
+/TMlib/TMScheme23.
+
+cpp
 double TM::Scheme::TMScheme23::gradient(const MapArea<double> &w,
-                                        const std::size_t &j,
-                                        const std::size_t &k,
-                                        const std::array<int, 2> &d,
-                                        const int &to) {
-    return w.getDataByIndex(j, k) + to * w.getDataByIndex(j + d[0], k + d[0]);
+
+=======
+
+double TM::Scheme::TMScheme23::gradient(const std::shared_ptr<const TM::Map::MapArea<double>> &w,
+
+>>>>>>>
+master: src
+/TMlib/TMScheme23.
+cpp
+const std::size_t
+&j,
+const std::size_t &k,
+const std::array<int, 2> &d,
+const int &to
+) {
+return w.
+getDataByIndex(j, k
+) +
+to *w
+.
+getDataByIndex(j
++ d[0], k + d[0]);
 }

@@ -114,6 +114,7 @@ void TsunamiWorker::runCalculation()
     }
     m_scheme->configure(*m_mapAreaWorker, *m_focus, m_isobath);
     m_scheme->calculation(*m_mapAreaWorker, m_calculationTime);
+
 }
 //TODO: remove before implement calculation part
 bool TsunamiWorker::readed() const

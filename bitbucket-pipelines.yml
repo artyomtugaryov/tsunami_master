@@ -6,6 +6,7 @@ pipelines:
         script:
           - apt-get update
           - apt-get install -y cmake qtbase5-dev libqt5svg5-dev qt5-default qtdeclarative5-dev
+          - git submodule init
           - git submodule update
           - mkdir build_tmlib
           - cd build_tmlib
