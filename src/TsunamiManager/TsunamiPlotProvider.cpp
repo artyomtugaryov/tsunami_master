@@ -130,17 +130,17 @@ void TsunamiPlotProvider::plotBathametry()
                        {6000, QColor(214, 214, 214)}});
     if(m_eta)
     {
-        m_eta->setStartX(m_mapAreaWorker->bathymetry()->startX());
-        m_eta->setStartY(m_mapAreaWorker->bathymetry()->startY());
-        m_eta->setSizeX(m_mapAreaWorker->bathymetry()->sizeX());
-        m_eta->setSizeY(m_mapAreaWorker->bathymetry()->sizeY());
-        m_eta->setStepX(m_mapAreaWorker->bathymetry()->stepX());
-        m_eta->setStepY(m_mapAreaWorker->bathymetry()->stepY());
+        m_eta->setStartX(m_mapAreaWorker->bathymetry().startX());
+        m_eta->setStartY(m_mapAreaWorker->bathymetry().startY());
+        m_eta->setSizeX(m_mapAreaWorker->bathymetry().sizeX());
+        m_eta->setSizeY(m_mapAreaWorker->bathymetry().sizeY());
+        m_eta->setStepX(m_mapAreaWorker->bathymetry().stepX());
+        m_eta->setStepY(m_mapAreaWorker->bathymetry().stepY());
     }
     colorFunc2D f = [&colorMap, this](double x, double y)->QColor {
         QColor c;
 
-        double data = m_mapAreaWorker->bathymetry()->getDataByPoint(x, y);
+        double data = m_mapAreaWorker->bathymetry().getDataByPoint(x, y);
 
         if (data > 0.0) {
             c = colorMap.getColor(data);
@@ -171,12 +171,12 @@ void TsunamiPlotProvider::plotBathametry()
     }
     m_plot->drawColorbar(*m_colorBarMap, ticks, 22);
 
-    if(m_mapAreaWorker->mareoghraphs() && m_mapAreaWorker->mareoghraphs()->size() != 0)
+    if(m_mapAreaWorker->mareoghraphs().size() != 0)
     {
-        for(int i = 0; i < m_mapAreaWorker->mareoghraphs()->size(); ++i)
+        for(auto mareoghraph:m_mapAreaWorker->mareoghraphs())
         {
-            m_plot->drawPointByIndex((*m_mapAreaWorker->mareoghraphs())[i].getLongitude(),
-                                     (*m_mapAreaWorker->mareoghraphs())[i].getLatitude());
+            m_plot->drawPointByIndex(mareoghraph.getLongitude(),
+                                     mareoghraph.getLatitude());
         }
     }
 }

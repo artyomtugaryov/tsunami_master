@@ -22,19 +22,21 @@ namespace TM {
 
             bool setBathymetryPath(const std::string &path, bool readFromFile = false);
 
-            const std::shared_ptr<TM::Map::MapArea<double>> bathymetry() const noexcept;
+            const MapArea<double> bathymetry() const noexcept;
 
-            const std::shared_ptr<const TM::Map::MapArea<double>> eta() const noexcept;
+            const MapArea<double> eta() const noexcept;
 
-            void setEta(std::shared_ptr<TM::Map::MapArea<double>> &newEta) noexcept;
+            void setEta(const MapArea<double> &newEta) noexcept;
 
-            void setU(std::shared_ptr<TM::Map::MapArea<double>> &newU) noexcept;
+            void setBathymetry(const MapArea<double> &newBathymetry) noexcept;
 
-            void setV(std::shared_ptr<TM::Map::MapArea<double>> &newV) noexcept;
+            void setU(const MapArea<double> &newU) noexcept;
 
-            const std::shared_ptr<TM::Map::MapArea<double>> uVelocity() const noexcept;
+            void setV(const MapArea<double> &newV) noexcept;
 
-            const std::shared_ptr<TM::Map::MapArea<double>> vVelocity() const noexcept;
+            const MapArea<double> uVelocity() const noexcept;
+
+            const MapArea<double> vVelocity() const noexcept;
 
             double getLatitudeByIndex(const std::size_t &i) const noexcept;
 
@@ -50,7 +52,7 @@ namespace TM {
 
             double getMaxDepth() const noexcept;
 
-            std::shared_ptr<std::vector<Mareograph>> mareoghraphs() const;
+            const std::vector<Mareograph> mareoghraphs() const;
 
             std::string mareographsPath() const;
 
@@ -64,22 +66,22 @@ namespace TM {
 
             void saveMareographs(std::string path = "");
 
-            void checkMareographs(const std::shared_ptr<const MapArea<double>> &eta);
+            void checkMareographs(const MapArea<double> &eta);
 
             bool mareographsUpdating() const noexcept;
 
             void setMareographsUpdating(bool mareographsUpdating) noexcept;
 
-            void setMareoghraphs(const std::shared_ptr<std::vector<Mareograph>> &mareoghraphs);
+            void setMareoghraphs(const std::vector<Mareograph> &mareoghraphs);
 
         private:
-            std::shared_ptr<MapArea<double>> m_eta;
-            std::shared_ptr<MapArea<double>> m_uVelocity;
-            std::shared_ptr<MapArea<double>> m_vVelocity;
-            std::shared_ptr<MapArea<double>> m_max;
-            std::shared_ptr<MapArea<double>> m_min;
-            std::shared_ptr<MapArea<double>> m_bathymetry;
-            std::shared_ptr<std::vector<Mareograph>> m_mareographs;
+            MapArea<double> m_eta;
+            MapArea<double> m_uVelocity;
+            MapArea<double> m_vVelocity;
+            MapArea<double> m_max;
+            MapArea<double> m_min;
+            MapArea<double> m_bathymetry;
+            std::vector<Mareograph> m_mareographs;
 
             //TODO: RENDER TO A SEPARATOR FILE
             std::string m_bathymetryPath;

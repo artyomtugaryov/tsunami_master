@@ -7,21 +7,37 @@
 #include <iomanip>
 
 template<typename DataType>
-TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue) : m_sizeX(sizeX), m_sizeY(sizeY),
-        m_startX(0), m_startY(0),
-        m_stepX(1), m_stepY(1),
-        m_endX(sizeX - 1), m_endY(sizeX - 1),
-        m_data(m_sizeX * m_sizeY, defaultValue) {}
+TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue) : m_sizeX(sizeX),
+                                                                                                   m_sizeY(sizeY),
+                                                                                                   m_startX(0),
+                                                                                                   m_startY(0),
+                                                                                                   m_stepX(1),
+                                                                                                   m_stepY(1),
+                                                                                                   m_endX(sizeX - 1),
+                                                                                                   m_endY(sizeX - 1),
+                                                                                                   m_data(m_sizeX *
+                                                                                                          m_sizeY,
+                                                                                                          defaultValue) {}
+
+template<typename DataType>
+TM::Map::MapArea<DataType>::MapArea(const MapArea<DataType> &other) : m_sizeX(other.m_sizeX), m_sizeY(other.m_sizeY),
+                                                                      m_startX(other.m_startX),
+                                                                      m_startY(other.m_startY),
+                                                                      m_stepX(other.m_stepX), m_stepY(other.m_stepY),
+                                                                      m_endX(other.m_endX), m_endY(other.m_endY) {
+    this->m_data = other.m_data;
+}
 
 template<typename DataType>
 template<typename T>
-TM::Map::MapArea<DataType>::MapArea(const std::shared_ptr<MapArea<T>> &other) : m_sizeX(other->sizeX()),
-                                                                                      m_sizeY(other->sizeY()),
-                                                                                      m_data(m_sizeX * m_sizeY, static_cast<DataType>(0)),
-                                                                                      m_startX(other->startX()),
-                                                                                      m_startY(other->startY()),
-                                                                                      m_endX(other->endX()),
-                                                                                      m_endY(other->endY()) {
+TM::Map::MapArea<DataType>::MapArea(const MapArea<T> &other) : m_sizeX(other.sizeX()),
+                                                               m_sizeY(other.sizeY()),
+                                                               m_data(m_sizeX * m_sizeY,
+                                                                      static_cast<DataType>(0)),
+                                                               m_startX(other.startX()),
+                                                               m_startY(other.startY()),
+                                                               m_endX(other.endX()),
+                                                               m_endY(other.endY()) {
     setStepX((m_endX - m_startX) / (m_sizeX - 1));
     setStepY((m_endY - m_startY) / (m_sizeY - 1));
 }
@@ -104,7 +120,7 @@ DataType TM::Map::MapArea<DataType>::getDataByPoint(double longitude, double lat
 template<typename DataType>
 void TM::Map::MapArea<DataType>::setSizeX(std::size_t sizeX) {
     if (m_sizeX != sizeX) {
-        m_data.resize(m_sizeX*m_sizeY);
+        m_data.resize(m_sizeX * m_sizeY);
         m_sizeX = sizeX;
     }
 }
@@ -112,7 +128,7 @@ void TM::Map::MapArea<DataType>::setSizeX(std::size_t sizeX) {
 template<typename DataType>
 void TM::Map::MapArea<DataType>::setSizeY(std::size_t sizeY) {
     if (m_sizeY != sizeY) {
-        m_data.resize(m_sizeX*m_sizeY);
+        m_data.resize(m_sizeX * m_sizeY);
         m_sizeY = sizeY;
     }
 }
@@ -183,24 +199,22 @@ const DataType TM::Map::MapArea<DataType>::getMaxValue() const {
 template
 class TM::Map::MapArea<double>;
 
-template TM::Map::MapArea<double>::MapArea(const std::shared_ptr<TM::Map::MapArea<double>> &);
-
 template
 class TM::Map::MapArea<float>;
 
-template TM::Map::MapArea<float>::MapArea(const std::shared_ptr<TM::Map::MapArea<double>> &);
+template TM::Map::MapArea<float>::MapArea(const MapArea<double> &);
 
 template
 class TM::Map::MapArea<bool>;
 
-template TM::Map::MapArea<bool>::MapArea(const std::shared_ptr<TM::Map::MapArea<double>> &);
+template TM::Map::MapArea<bool>::MapArea(const MapArea<double> &);
 
 template
 class TM::Map::MapArea<int>;
 
-template TM::Map::MapArea<int>::MapArea(const std::shared_ptr<TM::Map::MapArea<double>> &);
+template TM::Map::MapArea<int>::MapArea(const MapArea<double> &);
 
 template
 class TM::Map::MapArea<TM::Scheme::types_cells>;
 
-template TM::Map::MapArea<TM::Scheme::types_cells>::MapArea(const std::shared_ptr<TM::Map::MapArea<double>> &);
+template TM::Map::MapArea<TM::Scheme::types_cells>::MapArea(const MapArea<double> &);

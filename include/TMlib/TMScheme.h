@@ -27,19 +27,19 @@ namespace TM {
 
             virtual ~TMScheme() = default;
 
-            virtual void calculation(const shared_ptr<MapAreaWorker> & area,
+            virtual void calculation(MapAreaWorker & area,
                                      const double & time) = 0;
 
-            virtual void configure(const shared_ptr<const MapAreaWorker> & area,
-                                   const shared_ptr<const Focus::Focus> & focus,
+            virtual void configure(const MapAreaWorker & area,
+                                   const Focus::Focus & focus,
                                    const double & izobata) = 0;
 
         protected:
-            void setTypesOfCells(const shared_ptr<const MapAreaWorker> &area,
+            void setTypesOfCells(const MapAreaWorker &area,
                                  const double &izobata);
 
-            shared_ptr<Focus::Focus> m_focus;
-            shared_ptr<MapArea<types_cells>> m_types_cells;
+            Focus::Focus m_focus;
+            MapArea<types_cells> m_types_cells;
         };
     }
 }

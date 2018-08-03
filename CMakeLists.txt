@@ -53,5 +53,7 @@ message (STATUS "CMAKE_C_COMPILER_ID ................... " ${CMAKE_C_COMPILER_ID
 message (STATUS "BINARY DIRECTORY ...................... " ${BIN_DIR})
 message (STATUS "LIB BIN DIRECTORY ..................... " ${LIBRARY_OUTPUT_PATH})
 message (STATUS "QT ROOT DIRECTORY ..................... " $ENV{QT_ROOT})
+
 add_subdirectory(src)
 add_subdirectory(tests)
+add_subdirectory(samples)
