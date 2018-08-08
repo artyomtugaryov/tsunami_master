@@ -6,20 +6,19 @@
 using namespace TM;
 using namespace TM::Map;
 using namespace TM::Focus;
+using namespace TM::Scheme;
 
-void TM::Scheme::TMKolchSchema::configure(const MapAreaWorker &area,
+void KolchSchema::configure(const MapAreaWorker &area,
                                           const TM::Focus::Focus &focus,
                                           const double &izobata) {
-    this->setTypesOfCells(area, izobata);
     this->set_delta(area.bathymetry());
-    this->m_focus = focus;
     terr_up.resize(area.bathymetry().sizeY());
     for (int j = 0; j < area.bathymetry().endY(); j++) {
         terr_up[j].resize(area.bathymetry().sizeY());
     }
 }
 
-void TM::Scheme::TMKolchSchema::set_delta(const MapArea<double> &map) {
+void KolchSchema::set_delta(const MapArea<double> &map) {
     delta_x_m = map.stepX() * M_PI * TM::Constants::R_EACH / 180;
     delta_y_m.resize(map.sizeY());
     delta_t.resize(map.sizeY());
@@ -32,7 +31,7 @@ void TM::Scheme::TMKolchSchema::set_delta(const MapArea<double> &map) {
     }
 }
 
-void TM::Scheme::TMKolchSchema::calculation(MapAreaWorker &area,
+void KolchSchema::calculation(MapAreaWorker &area,
                                             const double &timeEnd) {
     std::size_t size_y = area.bathymetry().sizeY();
     std::size_t size_x = area.bathymetry().sizeX();
@@ -49,7 +48,7 @@ void TM::Scheme::TMKolchSchema::calculation(MapAreaWorker &area,
 //#pragma omp parallel for shared(u_old, v_old, eta_old, h) private(j)
             for (j = 1; j < size_y - 1; ++j) {
                 auto etaValue = 0.;
-                if (m_types_cells.getDataByIndex(i, j) == TM::Scheme::types_cells::WATER) {
+                if (area.typeOfCell(i, j) == types_cells::WATER) {
                     if (i < size_x - 2 && j < size_y - 2) {
                         etaValue = eta_old.getDataByIndex(i, j) - delta_t[j] * ((1. / (2. * delta_x_m)) *
                                                                                 (u_old.getDataByIndex(i, j + 1) *
@@ -74,7 +73,7 @@ void TM::Scheme::TMKolchSchema::calculation(MapAreaWorker &area,
                     }
                 }
                 eta->setDataByIndex(i, j, etaValue +
-                                          m_focus.getHeightByPoint(area.getLongitudeByIndex(i),
+                                          area.focus().getHeightByPoint(area.getLongitudeByIndex(i),
                                                                     area.getLatitudeByIndex(j), t));
             }
         }
@@ -89,7 +88,7 @@ void TM::Scheme::TMKolchSchema::calculation(MapAreaWorker &area,
             for (j = 1; j < size_y - 1; ++j) {
                 auto u = 0.;
                 auto v = 0.;
-                if (m_types_cells.getDataByIndex(i, j) == TM::Scheme::types_cells::WATER) {
+                if (area.typeOfCell(i, j) == types_cells::WATER) {
                     u = u_old.getDataByIndex(i, j) -
                         TM::Constants::G * delta_t[j] / delta_x_m *
                         (eta->getDataByIndex(i, j) - eta->getDataByIndex(i, j - 1)) -

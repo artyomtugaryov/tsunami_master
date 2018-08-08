@@ -12,18 +12,32 @@
 
 namespace TM {
     namespace Map {
+
+        enum types_cells {
+            LAND = 0,
+            WATER = 1,
+            BOUNDARY1 = 2,  //near land
+            BOUNDARY2 = 3   //end of grid
+        };
+
         template<typename DataType>
         class MapArea {
         public:
 
-            MapArea() = default;
 
-            MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue = static_cast<DataType>(0));
+            explicit MapArea(const size_t &sizeX = 0,
+                             const size_t &sizeY = 0,
+                             const DataType &defaultValue = static_cast<DataType>(0));
 
-            MapArea(const MapArea<DataType> & other);
+            MapArea(const MapArea<DataType> &other);
 
             template<typename T>
-            MapArea(const MapArea<T> &other);
+            explicit MapArea(const MapArea<T> &other);
+
+            template<typename T>
+            MapArea<DataType>& operator=(const MapArea<T> &other);
+
+            MapArea<DataType>& operator=(const MapArea<DataType> &other);
 
             std::size_t getIndex(const std::size_t &x, const std::size_t &y) const;
 
@@ -33,11 +47,12 @@ namespace TM {
 
             std::size_t getIndexYByPoint(double lat) const;
 
-            std::size_t sizeX() const noexcept;
 
-            std::size_t sizeY() const noexcept;
+            const size_t &sizeX() const noexcept;
 
-            double stepX() const noexcept;
+            const size_t &sizeY() const noexcept;
+
+            const double &stepX() const noexcept;
 
             double stepY() const noexcept;
 
@@ -49,7 +64,7 @@ namespace TM {
 
             double endY() const noexcept;
 
-            DataType getDataByIndex(const std::size_t &x, const std::size_t &y) const;
+            const DataType getDataByIndex(const std::size_t &x, const std::size_t &y) const;
 
             DataType getDataByPoint(double longitude, double latitude) const;
 
@@ -80,14 +95,17 @@ namespace TM {
             void saveAsTextFile(std::string path, int setprecision) const;
 
         private:
+
             std::size_t m_sizeX;
             std::size_t m_sizeY;
+
             double m_startX;
             double m_startY;
             double m_stepX;
             double m_stepY;
             double m_endX;
             double m_endY;
+
             std::vector<DataType> m_data;
         };
     }

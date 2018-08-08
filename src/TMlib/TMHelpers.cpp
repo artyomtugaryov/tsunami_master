@@ -77,7 +77,7 @@ void saveMapAreaAsImage(TM::Map::MapArea<DataType> &area,
 
 ///Implementations
 template
-void saveMapAreaAsImage(MapArea<TM::Scheme::types_cells> &,
+void saveMapAreaAsImage(MapArea<TM::Map::types_cells> &,
                         const std::string &,
                         const MapArea<double> &);
 

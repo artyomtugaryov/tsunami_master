@@ -1,21 +1,31 @@
 #include <TMlib/TMMapArea.h>
 #include <TMlib/TMMapAreaWorker.h>
+#include <TMlib/TMScheme23.h>
 
 using namespace TM;
 using namespace TM::Map;
+using namespace TM::Scheme;
 
-void fillMap(const std::shared_ptr<MapArea<double>> &map) {
-    for (size_t i(0); i < map->sizeX(); i++) {
-        for (size_t j(0); j < map->sizeY(); j++) {
-               map->setDataByIndex(i, j, 2.4);
+void fillMap(MapArea<double> &map) {
+    for (size_t i(0); i < map.sizeX(); i++) {
+        for (size_t j(0); j < map.sizeY(); j++) {
+               map.setDataByIndex(i, j, -12.4);
         }
     }
 }
 
 int main(int argc, char *argv[]) {
-    std::shared_ptr<MapArea<double>> bath = std::make_shared<MapArea<double>>(15, 15);
+    MapArea<double> bath(15, 15);
+    MapAreaWorker areaWorker;
+    Scheme23 scheme;
+
     fillMap(bath);
-    std::shared_ptr<MapAreaWorker> areaWorker;
-    areaWorker->setBathymetry(*bath);
+
+    areaWorker.setBathymetry(bath);
+    areaWorker.conigure(-5);
+
+    scheme.configure(areaWorker);
+
+    scheme.calculation(areaWorker, 1);
     return 0;
 }
