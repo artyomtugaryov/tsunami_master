@@ -11,7 +11,7 @@ stages:
 before_script:
 - export APT_CACHE_DIR=`pwd`/apt-cache && mkdir -pv $APT_CACHE_DIR
 - apt-get update -qq
-- apt-get -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential cmake
+- apt-get -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential cmake qt5-default
 
 build_TM:
   stage: build
