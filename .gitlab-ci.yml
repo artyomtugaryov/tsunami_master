@@ -1,0 +1,19 @@
+image: ubuntu:16.04
+
+cache:
+  key: apt-cache
+  paths:
+  - apt-cache/
+
+stages:
+- build
+
+build_TM:
+  stage: build
+  script:
+  - mkdir build && cd build
+  - cmake ../
+  - make -j32
+  artifacts:
+    paths:
+    - bin
