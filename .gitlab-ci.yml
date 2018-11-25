@@ -22,8 +22,6 @@ build_TM:
   - mkdir build && cd build
   - cmake ../
   - qmake --version
-  - pkg-config --modversion QtCore
-  - pkg-config --modversion Qt5Core
   - make -j32 TMlib TMLibTests
   artifacts:
     paths:
