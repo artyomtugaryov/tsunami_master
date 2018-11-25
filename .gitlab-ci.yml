@@ -22,7 +22,7 @@ build_TM:
   - mkdir build && cd build
   - cmake ../
   - qmake --version
-  - make -j32 TMlib TMLibTests
+  - make -j32 TMLibTests
   artifacts:
     paths:
     - bin
