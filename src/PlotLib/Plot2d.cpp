@@ -1,5 +1,6 @@
 #include "PlotLib/Plot2d.h"
 #include <QDebug>
+#include <math.h>
 
 namespace PlotLib {
 //TODO: use const?
@@ -176,7 +177,8 @@ void Plot2d::drawGrid(bool grid, int fontSize, double stepX,
     }
 
     k = static_cast<int>(trunc(log(m_region.height()) / log(m_axis_y_base)));
-    double dy = exp(log(m_axis_y_base) * k), dyFont = dy;
+    double dy = exp(log(m_axis_y_base) * k)
+    double dyFont = dy;
     if (stepY > 0.001) dy = stepY;
     maxK = m_window.height() / 30;
 
