@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <fstream>
 #include <iomanip>
+#include <math.h> 
 
 template<typename DataType>
 TM::Map::MapArea<DataType>::MapArea(std::size_t sizeX, std::size_t sizeY, DataType defaultValue) : m_sizeX(sizeX),
