@@ -1,31 +1,37 @@
 #ifndef TSUNAMIMANAGER_TMKOLCHSCHEMA_H
 #define TSUNAMIMANAGER_TMKOLCHSCHEMA_H
 
-#include "TMScheme.h"
-#include "TMMapAreaWorker.h"
+#include "TMlib/TMScheme.h"
+#include "TMlib/TMMapAreaWorker.h"
+
+#include <vector>
 
 namespace TM {
     namespace Scheme {
-        class TMKolchSchema : public TMScheme {
+        class KolchSchema : public Scheme {
         public:
-            TMKolchSchema() = default;
+            KolchSchema() = default;
 
-            virtual ~TMKolchSchema() = default;
+            virtual ~KolchSchema() = default;
 
             void calculation(MapAreaWorker &,
                              const double &);
 
             void configure(const MapAreaWorker &,
                            const Focus::Focus &,
-                           const double &) override ;
+                           const double &);
 
         private:
+
             void set_delta(const MapArea<double> &map);
+
+        private:
 
             double delta_x_m;
             std::vector<double> delta_t;
             std::vector<double> delta_y_m;
-            std::vector<vector<int>> terr_up;
+
+            std::vector<std::vector<int>> terr_up;
         };
     }
 }

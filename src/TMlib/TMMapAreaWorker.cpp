@@ -1,11 +1,13 @@
-#include "TMlib/TMMapAreaWorker.h"
-#include <TMlib/TMException.h>
 #include <fstream>
 #include <algorithm>
 #include <ctime>
 
+#include "TMlib/TMMapAreaWorker.h"
+#include "TMlib/TMException.h"
+
 using namespace TM;
 using namespace TM::Map;
+using namespace TM::details;
 
 MapAreaWorker::MapAreaWorker(const std::string &path) :
         m_uVelocity(this->getMaxXIndex(), this->getMaxYIndex()),
@@ -20,6 +22,40 @@ MapAreaWorker::MapAreaWorker(const std::string &path) :
               << " ms."
               << std::endl;
 }
+
+void MapAreaWorker::conigure(const double &izobata){
+    m_types_cells = m_bathymetry;
+    setTypesOfCells(izobata);
+    m_eta = m_bathymetry;
+    m_uVelocity= m_bathymetry;
+    m_vVelocity = m_bathymetry;
+}
+
+
+const MapArea<double> &MapAreaWorker::eta() const noexcept {
+    return m_eta;
+}
+
+const MapArea<double> &MapAreaWorker::bathymetry() const noexcept {
+    return m_bathymetry;
+}
+
+MapArea<double> &MapAreaWorker::uVelocity() noexcept {
+    return m_uVelocity;
+}
+
+MapArea<double> &MapAreaWorker::vVelocity() noexcept {
+    return m_vVelocity;
+}
+
+const types_cells MapAreaWorker::typeOfCell(const size_t &i, const size_t &j) const {
+    return m_types_cells.getDataByIndex(i, j);
+}
+
+const Focus::Focus &MapAreaWorker::focus() noexcept {
+    return m_focus;
+}
+
 
 void MapAreaWorker::readBathymetryFromFileDat() {
     std::vector<double> longitude; // x
@@ -131,27 +167,12 @@ void MapAreaWorker::setV(const MapArea<double> &newV) noexcept {
 }
 
 
-const MapArea<double> MapAreaWorker::eta() const noexcept {
-    return m_eta;
-}
 
-const MapArea<double> MapAreaWorker::bathymetry() const noexcept {
-    return m_bathymetry;
-}
-
-const MapArea<double> MapAreaWorker::uVelocity() const noexcept {
-    return m_uVelocity;
-}
-
-const MapArea<double> MapAreaWorker::vVelocity() const noexcept {
-    return m_vVelocity;
-}
-
-size_t MapAreaWorker::getMaxXIndex() const {
+const size_t &MapAreaWorker::getMaxXIndex() const {
     return m_bathymetry.sizeX();
 }
 
-size_t MapAreaWorker::getMaxYIndex() const {
+const size_t &MapAreaWorker::getMaxYIndex() const {
     return m_bathymetry.sizeY();
 }
 
@@ -261,4 +282,44 @@ int MapAreaWorker::mareographStepTime() const {
 
 void MapAreaWorker::setMareographStepTime(int mareographStepTime) {
     m_mareographStepTime = mareographStepTime;
+}
+
+
+void MapAreaWorker::setTypesOfCells(const double &izobata) {
+    auto maxX = m_types_cells.sizeX();
+    auto maxY = m_types_cells.sizeY();
+    auto types_of_cells = m_types_cells;
+    std::size_t i(0), j(0);
+    clock_t begin = clock();
+#pragma omp parallel for private(i)
+    for (i = 0; i < maxX; i++) {
+#pragma omp parallel for private(j)
+        for (j = 0; j < maxY; j++) {
+            auto v = m_bathymetry.getDataByIndex(i, j);
+            if (v >= izobata) {
+                m_types_cells.setDataByIndex(i, j, types_cells::LAND);
+                continue;
+            }
+            m_types_cells.setDataByIndex(i, j, types_cells::WATER);
+            for (int k: {-1, 1}) {
+                for (int t: {-1, 1}) {
+                    try {
+                        if (m_bathymetry.getDataByIndex(i + k, j + t) >= izobata) {
+                            m_types_cells.setDataByIndex(i, j, types_cells::BOUNDARY1);
+                        }
+                    } catch (::TMException &ex) {
+                        m_types_cells.setDataByIndex(i, j, types_cells::BOUNDARY2);
+                        break;
+                    }
+                }
+            }
+            if (m_types_cells.getDataByIndex(i, j) == types_cells::BOUNDARY1) {
+            }
+        }
+    }
+    clock_t end = clock();
+    std::cout << "Time of setTypesOfCells is: "
+              << static_cast<double>(end - begin) * 1000.0 / double(CLOCKS_PER_SEC)
+              << " ms."
+              << std::endl;
 }

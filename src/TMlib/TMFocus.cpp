@@ -4,6 +4,8 @@
 #include "TMlib/TMFocus.h"
 #include "TMlib/TMException.h"
 
+using namespace TM::Focus;
+
 TM::Focus::Focus::Focus(const std::string &path) {
     std::fstream blocksFile(path, std::ios_base::in);
     if (!blocksFile.good())
@@ -47,7 +49,7 @@ const TM::Focus::Block TM::Focus::Focus::getBlock(std::size_t b) const noexcept 
 }
 
 
-double TM::Focus::Focus::getHeightByPoint(double lat, double lon, double t) {
+double Focus::getHeightByPoint(double lat, double lon, double t) const {
     for (auto block : m_blocks) {
         if (block.has(lat, lon)) {
             return block.getUpHeight(t);
