@@ -1,6 +1,10 @@
 #include <algorithm>
 #include <fstream>
 #include <iomanip>
+#include <algorithm>
+#include <fstream>
+#include <iomanip>
+#include <math.h>
 
 #include "TMlib/TMMapArea.h"
 #include "TMlib/TMException.h"
@@ -12,7 +16,6 @@ using namespace TM::Map;
 using namespace TM::Scheme;
 
 using namespace std;
-
 
 template<typename DataType>
 MapArea<DataType>::MapArea(const size_t &sizeX, const size_t &sizeY, const DataType &defaultValue) : m_sizeX(sizeX),
