@@ -1,4 +1,4 @@
-image: ubuntu:16.04
+image: ubuntu:18.04
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
@@ -14,7 +14,7 @@ stages:
 before_script:
 - export APT_CACHE_DIR=`pwd`/apt-cache && mkdir -pv $APT_CACHE_DIR
 - apt-get update -qq
-- apt-get -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential cmake qtbase5-dev=5.11 libqt5svg5-dev=5.11 qt5-default=5.11 qtdeclarative5-dev=5.11
+- apt-get -o dir::cache::archives="$APT_CACHE_DIR" install -y build-essential cmake qtbase5-dev libqt5svg5-dev qt5-default qtdeclarative5-dev
 
 build_TM:
   stage: build
