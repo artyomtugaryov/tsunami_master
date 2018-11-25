@@ -21,7 +21,7 @@ build_TM:
   script:
   - mkdir build && cd build
   - cmake ../
-  - make -j32
+  - make -j32 TMlib TMLibTests
   artifacts:
     paths:
     - bin
