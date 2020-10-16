@@ -1,20 +1,20 @@
 # TsunamiMaster
 
-The TsunamiMaster is a C++ cross-platform application from numerical modeling of generation and propagation tsunami and
+TsunamiMaster is a C++ cross-platform application for numerical modeling of generation and propagation long waves and
 visualize results of modeling.
 TsunamiMaster consists of two main part: C++ library (backend) and User Interface (frontend).
 
 TMlib is C++ library consists of classes, functions that are implemented algorithms for numerical modeling of generation
 and propagation tsunami.
 
-For building the TsunamiMaster please follow instructions:
+For building TsunamiMaster please follow instructions:
 
 1. Install [Qt](http://doc.qt.io/qt-5/gettingstarted.html)
     1.1. If you want to use cmake for building the project you should install [cmake](https://cmake.org/download/)
 
 2. Clone the repository with source code: `git clone https://github.com/artyomtugaryov/tsunami_master.git`
 
-3. CD to TsunamiMaster folder
+3. `cd tsunami_master`
 
 4. Initialize and update submodules (git submodule init && git submodule update)
 
