@@ -9,10 +9,10 @@ and propagation tsunami.
 
 For building the TsunamiMaster please follow instructions:
 
-1. Install Qt (http://doc.qt.io/qt-5/gettingstarted.html)
-    1.1. If you want to use cmake for building the project you should install cmake (https://cmake.org/download/)
+1. Install [Qt](http://doc.qt.io/qt-5/gettingstarted.html)
+    1.1. If you want to use cmake for building the project you should install [cmake](https://cmake.org/download/)
 
-2. Clone the repository with source code: `git clone git clone git@bitbucket.org:ArtyomTugaryov/tsunamimaster.git TsunamiMaster`
+2. Clone the repository with source code: `git clone https://github.com/artyomtugaryov/tsunami_master.git`
 
 3. CD to TsunamiMaster folder
 
@@ -22,7 +22,7 @@ For building the TsunamiMaster please follow instructions:
 
 6. If you want to build using cmake (without QtCreator) create build directory: `mkdir build && cd build`
 
-7. Create Makefile: 'cmake ..'
+7. Create Makefile: `cmake ..`
 
-8. Make the project: 'make -j8'
+8. Make the project: `make -j8`
 
