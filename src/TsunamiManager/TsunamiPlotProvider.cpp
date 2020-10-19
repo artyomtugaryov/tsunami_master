@@ -1,7 +1,7 @@
 #include "TsunamiManager/TsunamiPlotProvider.h"
 #include "TsunamiManager/TsunamiPlotData.h"
 
-#include <TMlib/TMMareograph.h>
+#include <TMlib/mareograph.h>
 
 #include <QDebug>
 

@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <TMlib/TMBrickPoint.h>
+#include <TMlib/brick_point.h>
 #include <memory>
 
 using namespace TM::Focus;

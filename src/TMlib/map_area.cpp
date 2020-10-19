@@ -6,10 +6,10 @@
 #include <iomanip>
 #include <math.h>
 
-#include "TMlib/TMMapArea.h"
-#include "TMlib/TMException.h"
-#include "TMlib/TMScheme.h"
-#include "TMlib/TMScheme23.h"
+#include "TMlib/map_area.h"
+#include "TMlib/exception.h"
+#include "TMlib/scheme.h"
+#include "TMlib/scheme23.h"
 
 using namespace TM;
 using namespace TM::Map;

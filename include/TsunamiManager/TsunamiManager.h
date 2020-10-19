@@ -5,11 +5,11 @@
 #include "TsunamiWorker.h"
 #include "TsunamiPlotProvider.h"
 
-#include <TMlib/TMMapAreaWorker.h>
-#include <TMlib/TMException.h>
-#include <TMlib/TMScheme23.h>
-#include <TMlib/TMKolchScheme.h>
-#include <TMlib/TMFocus.h>
+#include <TMlib/map_area_worker.h>
+#include <TMlib/exception.h>
+#include <TMlib/scheme23.h>
+#include <TMlib/kolch_scheme.h>
+#include <TMlib/focus.h>
 #include <PlotLib/Plot2d.h>
 #include <PlotLib/ColorMap.h>
 
@@ -62,7 +62,7 @@ private:
 
     TsunamiManagerInfo::TsunamiData* m_tsunamiData;
     std::shared_ptr<TM::Map::MapAreaWorker> m_mapAreaWorker;
-    std::shared_ptr<TM::Scheme::TMScheme> m_scheme;
+    std::shared_ptr<TM::Scheme::Scheme> m_scheme;
     std::shared_ptr<TM::Focus::Focus> m_focus;
     std::shared_ptr<TM::Map::MapArea<double> > m_eta;
     TsunamiManagerInfo::TsunamiPlotProvider* m_plotProvider;

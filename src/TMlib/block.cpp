@@ -1,7 +1,7 @@
 #include <algorithm>
 
-#include "TMlib/TMBlock.h"
-#include "TMlib/TMException.h"
+#include "TMlib/block.h"
+#include "TMlib/exception.h"
 
 bool TM::Focus::Block::has(const double &lat, const double &lon) {
     return pointLocation({lat, lon});

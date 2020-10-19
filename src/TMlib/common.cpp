@@ -1,5 +1,6 @@
 #include <math.h>
-#include "TMlib/TMCommon.h"
+#include "TMlib/common.h"
+#include "TMlib/constants.h"
 
 double TM::Common::coefKoriolis(const double &lat) {
     return 2. * (2. * M_PI / TM::Constants::T_EACH) * cos(lat);

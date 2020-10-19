@@ -1,8 +1,8 @@
-#ifndef TSUNAMIMANAGER_TMKOLCHSCHEMA_H
-#define TSUNAMIMANAGER_TMKOLCHSCHEMA_H
+#ifndef TSUNAMIMANAGER_KolchSchema_H
+#define TSUNAMIMANAGER_KolchSchema_H
 
-#include "TMlib/TMScheme.h"
-#include "TMlib/TMMapAreaWorker.h"
+#include "TMlib/scheme.h"
+#include "TMlib/map_area_worker.h"
 
 #include <vector>
 
@@ -17,9 +17,9 @@ namespace TM {
             void calculation(MapAreaWorker &,
                              const double &);
 
-            void configure(const MapAreaWorker &,
-                           const Focus::Focus &,
-                           const double &);
+            void configure(const MapAreaWorker &area,
+                           const TM::Focus::Focus &focus,
+                           const double &izobata);
 
         private:
 
@@ -37,4 +37,4 @@ namespace TM {
 }
 
 
-#endif //TSUNAMIMANAGER_TMKOLCHSCHEMA_H
+#endif //TSUNAMIMANAGER_KolchSchema_H

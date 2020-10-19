@@ -1,5 +1,5 @@
-#ifndef TMLIB_TMBRICKUP_H
-#define TMLIB_TMBRICKUP_H
+#ifndef TM_LIB_BRICK_UP_H
+#define TM_LIB_BRICK_UP_H
 
 namespace TM {
     namespace Focus {
@@ -25,4 +25,4 @@ namespace TM {
     }
 }
 
-#endif //TMLIB_TMBRICKUP_H
+#endif //TM_LIB_BRICK_UP_H

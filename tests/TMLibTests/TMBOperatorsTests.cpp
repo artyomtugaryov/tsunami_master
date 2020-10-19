@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include <TMlib/TMOperators.hpp>
-#include <TMlib/TMMapArea.h>
+#include <TMlib/operators.hpp>
+#include <TMlib/map_area.h>
 #include <memory>
 
 using namespace TM::Map;
@@ -41,7 +41,7 @@ TEST_F(TMOperatorsTests, operatorTBackwardY) {
 }
 
 TEST_F(TMOperatorsTests, operatorTException) {
-    ASSERT_THROW(T(*m_maparea, 1, 1, static_cast<direction>(5)), TM::details::TMException);
+    ASSERT_THROW(T(*m_maparea, 1, 1, static_cast<direction>(5)), TM::details::exception);
 }
 
 /*
@@ -64,7 +64,7 @@ TEST_F(TMOperatorsTests, operatorDeltaBackwardY) {
 }
 
 TEST_F(TMOperatorsTests, operatorDeltaException) {
-    ASSERT_THROW(delta(*m_maparea, 1, 1, static_cast<direction>(5)), TM::details::TMException);
+    ASSERT_THROW(delta(*m_maparea, 1, 1, static_cast<direction>(5)), TM::details::exception);
 }
 
 
@@ -80,13 +80,13 @@ TEST_F(TMOperatorsTests, operatorFeatureForwardY) {
 }
 
 TEST_F(TMOperatorsTests, operatorFeatureBackwarddX) {
-    ASSERT_THROW(feature(*m_maparea, 1, 1, direction::X_BACKWARD), TM::details::TMException);
+    ASSERT_THROW(feature(*m_maparea, 1, 1, direction::X_BACKWARD), TM::details::exception);
 }
 
 TEST_F(TMOperatorsTests, operatorFeatureBackwardY) {
-    ASSERT_THROW(feature(*m_maparea, 1, 1, direction::Y_BACKWARD), TM::details::TMException);
+    ASSERT_THROW(feature(*m_maparea, 1, 1, direction::Y_BACKWARD), TM::details::exception);
 }
 
 TEST_F(TMOperatorsTests, operatorFeatureException) {
-    ASSERT_THROW(feature(*m_maparea, 1, 1, static_cast<direction>(5)), TM::details::TMException);
+    ASSERT_THROW(feature(*m_maparea, 1, 1, static_cast<direction>(5)), TM::details::exception);
 }

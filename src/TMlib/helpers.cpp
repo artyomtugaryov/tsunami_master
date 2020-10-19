@@ -1,5 +1,5 @@
-#include <TMlib/TMMapArea.h>
-#include <TMlib/TMScheme.h>
+#include <TMlib/map_area.h>
+#include <TMlib/scheme.h>
 #include <QtGui/QImage>
 #include <PlotLib/Plot2d.h>
 

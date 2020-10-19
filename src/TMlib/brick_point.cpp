@@ -1,4 +1,4 @@
-#include "TMlib/TMBrickPoint.h"
+#include "TMlib/brick_point.h"
 
 TM::Focus::BrickPoint::BrickPoint(double x, double y) : m_x(x), m_y(y) {}
 

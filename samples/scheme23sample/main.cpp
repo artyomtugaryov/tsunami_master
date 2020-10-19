@@ -1,6 +1,6 @@
-#include <TMlib/TMMapArea.h>
-#include <TMlib/TMMapAreaWorker.h>
-#include <TMlib/TMScheme23.h>
+#include <TMlib/map_area.h>
+#include <TMlib/map_area_worker.h>
+#include <TMlib/scheme23.h>
 
 using namespace TM;
 using namespace TM::Map;

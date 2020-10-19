@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-#include "TMlib/TMMapArea.h"
-#include "TMException.h"
+#include "TMlib/map_area.h"
+#include "exception.h"
 
 using namespace std;
 using namespace TM::Map;

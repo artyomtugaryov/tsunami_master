@@ -1,9 +1,9 @@
 #include "TsunamiManager/TsunamiWorker.h"
-#include <TMlib/TMKolchScheme.h>
+#include <TMlib/kolch_scheme.h>
 #include <QDebug>
 
 TsunamiWorker::TsunamiWorker(std::shared_ptr<TM::Map::MapAreaWorker> mapAreaWorker,
-                             std::shared_ptr<TM::Scheme::TMScheme> scheme,
+                             std::shared_ptr<TM::Scheme::Scheme> scheme,
                              std::shared_ptr<TM::Focus::Focus> focus,
                              QObject *parent) :
     QObject(parent),
@@ -66,7 +66,7 @@ void TsunamiWorker::setCalculationTime(int calculationTime)
     m_calculationTime = calculationTime;
 }
 
-std::shared_ptr<TM::Scheme::TMScheme> TsunamiWorker::scheme() const
+std::shared_ptr<TM::Scheme::Scheme> TsunamiWorker::scheme() const
 {
     return m_scheme;
 }
@@ -82,7 +82,7 @@ void TsunamiWorker::setFocus(const std::shared_ptr<TM::Focus::Focus> &focus)
     m_focus = focus;
 }
 
-void TsunamiWorker::setScheme(const std::shared_ptr<TM::Scheme::TMScheme> &scheme)
+void TsunamiWorker::setScheme(const std::shared_ptr<TM::Scheme::Scheme> &scheme)
 {
     m_scheme.reset();
     m_scheme = scheme;
@@ -110,7 +110,7 @@ void TsunamiWorker::runCalculation()
     }
     if (!m_scheme) {
 //        m_scheme = std::make_shared<TM::Scheme::TMScheme23>();
-        m_scheme = std::make_shared<TM::Scheme::TMKolchSchema>();
+        m_scheme = std::make_shared<TM::Scheme::KolchSchema>();
     }
     m_scheme->configure(*m_mapAreaWorker, *m_focus, m_isobath);
     m_scheme->calculation(*m_mapAreaWorker, m_calculationTime);

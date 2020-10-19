@@ -1,15 +1,15 @@
-#ifndef TMCOMMON_H
-#define TMCOMMON_H
+#ifndef TM_LIB_COMMON_H
+#define TM_LIB_COMMON_H
 
 #include <cmath>
-#include "TMlib/TMConstants.h"
 
-namespace TM{
-    namespace Common{
+namespace TM {
+    namespace Common {
         double coefKoriolis(const double &lat);
+
         double coefKoriolis_kolch(const double &lat);
     }
 }
 
 
-#endif // TMCOMMON_H
+#endif // TM_LIB_COMMON_H

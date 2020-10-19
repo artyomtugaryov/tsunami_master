@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <ctime>
 
-#include "TMlib/TMMapAreaWorker.h"
-#include "TMlib/TMException.h"
+#include "TMlib/map_area_worker.h"
+#include "TMlib/exception.h"
 
 using namespace TM;
 using namespace TM::Map;
@@ -246,7 +246,7 @@ void MapAreaWorker::readMareographsFromFile(const std::string &mareographsPath) 
     file.close();
 }
 
-void MapAreaWorker::saveMareographs(std::__cxx11::string path) {
+void MapAreaWorker::saveMareographs(std::string path) {
     for (size_t i = 0; i < m_mareographs.size(); i++) {
         if (i < 10) {
             m_mareographs[i].writeToFileMareograph(path + "0" + std::to_string(i));
@@ -307,7 +307,7 @@ void MapAreaWorker::setTypesOfCells(const double &izobata) {
                         if (m_bathymetry.getDataByIndex(i + k, j + t) >= izobata) {
                             m_types_cells.setDataByIndex(i, j, types_cells::BOUNDARY1);
                         }
-                    } catch (::TMException &ex) {
+                    } catch (std::exception &ex) {
                         m_types_cells.setDataByIndex(i, j, types_cells::BOUNDARY2);
                         break;
                     }

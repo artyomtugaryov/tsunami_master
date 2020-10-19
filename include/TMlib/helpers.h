@@ -2,8 +2,8 @@
 #define TSUNAMIMANAGER_HELPERS_H
 
 
-#include <TMlib/TMMapArea.h>
-#include <TMlib/TMScheme.h>
+#include <TMlib/map_area.h>
+#include <TMlib/scheme.h>
 
 template<typename DataType>
 void saveMapAreaAsImage(const MapArea<DataType> &area,

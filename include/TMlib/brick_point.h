@@ -1,5 +1,5 @@
-#ifndef TSUNAMIMANAGER_TMBRICKPOINT_H
-#define TSUNAMIMANAGER_TMBRICKPOINT_H
+#ifndef TM_LIB_BRICK_POINT_H
+#define TM_LIB_BRICK_POINT_H
 
 #include <vector>
 
@@ -8,7 +8,7 @@ namespace TM {
         class BrickPoint {
         public:
 
-            BrickPoint(double x=0.0, double y=0.0);
+            BrickPoint(double x = 0.0, double y = 0.0);
 
             bool operator<(const BrickPoint &other) const noexcept;
 
@@ -33,4 +33,4 @@ namespace TM {
     }
 }
 
-#endif //TSUNAMIMANAGER_TMBRICKPOINT_H
+#endif //TM_LIB_BRICK_POINT_H

@@ -1,7 +1,8 @@
-#include <TMlib/TMKolchScheme.h>
-#include <TMlib/TMCommon.h>
+#include <TMlib/kolch_scheme.h>
+#include <TMlib/common.h>
+#include <TMlib/constants.h>
+#include <TMlib/helpers.h>
 #include <time.h>
-#include <TMlib/TMHelpers.h>
 
 using namespace TM;
 using namespace TM::Map;
@@ -9,8 +10,8 @@ using namespace TM::Focus;
 using namespace TM::Scheme;
 
 void KolchSchema::configure(const MapAreaWorker &area,
-                                          const TM::Focus::Focus &focus,
-                                          const double &izobata) {
+                            const TM::Focus::Focus &focus,
+                            const double &izobata) {
     this->set_delta(area.bathymetry());
     terr_up.resize(area.bathymetry().sizeY());
     for (int j = 0; j < area.bathymetry().endY(); j++) {
@@ -26,13 +27,14 @@ void KolchSchema::set_delta(const MapArea<double> &map) {
         delta_y_m[j] = delta_x_m * cos((map.startY() + j * map.stepY()) / 180.0 * M_PI);
         delta_t[j] = 1;
         auto v = sqrt(delta_y_m[j] * delta_y_m[j] + delta_x_m * delta_x_m) / sqrt(2 * TM::Constants::G * 3000);
-        if (delta_t[j] > v)
+        if (delta_t[j] > v) {
             delta_t[j] = v;
+        }
     }
 }
 
 void KolchSchema::calculation(MapAreaWorker &area,
-                                            const double &timeEnd) {
+                              const double &timeEnd) {
     std::size_t size_y = area.bathymetry().sizeY();
     std::size_t size_x = area.bathymetry().sizeX();
     auto eta = std::make_shared<TM::Map::MapArea<double>>(area.bathymetry());
@@ -59,12 +61,12 @@ void KolchSchema::calculation(MapAreaWorker &area,
                                                                                   -h.getDataByIndex(i, j - 1))) +
                                                                                 (1 / (2 * delta_y_m[j]) *
                                                                                  (v_old.getDataByIndex(i + 1,
-                                                                                                        j) *
+                                                                                                       j) *
                                                                                   (-h.getDataByIndex(i + 1,
                                                                                                      j) +
                                                                                    -h.getDataByIndex(i, j)) -
                                                                                   v_old.getDataByIndex(i,
-                                                                                                        j) *
+                                                                                                       j) *
                                                                                   (-h.getDataByIndex(i - 1,
                                                                                                      j) +
                                                                                    -h.getDataByIndex(i,
@@ -74,7 +76,7 @@ void KolchSchema::calculation(MapAreaWorker &area,
                 }
                 eta->setDataByIndex(i, j, etaValue +
                                           area.focus().getHeightByPoint(area.getLongitudeByIndex(i),
-                                                                    area.getLatitudeByIndex(j), t));
+                                                                        area.getLatitudeByIndex(j), t));
             }
         }
         area.setEta(*eta);
@@ -95,7 +97,7 @@ void KolchSchema::calculation(MapAreaWorker &area,
                         delta_t[j] * Ch / (eta->getDataByIndex(i, j) + -h.getDataByIndex(i, j)) *
                         fabs(u_old.getDataByIndex(i, j)) * u_old.getDataByIndex(i, j);
                     v = v_old.getDataByIndex(i, j) - TM::Constants::G * delta_t[j] / delta_y_m[j] *
-                                                      (eta->getDataByIndex(i, j) - eta->getDataByIndex(i - 1, j)) -
+                                                     (eta->getDataByIndex(i, j) - eta->getDataByIndex(i - 1, j)) -
                         delta_t[j] * Ch / (eta->getDataByIndex(i, j) + -h.getDataByIndex(i, j)) *
                         fabs(v_old.getDataByIndex(i, j)) * v_old.getDataByIndex(i, j);
 

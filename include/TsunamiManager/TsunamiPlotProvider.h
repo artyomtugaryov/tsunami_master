@@ -3,8 +3,8 @@
 
 #include "TsunamiManager/TsunamiData.h"
 
-#include <TMlib/TMMapAreaWorker.h>
-#include <TMlib/TMException.h>
+#include <TMlib/map_area_worker.h>
+#include <TMlib/exception.h>
 #include <PlotLib/Plot2d.h>
 #include <PlotLib/ColorMap.h>
 

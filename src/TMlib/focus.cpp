@@ -1,8 +1,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "TMlib/TMFocus.h"
-#include "TMlib/TMException.h"
+#include "TMlib/focus.h"
+#include "TMlib/exception.h"
 
 using namespace TM::Focus;
 

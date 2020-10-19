@@ -5,8 +5,8 @@
 #include <QGuiApplication>
 #include <QQuickView>
 #include <QThread>
-#include <TMlib/TMMapAreaWorker.h>
-#include <TMlib/TMException.h>
+#include <TMlib/map_area_worker.h>
+#include <TMlib/exception.h>
 #include <TsunamiManager/TsunamiManager.h>
 
 class SourceGUI : public QObject

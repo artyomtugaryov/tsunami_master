@@ -1,8 +1,9 @@
-#include <TMlib/TMScheme23.h>
-#include <TMlib/TMCommon.h>
-#include <TMlib/TMOperators.hpp>
-#include <TMlib/TMException.h>
-#include <TMlib/TMHelpers.h>
+#include <TMlib/scheme23.h>
+#include <TMlib/common.h>
+#include <TMlib/constants.h>
+#include <TMlib/operators.hpp>
+#include <TMlib/exception.h>
+#include <TMlib/helpers.h>
 #include <cmath>
 #include <ctime>
 #include <queue>
@@ -13,7 +14,9 @@ using namespace TM::Scheme::Operators;
 using namespace TM::Common;
 using namespace TM::Constants;
 
-void Scheme23::configure(const MapAreaWorker &area) {
+void Scheme23::configure(const MapAreaWorker &area,
+                         const TM::Focus::Focus &focus,
+                         const double &izobata) {
     setUpBArrays(area.getMaxXIndex(), area.getMaxYIndex());
 }
 

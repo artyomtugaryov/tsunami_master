@@ -1,9 +1,9 @@
 #ifndef TSUNAMIMANAGER_TMSHEME24_H
 #define TSUNAMIMANAGER_TMSHEME24_H
 
-#include "TMlib/TMMapAreaWorker.h"
-#include "TMlib/TMMapArea.h"
-#include "TMlib/TMScheme.h"
+#include "TMlib/map_area_worker.h"
+#include "TMlib/map_area.h"
+#include "TMlib/scheme.h"
 
 namespace TM {
 namespace Scheme {
@@ -14,7 +14,9 @@ namespace Scheme {
 
         ~Scheme23() override = default;
 
-        void configure(const MapAreaWorker & area) override;
+        void configure(const MapAreaWorker &area,
+                       const TM::Focus::Focus &focus,
+                       const double &izobata) override;
 
         void calculation(MapAreaWorker &area,
                          const double &time) override;

@@ -36,7 +36,7 @@ HEADERS += $${_PRO_FILE_PWD_}/../../include/TMlib/TMBlock.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMMapArea.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMMapAreaWorker.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMMareograph.h \
-           $${_PRO_FILE_PWD_}/../../include/TMlib/TMScheme.h \
+           $${_PRO_FILE_PWD_}/../../include/TMlib/scheme.h \
            $${_PRO_FILE_PWD_}/../../include/TMlib/TMScheme23.h \
 #TODO: For test. Remove after all work with calculation part.
            $${_PRO_FILE_PWD_}/../../include/PlotLib \

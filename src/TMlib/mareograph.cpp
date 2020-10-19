@@ -1,4 +1,4 @@
-#include "TMlib/TMMareograph.h"
+#include "TMlib/mareograph.h"
 
 using namespace TM;
 
@@ -244,13 +244,4 @@ std::vector<Mareograph> Mareograph::readFromFile(std::string path,
         }
     }
     return M;
-}
-
-std::vector<Mareograph> Mareograph::readFromFile(std::__cxx11::wstring path,
-                                                 double startX, double startY,
-                                                 double deltaX, double deltaY,
-                                                 int sizeY, bool readHeights) {
-    std::string _path(path.begin(), path.end());
-    return readFromFile(_path, startX, startY,
-                        deltaX, deltaY, sizeY, readHeights);
 }

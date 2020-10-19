@@ -1,5 +1,5 @@
-#ifndef EXCEPTION_H
-#define EXCEPTION_H
+#ifndef TM__LIB_EXCEPTION_H
+#define TM__LIB_EXCEPTION_H
 
 #include <exception>
 #include <memory>
@@ -15,12 +15,12 @@
 #endif//__linux__
 
 #define THROW_TM_EXCEPTION\
-    throw TM::details::TMException(__FILE__, __LINE__)\
+    throw TM::details::exception(__FILE__, __LINE__)\
 
 namespace TM {
     namespace details {
 
-        class TMException : public std::exception {
+        class exception : public std::exception {
             mutable std::string m_errorDesc;
             std::string m_file;
             int m_line;
@@ -35,14 +35,14 @@ namespace TM {
                 return m_errorDesc.c_str();
             }
 
-            TMException(std::string fileName, const int line) noexcept
+            exception(std::string fileName, const int line) noexcept
                     : m_file(std::move(fileName)), m_line(line) {
             }
 
-            ~TMException() override = default;
+            ~exception() override = default;
 
             template<typename T>
-            TMException &operator<<(const T &arg) noexcept {
+            exception &operator<<(const T &arg) noexcept {
                 if (!m_exceptionStream) {
                     m_exceptionStream.reset(new std::stringstream());
                 }
@@ -50,7 +50,7 @@ namespace TM {
                 (*m_exceptionStream)
 #ifdef __linux__
                         << print_stacktrace()
-#endif//__linux__
+                        #endif//__linux__
                         << std::endl << arg;
                 return *this;
             }
@@ -118,4 +118,4 @@ namespace TM {
     }
 }
 
-#endif // EXCEPTION_H
+#endif // TM__LIB_EXCEPTION_H

@@ -1,9 +1,9 @@
 #ifndef MAPAREAWORKER_H
 #define MAPAREAWORKER_H
 
-#include "TMlib/TMMapArea.h"
-#include "TMlib/TMMareograph.h"
-#include "TMlib/TMFocus.h"
+#include "TMlib/map_area.h"
+#include "TMlib/mareograph.h"
+#include "TMlib/focus.h"
 
 #include <iostream>
 #include <memory>

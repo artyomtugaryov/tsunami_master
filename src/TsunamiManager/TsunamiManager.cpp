@@ -13,7 +13,7 @@ TsunamiManager::TsunamiManager(QObject *parent) :
     QObject(parent),
     m_tsunamiData(new TsunamiManagerInfo::TsunamiData(this)),
     m_mapAreaWorker(std::make_shared<TM::Map::MapAreaWorker>()),
-    m_scheme(std::make_shared<TM::Scheme::TMKolchSchema>()),
+    m_scheme(std::make_shared<TM::Scheme::KolchSchema>()),
     m_focus(std::make_shared<TM::Focus::Focus>()),
     m_plotProvider(new TsunamiPlotProvider(m_tsunamiData, m_mapAreaWorker)),
     m_tsunamiWorker(new TsunamiWorker(m_mapAreaWorker, m_scheme, m_focus)),
@@ -91,7 +91,7 @@ void TsunamiManager::startCalculation()
         {
             m_scheme.reset();
         }
-        m_scheme = std::make_shared<TM::Scheme::TMKolchSchema>();
+        m_scheme = std::make_shared<TM::Scheme::KolchSchema>();
         m_tsunamiWorker->setScheme(m_scheme);
         m_tsunamiWorker->setCommand(TsunamiWorker::ThreadCommand::RunCalculation);
         m_tsunamiWorkerThread->start();

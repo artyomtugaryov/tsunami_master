@@ -1,8 +1,8 @@
-#ifndef TSUNAMIMANAGER_TMBLOCK_H
-#define TSUNAMIMANAGER_TMBLOCK_H
+#ifndef TM_LIB_BLOCK_H
+#define TM_LIB_BLOCK_H
 
-#include "TMlib/TMBrickUp.h"
-#include "TMlib/TMBrickPoint.h"
+#include "TMlib/brick_up.h"
+#include "TMlib/brick_point.h"
 
 #include <vector>
 
@@ -37,4 +37,4 @@ namespace TM {
     }
 }
 
-#endif //TSUNAMIMANAGER_TMBLOCK_H
+#endif //TM_LIB_BLOCK_H

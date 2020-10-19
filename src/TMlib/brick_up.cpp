@@ -1,4 +1,4 @@
-#include "TMlib/TMBrickUp.h"
+#include "TMlib/brick_up.h"
 
 TM::Focus::BrickUp::BrickUp(const double &b, const double &h) : m_brickUpT(b), m_heightUp(h) {}
 
